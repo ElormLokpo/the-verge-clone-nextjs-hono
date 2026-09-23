@@ -5,6 +5,7 @@ import { secureHeaders } from "hono/secure-headers";
 import { env } from "./config";
 import { db } from "./db";
 import { sql } from "drizzle-orm";
+import {authRoutes} from "./modules"
 
 export const createApp = () => {
     const app = new Hono().basePath("/api/v1");
@@ -20,7 +21,7 @@ export const createApp = () => {
         allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         credentials: true,
 
-    }))
+    }));
 
     app.all("/health", async (c: Context) => {
         try {
@@ -31,7 +32,9 @@ export const createApp = () => {
             console.error(err);
             return c.json({ message: "Database ping unsucessful" }, 500)
         }
-    })
+    });
+
+    app.route("", authRoutes)
 
     return app;
 }
