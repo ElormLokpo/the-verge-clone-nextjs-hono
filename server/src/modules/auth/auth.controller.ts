@@ -1,5 +1,6 @@
 import { Context } from "hono";
 import { assignRoleToUserService, changePasswordService, deleteUserService, getActiveUsersService, getAllUsersService, restoreUserService, updateUserService } from "./auth.services";
+import { ChangePasswordBody, UpdateUserBody, UserRoleType } from "./auth.types";
 
 
 export const getAllUsersController = async (c: Context) => {
@@ -14,7 +15,7 @@ export const getActiveUsersController = async (c: Context) => {
 
 export const assignRoleToUserController = async (c: Context) => {
     const userId = c.req.param("id");
-    const { role } = await c.req.json<{ role: "admin" | "user" }>();
+    const { role } = await c.req.json<{ role: UserRoleType }>();
 
     const updatedUser = await assignRoleToUserService(userId, role, c);
 
@@ -23,7 +24,7 @@ export const assignRoleToUserController = async (c: Context) => {
 
 export const updateUserController = async (c: Context) => {
     const currentUser = c.get("user");
-    const body = await c.req.json<{ name?: string; image?: string }>();
+    const body = await c.req.json<UpdateUserBody>();
 
     const updatedUser = await updateUserService(currentUser, body);
 
@@ -31,7 +32,7 @@ export const updateUserController = async (c: Context) => {
 }
 
 export const changePasswordController = async (c: Context) => {
-    const body = await c.req.json<{ currentPassword: string; newPassword: string }>();
+    const body = await c.req.json<ChangePasswordBody>();
     const changedPassword = await changePasswordService(body, c.req.raw.headers);
 
     if (changedPassword instanceof Error) {

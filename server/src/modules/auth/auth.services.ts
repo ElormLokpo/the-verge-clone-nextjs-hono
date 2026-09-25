@@ -3,12 +3,13 @@ import { db } from "../../db";
 import { user } from "../../db/schema";
 import { and, eq, isNull } from "drizzle-orm";
 import auth from "./auth.oauth";
+import { ChangePasswordBody, UpdateUserBody, UserIdType, UserRoleType, UserType } from "./auth.types";
 
 
 export const getActiveUsersService = async () => await db.select().from(user).where(isNull(user.deletedAt));
 
 
-export const assignRoleToUserService = async (userId: string | undefined, role: "user" | "admin", c: Context) => {
+export const assignRoleToUserService = async (userId: UserIdType, role: UserRoleType, c: Context) => {
 
     if (!["admin", "user"].includes(role)) {
         return c.json({ error: "Invalid role specified" }, 400);
@@ -25,7 +26,7 @@ export const assignRoleToUserService = async (userId: string | undefined, role: 
 
 export const getAllUsersService = async () => await db.select().from(user);
 
-export const updateUserService = async (currentUser, body: { name?: string; image?: string }) => {
+export const updateUserService = async (currentUser: UserType, body: UpdateUserBody) => {
     const updatedUser = await db
         .update(user)
         .set({
@@ -39,7 +40,7 @@ export const updateUserService = async (currentUser, body: { name?: string; imag
     return updatedUser[0];
 }
 
-export const changePasswordService = async (body: { currentPassword: string; newPassword: string; }, headers: Headers) => {
+export const changePasswordService = async (body: ChangePasswordBody, headers: Headers) => {
 
 
     try {
@@ -57,7 +58,7 @@ export const changePasswordService = async (body: { currentPassword: string; new
 }
 
 
-export const deleteUserService = async (userId: string | undefined, c: Context) => {
+export const deleteUserService = async (userId: UserIdType, c: Context) => {
     const [softDeletedUser] = await db
         .update(user)
         .set({
@@ -74,7 +75,7 @@ export const deleteUserService = async (userId: string | undefined, c: Context) 
     return softDeletedUser;
 }
 
-export const restoreUserService = async (userId: string | undefined, c: Context) => {
+export const restoreUserService = async (userId: UserIdType, c: Context) => {
     const [restoredUser] = await db
         .update(user)
         .set({
