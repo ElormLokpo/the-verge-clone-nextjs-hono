@@ -36,6 +36,10 @@ export async function loginUserService(email: string, password: string) {
         throw new Error("Invalid credentials");
     }
 
+    if (user.deleteAt){
+        throw new Error("Account has been deleted");
+    }
+
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) throw new Error("Invalid credentials");
 
