@@ -5,7 +5,7 @@ import { secureHeaders } from "hono/secure-headers";
 import { env } from "./config";
 import { db } from "./db";
 import { sql } from "drizzle-orm";
-import {authRoutes} from "./modules"
+import { authRoutes } from "./modules"
 
 export const createApp = () => {
     const app = new Hono().basePath("/api/v1");

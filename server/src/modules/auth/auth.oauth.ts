@@ -4,6 +4,7 @@ import { env } from '../../config'
 import { db } from '../../db'
 import { user } from '../../db/schema'
 import * as schema from "../../db/schema";
+import { admin, openAPI } from "better-auth/plugins";
 
 export const auth = betterAuth({
 
@@ -14,12 +15,47 @@ export const auth = betterAuth({
 
     trustedOrigins: ['http://localhost:5173'],
 
-    emailAndPassword: {
-        enabled: true,
-    },
-
-    baseURL: env.BETTER_AUTH_URL || "http://localhost:5000/api/v1/auth",
+   
+    baseURL: env.BETTER_AUTH_URL || "http://localhost:5000",
+    basePath: "/api/v1/auth",
     secret: env.BETTER_AUTH_SECRET!,
+
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: true, 
+    async sendResetPassword({ user, url }) {
+      console.log(`[Email Mock] Reset password for ${user.email}: ${url}`);
+      
+    },
+  },
+
+  
+  emailVerification: {
+    autoSignInAfterVerification: true,
+    async sendVerificationEmail({ user, url }) {
+      console.log(`[Email Mock] Verify email for ${user.email}: ${url}`);
+     
+    },
+  },
+
+ 
+  
+  plugins: [
+    admin({
+      defaultRole: "user",
+      adminRole: "admin",
+    }),
+  ],
+
+  
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, 
+    updateAge: 60 * 60 * 24, 
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, 
+    },
+  },
 
     socialProviders: {
         google: {
