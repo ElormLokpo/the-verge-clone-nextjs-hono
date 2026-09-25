@@ -1,84 +1,54 @@
-import { betterAuth } from 'better-auth'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { env } from '../../config'
-import { db } from '../../db'
-import { user } from '../../db/schema'
-import * as schema from "../../db/schema";
-import { admin, openAPI } from "better-auth/plugins";
+import { env } from "bun";
 
-export const auth = betterAuth({
-
-    database: drizzleAdapter(db, {
-        provider: 'pg',
-        schema: schema
-    }),
-
-    trustedOrigins: ['http://localhost:5173'],
-
-   
-    baseURL: env.BETTER_AUTH_URL || "http://localhost:5000",
-    basePath: "/api/v1/auth",
-    secret: env.BETTER_AUTH_SECRET!,
-
-  emailAndPassword: {
-    enabled: true,
-    requireEmailVerification: true, 
-    async sendResetPassword({ user, url }) {
-      console.log(`[Email Mock] Reset password for ${user.email}: ${url}`);
-      
-    },
-  },
-
-  
-  emailVerification: {
-    autoSignInAfterVerification: true,
-    async sendVerificationEmail({ user, url }) {
-      console.log(`[Email Mock] Verify email for ${user.email}: ${url}`);
-     
-    },
-  },
-
- 
-  
-  plugins: [
-    admin({
-      defaultRole: "user",
-      adminRole: "admin",
-    }),
-  ],
-
-  
-  session: {
-    expiresIn: 60 * 60 * 24 * 7, 
-    updateAge: 60 * 60 * 24, 
-    cookieCache: {
-      enabled: true,
-      maxAge: 5 * 60, 
-    },
-  },
-
-    socialProviders: {
-        google: {
-            clientId: env.GOOGLE_CLIENT_ID,
-            clientSecret: env.GOOGLE_CLIENT_SECRET,
-        },
-    },
-
-    advanced: {
-        ipAddress: {
-            ipAddressHeaders: ["x-forwarded-for", "x-real-ip"],
-        },
-
-        rateLimit: {
-            enabled: process.env.NODE_ENV === "production",
-        },
-    },
-})
+const GOOGLE_AUTH_URL = env.GOOGLE_AUTH_URL!; 
+const GOOGLE_USERINFO_URL = env.GOOGLE_USERINFO_URL!;
 
 
-export type AuthType = {
-    user: typeof auth.$Infer.Session.user | null
-    session: typeof auth.$Infer.Session.session | null
+export function getGoogleAuthUrl(state: string): string {
+  const params = new URLSearchParams({
+    client_id: env.GOOGLE_CLIENT_ID!,
+    redirect_uri: env.GOOGLE_REDIRECT_URI!,
+    response_type: "code",
+    scope: "openid email profile",
+    state,
+  });
+
+  return `${GOOGLE_AUTH_URL}?${params.toString()}`;
 }
 
-export default auth;
+interface GoogleTokens {
+  access_token: string;
+  id_token: string;
+}
+
+interface GoogleUser {
+  sub: string;  
+  email: string;
+  name: string;
+}
+
+export async function exchangeCodeForTokens(code: string): Promise<GoogleTokens> {
+  const res = await fetch(env.GOOGLE_TOKEN_URL!, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      code,
+      client_id: process.env.GOOGLE_CLIENT_ID!,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+      redirect_uri: process.env.GOOGLE_REDIRECT_URI!,
+      grant_type: "authorization_code",
+    }),
+  });
+
+  if (!res.ok) throw new Error("Failed to exchange code");
+  return res.json() as Promise<GoogleTokens>;
+}
+
+export async function getGoogleUser(accessToken: string): Promise<GoogleUser> {
+  const res = await fetch(GOOGLE_USERINFO_URL, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch Google user");
+  return res.json() as Promise<GoogleUser>;
+}

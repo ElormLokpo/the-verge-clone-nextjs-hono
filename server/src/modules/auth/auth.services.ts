@@ -1,94 +1,92 @@
-import { Context } from "hono";
-import { db } from "../../db";
-import { user } from "../../db/schema";
+import bcrypt from "bcryptjs";
 import { and, eq, isNull } from "drizzle-orm";
-import auth from "./auth.oauth";
-import { ChangePasswordBody, UpdateUserBody, UserIdType, UserRoleType, UserType } from "./auth.types";
+import { db } from "../../db"
+import { users, type NewUser, type User } from "../../db/schema";
+import { signToken, JWTPayload, Role } from "./";
+import { Context } from "hono";
 
 
-export const getActiveUsersService = async () => await db.select().from(user).where(isNull(user.deletedAt));
+export async function registerUserService(name: string, role: Role, email: string, password: string) {
+    const existing = await db.query.users.findFirst({
+        where: eq(users.email, email),
+    });
 
-
-export const assignRoleToUserService = async (userId: UserIdType, role: UserRoleType, c: Context) => {
-
-    if (!["admin", "user"].includes(role)) {
-        return c.json({ error: "Invalid role specified" }, 400);
+    if (existing) {
+        throw new Error("Email already in use");
     }
 
-    const updated = await db
-        .update(user)
-        .set({ role, updatedAt: new Date() })
-        .where(eq(user.id, userId))
+    const passwordHash = await bcrypt.hash(password, 12);
+
+    const [user] = await db
+        .insert(users)
+        .values({ email, passwordHash, role: role  ?? "user", name } satisfies NewUser)
         .returning();
 
-    return updated[0];
+    const token = await signToken(buildPayload(user));
+    return { user: sanitize(user), token };
 }
 
-export const getAllUsersService = async () => await db.select().from(user);
 
-export const updateUserService = async (currentUser: UserType, body: UpdateUserBody) => {
-    const updatedUser = await db
-        .update(user)
-        .set({
-            name: body.name ?? currentUser.name,
-            image: body.image ?? currentUser.image,
-            updatedAt: new Date(),
-        })
-        .where(eq(user.id, currentUser.id))
-        .returning();
+export async function loginUserService(email: string, password: string) {
+    const user = await db.query.users.findFirst({
+        where: eq(users.email, email),
+    });
 
-    return updatedUser[0];
-}
-
-export const changePasswordService = async (body: ChangePasswordBody, headers: Headers) => {
-
-
-    try {
-        await auth.api.changePassword({
-            headers,
-            body: {
-                currentPassword: body.currentPassword,
-                newPassword: body.newPassword,
-                revokeOtherSessions: true,
-            },
-        })
-    } catch (err) {
-        return err;
+    if (!user || !user.passwordHash) {
+        throw new Error("Invalid credentials");
     }
+
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    if (!valid) throw new Error("Invalid credentials");
+
+    const token = await signToken(buildPayload(user));
+    return { user: sanitize(user), token };
 }
 
 
-export const deleteUserService = async (userId: UserIdType, c: Context) => {
+export async function findOrCreateOAuthUserService(
+    email: string,
+    oauthId: string,
+    provider: "google"
+) {
+    let user = await db.query.users.findFirst({
+        where: eq(users.email, email),
+    });
+
+    if (!user) {
+        [user] = await db
+            .insert(users)
+            .values({ email, oauthProvider: provider, oauthId, role: "user" })
+            .returning();
+    }
+
+    const token = await signToken(buildPayload(user));
+    return { user: sanitize(user), token };
+}
+
+export async function deleteUserService(userId: string, c: Context) {
     const [softDeletedUser] = await db
-        .update(user)
+        .update(users)
         .set({
-            deletedAt: new Date(),
+            deleteAt: new Date(),
             updatedAt: new Date(),
         })
-        .where(and(eq(user.id, userId), isNull(user.deletedAt)))
-        .returning();
+        .where(and(eq(users.id, userId), isNull(users.deleteAt)))        
+        .returning();           
 
-    if (!softDeletedUser) {
-        return c.json({ error: "User not found or already deleted" }, 404);
-    }
+        if (!softDeletedUser) {
+            return c.json({ error: "User not found or already deleted" }, 404);
+        }
 
-    return softDeletedUser;
+        return softDeletedUser;
 }
 
-export const restoreUserService = async (userId: UserIdType, c: Context) => {
-    const [restoredUser] = await db
-        .update(user)
-        .set({
-            deletedAt: null,
-            updatedAt: new Date(),
-        })
-        .where(eq(user.id, userId))
-        .returning();
 
-    if (!restoredUser) {
-        return c.json({ error: "User not found" }, 404);
-    }
-
-    return restoredUser;
+function buildPayload(user: User): JWTPayload {
+    return { sub: user.id, email: user.email, role: user.role as Role };
 }
 
+function sanitize(user: User) {
+    const { passwordHash, ...safe } = user;
+    return safe;
+}

@@ -1,51 +1,44 @@
 import { createMiddleware } from "hono/factory";
-import { auth } from "./auth.oauth";
-import { db } from "../../db";
-import { user } from "../../db/schema";
-import { and, eq, isNull } from "drizzle-orm";
+import { getCookie } from "hono/cookie";
+import  { type AppVariables, verifyToken, Role } from "./";
 
-export interface AuthContext {
-  user: typeof auth.$Infer.Session.user;
-  session: typeof auth.$Infer.Session.session;
-}
+export const authMiddleware = createMiddleware<{ Variables: AppVariables }>(
+  async (c, next) => {
 
+    const cookieToken = getCookie(c, "auth_token");
+    const headerToken = c.req.header("Authorization")?.replace("Bearer ", "");
+    const token = cookieToken ?? headerToken;
 
-export const requireAuth = createMiddleware(async (c, next) => {
-  const session = await auth.api.getSession({
-    headers: c.req.raw.headers,
-  });
+    if (!token) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
 
-  if (!session) {
-    return c.json({ error: "Unauthorized: Invalid or expired session" }, 401);
+    try {
+      const payload = await verifyToken(token);
+      c.set("user", {
+        id: payload.sub,
+        email: payload.email,
+        role: payload.role,
+      });
+      await next();
+    } catch {
+      return c.json({ error: "Invalid or expired token" }, 401);
+    }
   }
+);
 
-  const [dbUser] = await db
-    .select()
-    .from(user)
-    .where(and(eq(user.id, session.user.id), isNull(user.deletedAt)));
+export function requireRole(...roles: Role[]) {
+  return createMiddleware<{ Variables: AppVariables }>(async (c, next) => {
+    const user = c.get("user");
 
-  if (!dbUser) {
-    return c.json({ error: "Account has been deactivated or deleted" }, 401);
-  }
+    if (!user) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
 
-  if (!session.user.emailVerified) {
-    return c.json({ error: "Forbidden: Please verify your email first" }, 403);
-  }
-
-  c.set("user", session.user);
-  c.set("session", session.session);
-  await next();
-});
-
-
-export const requireRole = (allowedRoles: string[]) => {
-  return createMiddleware(async (c, next) => {
-    const user = c.get("user") as typeof auth.$Infer.Session.user;
-
-    if (!user || !user.role || !allowedRoles.includes(user.role)) {
-      return c.json({ error: "Forbidden: Insufficient permissions" }, 403);
+    if (!roles.includes(user.role)) {
+      return c.json({ error: "Forbidden" }, 403);
     }
 
     await next();
   });
-};
+}

@@ -2,10 +2,10 @@ import { Context, Hono } from "hono";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
-import { env } from "./config";
+import { env, errorMiddleware } from "./config";
 import { db } from "./db";
 import { sql } from "drizzle-orm";
-import { authRoutes } from "./modules"
+import { auth as authRoutes } from "./modules/auth/auth.routes";
 
 export const createApp = () => {
     const app = new Hono().basePath("/api/v1");
@@ -34,8 +34,9 @@ export const createApp = () => {
         }
     });
 
-    app.route("", authRoutes)
-
+    app.route("/auth", authRoutes)
+    app.onError(errorMiddleware);
+    
     return app;
 }
 

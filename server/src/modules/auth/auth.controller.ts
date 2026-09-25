@@ -1,51 +1,44 @@
-import { Context } from "hono";
-import { assignRoleToUserService, changePasswordService, deleteUserService, getActiveUsersService, getAllUsersService, restoreUserService, updateUserService } from "./auth.services";
-import { ChangePasswordBody, UpdateUserBody, UserRoleType } from "./auth.types";
+import type { Context } from "hono";
+import { getCookie, setCookie, deleteCookie } from "hono/cookie";
+import * as authService from "./";
+import { COOKIE_NAME, COOKIE_OPTIONS, Role } from "./";
 
 
-export const getAllUsersController = async (c: Context) => {
-    const users = await getAllUsersService();
-    return c.json({ users });
-}
 
-export const getActiveUsersController = async (c: Context) => {
-    const users = await getActiveUsersService();
-    return c.json({ users });
-}
+export async function register(c: Context) {
+    const { email, password, name, role } = await c.req.json<{
+        email: string;
+        password: string;
+        name: string,
+        role: Role
+    }>();
 
-export const assignRoleToUserController = async (c: Context) => {
-    const userId = c.req.param("id");
-    const { role } = await c.req.json<{ role: UserRoleType }>();
-
-    const updatedUser = await assignRoleToUserService(userId, role, c);
-
-    return c.json({ message: "User role updated successfully", user: updatedUser });
-}
-
-export const updateUserController = async (c: Context) => {
-    const currentUser = c.get("user");
-    const body = await c.req.json<UpdateUserBody>();
-
-    const updatedUser = await updateUserService(currentUser, body);
-
-    return c.json({ message: "User updated successfully", user: updatedUser });
-}
-
-export const changePasswordController = async (c: Context) => {
-    const body = await c.req.json<ChangePasswordBody>();
-    const changedPassword = await changePasswordService(body, c.req.raw.headers);
-
-    if (changedPassword instanceof Error) {
-        return c.json(changedPassword.message, 400);
+    if (!email || !password) {
+        return c.json({ error: "Email and password are required" }, 400);
     }
 
-    return c.json({ message: "Password updated successfully" });
+    const { user, token } = await authService.registerUserService(name, role, email, password);
+
+    setCookie(c, COOKIE_NAME, token, COOKIE_OPTIONS);
+    return c.json({ user, token }, 201);
 }
 
-export const deleteUserController = async (c: Context) => {
+export async function login(c: Context) {
+    const { email, password } = await c.req.json<{
+        email: string;
+        password: string;
+    }>();
+
+    const { user, token } = await authService.loginUserService(email, password);
+
+    setCookie(c, COOKIE_NAME, token, COOKIE_OPTIONS);
+    return c.json({ user, token });
+}
+
+export async function deleteUser(c: Context) {
     const userId = c.req.param("id");
 
-    const deletedUser = await deleteUserService(userId, c);
+    const deletedUser = await authService.deleteUserService(userId as string, c);
 
     return c.json({
         message: "User soft-deleted successfully",
@@ -53,18 +46,13 @@ export const deleteUserController = async (c: Context) => {
     });
 }
 
-export const restoreUserController = async (c: Context) => {
-    const userId = c.req.param("id");
-
-    const restoredUser = await restoreUserService(userId, c);
-
-    return c.json({
-        message: "User restored successfully",
-        user: restoredUser
-    });
+export async function logout(c: Context) {
+    deleteCookie(c, COOKIE_NAME);
+    return c.json({ message: "Logged out" });
 }
 
-export const getCurrentUserController = async (c: Context) => {
-    const currentUser = c.get("user");
-    return c.json({ user: currentUser });
+export async function me(c: Context) {
+
+    const user = c.get("user");
+    return c.json({ user });
 }

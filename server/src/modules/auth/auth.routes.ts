@@ -1,25 +1,51 @@
-import { Context, Hono } from "hono";
-import auth from "./auth.oauth";
-import { requireAuth, requireRole } from "./auth.middleware";
-import { assignRoleToUserController, changePasswordController, deleteUserController, getActiveUsersController, getAllUsersController, getCurrentUserController, restoreUserController, updateUserController } from "./auth.controller";
+import { Hono } from "hono";
+import * as authController from "./";
+import { type AppVariables, authMiddleware, requireRole, getGoogleAuthUrl, findOrCreateOAuthUserService, exchangeCodeForTokens, getGoogleUser } from "./";
+import { setCookie } from "hono/cookie";
+import { env, loginSchema, registerSchema, zValidator } from "../../config";
 
-export const authRoutes = new Hono()
+
+export const auth = new Hono<{ Variables: AppVariables }>();
 
 
-authRoutes.on(["POST", "GET"], "/auth/*", (c: Context) => {
-    console.log("--> Request URL seen by Better Auth:", c.req.raw.url);
-    return auth.handler(c.req.raw);
+auth.post("/register", zValidator(registerSchema), authController.register);
+auth.post("/login", zValidator(loginSchema), authController.login);
+auth.post("/logout", authController.logout);
+auth.get("/me", authMiddleware, authController.me);
+
+auth.delete("/delete-user/:id", authMiddleware, requireRole("admin"), authController.deleteUser);
+
+
+auth.get("/google", (c) => {
+
+    const state = crypto.randomUUID();
+    return c.redirect(getGoogleAuthUrl(state));
+});
+
+auth.get("/google/callback", async (c) => {
+    const code = c.req.query("code");
+    if (!code) return c.json({ error: "No code provided" }, 400);
+
+    const tokens = await exchangeCodeForTokens(code);
+    const googleUser = await getGoogleUser(tokens.access_token);
+
+    const { user, token } = await findOrCreateOAuthUserService(
+        googleUser.email,
+        googleUser.sub,
+        "google"
+    );
+
+    setCookie(c, "auth_token", token, {
+        httpOnly: true,
+        secure: env.NODE_ENV === "production",
+        sameSite: "Lax",
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+    });
+
+
+    return c.redirect(env.FRONTEND_URL + "/dashboard");
 });
 
 
-authRoutes.get("/auth/all-users", requireRole(["admin"]), getAllUsersController);
-authRoutes.get("/auth/active-users", requireRole(["admin"]), getActiveUsersController);
 
-authRoutes.patch("/auth/:id/role", requireRole(["admin"]), assignRoleToUserController);
-authRoutes.delete("/auth/delete-user/:id", requireRole(["admin"]), deleteUserController);
-authRoutes.post("/auth/restore-user/:id", requireRole(["admin"]), restoreUserController);
-
-
-authRoutes.post("/auth/change-password", requireAuth, changePasswordController);
-authRoutes.patch("/auth/update-user", requireAuth, updateUserController);
-authRoutes.get("/auth/me", requireAuth, getCurrentUserController);
