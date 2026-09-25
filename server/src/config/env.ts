@@ -8,9 +8,13 @@ const envSchema = z.object({
 
     GOOGLE_CLIENT_ID: z.string().min(1, { message: "Google client id is required" }),
     GOOGLE_CLIENT_SECRET: z.string().min(1, { message: "Google client secret is required" }),
+    GOOGLE_REDIRECT_URI: z.string().min(1, { message: "Google redirect uri is required" }),
+    GOOGLE_AUTH_URL: z.string().min(1, { message: "Google auth url is required" }),
+    GOOGLE_TOKEN_URL: z.string().min(1, { message: "Google token url is required" }),
+    GOOGLE_USERINFO_URL: z.string().min(1, { message: "Google userinfo url is required" }),
 
-    BETTER_AUTH_SECRET: z.string(),
-    BETTER_AUTH_URL: z.string()
+    JWT_SECRET: z.string().min(1, { message: "JWT secret is required" }),
+    FRONTEND_URL: z.string(),
 });
 
 
