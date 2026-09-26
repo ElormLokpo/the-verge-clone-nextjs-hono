@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { getCookie, setCookie, deleteCookie } from "hono/cookie";
 import * as authService from "./";
-import { COOKIE_NAME, COOKIE_OPTIONS, Role } from "./";
+import { COOKIE_NAME, COOKIE_OPTIONS, ForgotPasswordInput, ResetPasswordInput, resetPasswordService, Role } from "./";
 
 
 
@@ -74,7 +74,7 @@ export async function resendVerification(c: Context) {
 export async function verifyEmail(c: Context) {
     const body = await c.req.json<authService.VerifyEmailInput>();
 
-   
+
     if (!body.email || !body.code) {
         return c.json({ error: "Email and code are required" }, 400);
     }
@@ -86,4 +86,35 @@ export async function verifyEmail(c: Context) {
     }
 
     return c.json({ message: "Email verified successfully" });
+}
+
+export async function forgotPassword(c: Context) {
+    const body = await c.req.json<ForgotPasswordInput>();
+
+    if (!body.email) {
+        return c.json({ error: "Email is required" }, 400);
+    }
+
+    await authService.requestPasswordReset(body);
+
+
+    return c.json({
+        message: "A reset link has been sent to email.",
+    });
+}
+
+export async function resetPassword(c: Context) {
+    const body = await c.req.json<ResetPasswordInput>();
+
+    if (!body.token || !body.newPassword) {
+        return c.json({ error: "Token and new password are required" }, 400);
+    }
+
+    const result = await resetPasswordService(body);
+
+    if (!result.success) {
+        return c.json({ error: result.error }, 400);
+    }
+
+    return c.json({ message: "Password has been reset successfully" });
 }

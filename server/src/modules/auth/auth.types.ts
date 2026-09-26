@@ -32,6 +32,7 @@ export type ForgotPasswordInput = {
 export type ResetPasswordInput = {
   token: string;
   newPassword: string;
+  email: string;
 };
 
 export type ServiceResult<T = void> =

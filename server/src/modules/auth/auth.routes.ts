@@ -16,6 +16,9 @@ auth.get("/me", authMiddleware, authController.me);
 auth.post("/verify-email", authMiddleware,authController.verifyEmail);
 auth.post("/resend-verification", authMiddleware, authController.resendVerification);
 
+auth.post("/forgot-password", authController.forgotPassword);
+auth.post("/reset-password", authController.resetPassword);
+
 auth.delete("/delete-user/:id", authMiddleware, requireRole("admin"), authController.deleteUser);
 
 
