@@ -4,7 +4,7 @@ import type { Context } from "hono";
 export interface AppError {
   success: false;
   message: string;
-  errors?: Record<string, string[]>;  
+  errors?: Record<string, string[]>;
 }
 
 export function parseError(err: unknown): { status: number; body: AppError } {
@@ -13,7 +13,7 @@ export function parseError(err: unknown): { status: number; body: AppError } {
     const errors: Record<string, string[]> = {};
 
     for (const issue of err.issues) {
-      const field = issue.path.join(".");  
+      const field = issue.path.join(".");
       if (!errors[field]) errors[field] = [];
       errors[field].push(issue.message);
     }
@@ -48,7 +48,7 @@ export function parseError(err: unknown): { status: number; body: AppError } {
     };
   }
 
- 
+
   return {
     status: 500,
     body: {
@@ -56,6 +56,11 @@ export function parseError(err: unknown): { status: number; body: AppError } {
       message: "An unexpected error occurred",
     },
   };
+}
+
+
+export function sendEmail({ to, subject, html }: { to: string, subject: string, html: string }) {
+  console.log(`Sending email to ${to} with subject ${subject} and html ${html}`);
 }
 
 

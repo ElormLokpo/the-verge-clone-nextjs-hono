@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import * as authController from "./";
 import { type AppVariables, authMiddleware, requireRole, getGoogleAuthUrl, findOrCreateOAuthUserService, exchangeCodeForTokens, getGoogleUser } from "./";
 import { setCookie } from "hono/cookie";
-import { env, loginSchema, registerSchema, zValidator } from "../../config";
+import { env, loginSchema, registerSchema, emailSchema, verifyEmailSchema, zValidator, resetPasswordSchema } from "../../config";
 
 
 export const auth = new Hono<{ Variables: AppVariables }>();
@@ -12,6 +12,12 @@ auth.post("/register", zValidator(registerSchema), authController.register);
 auth.post("/login", zValidator(loginSchema), authController.login);
 auth.post("/logout", authController.logout);
 auth.get("/me", authMiddleware, authController.me);
+
+auth.post("/verify-email", zValidator(verifyEmailSchema), authMiddleware, authController.verifyEmail);
+auth.post("/resend-verification", zValidator(emailSchema), authMiddleware, authController.resendVerification);
+
+auth.post("/forgot-password", zValidator(emailSchema), authController.forgotPassword);
+auth.post("/reset-password", zValidator(resetPasswordSchema), authController.resetPassword);
 
 auth.delete("/delete-user/:id", authMiddleware, requireRole("admin"), authController.deleteUser);
 

@@ -1,8 +1,8 @@
 import type { Context } from "hono";
 import { getCookie, setCookie, deleteCookie } from "hono/cookie";
-import * as authService from "./";
-import { COOKIE_NAME, COOKIE_OPTIONS, Role } from "./";
-
+import * as authService from "./auth.services";
+import { COOKIE_NAME, COOKIE_OPTIONS, ForgotPasswordInput, ResetPasswordInput, Role } from "./";
+import {VerifyEmailInput} from "./"
 
 
 export async function register(c: Context) {
@@ -17,7 +17,7 @@ export async function register(c: Context) {
         return c.json({ error: "Email and password are required" }, 400);
     }
 
-    const { user, token } = await authService.registerUserService(name, role, email, password);
+    const { user, token } = await authService.registerUser(name, role, email, password);
 
     setCookie(c, COOKIE_NAME, token, COOKIE_OPTIONS);
     return c.json({ user, token }, 201);
@@ -29,7 +29,7 @@ export async function login(c: Context) {
         password: string;
     }>();
 
-    const { user, token } = await authService.loginUserService(email, password);
+    const { user, token } = await authService.loginUser(email, password);
 
     setCookie(c, COOKIE_NAME, token, COOKIE_OPTIONS);
     return c.json({ user, token });
@@ -38,7 +38,7 @@ export async function login(c: Context) {
 export async function deleteUser(c: Context) {
     const userId = c.req.param("id");
 
-    const deletedUser = await authService.deleteUserService(userId as string, c);
+    const deletedUser = await authService.deleteUser(userId as string, c);
 
     return c.json({
         message: "User soft-deleted successfully",
@@ -55,4 +55,61 @@ export async function me(c: Context) {
 
     const user = c.get("user");
     return c.json({ user });
+}
+
+export async function resendVerification(c: Context) {
+    const user = c.get("user");
+    const { email } = await c.req.json<{ email: string }>();
+
+
+    const result = await authService.generateAndSendVerificationCode(user.id, email);
+
+    if (!result.success) {
+        return c.json({ error: result.error }, 400);
+    }
+
+    return c.json({ message: "Verification code sent" });
+}
+
+export async function verifyEmail(c: Context) {
+    const body = await c.req.json<VerifyEmailInput>();
+
+
+
+    const result = await authService.verifyEmailCode(body);
+
+    if (!result.success) {
+        return c.json({ error: result.error }, 400);
+    }
+
+    return c.json({ message: "Email verified successfully" });
+}
+
+export async function forgotPassword(c: Context) {
+    const body = await c.req.json<ForgotPasswordInput>();
+
+
+
+    await authService.requestPasswordReset(body);
+
+
+    return c.json({
+        message: "A reset link has been sent to email.",
+    });
+}
+
+export async function resetPassword(c: Context) {
+    const body = await c.req.json<ResetPasswordInput>();
+
+    if (!body.token || !body.newPassword) {
+        return c.json({ error: "Token and new password are required" }, 400);
+    }
+
+    const result = await authService.resetPassword(body);
+
+    if (!result.success) {
+        return c.json({ error: result.error }, 400);
+    }
+
+    return c.json({ message: "Password has been reset successfully" });
 }
