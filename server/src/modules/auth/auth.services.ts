@@ -7,7 +7,7 @@ import { Context } from "hono";
 import { randomBytes, randomInt } from "crypto";
 import { env, sendEmail } from "../../config";
 
-export async function registerUserService(name: string, role: Role, email: string, password: string) {
+export async function registerUser(name: string, role: Role, email: string, password: string) {
     const existing = await db.query.users.findFirst({
         where: eq(users.email, email),
     });
@@ -28,7 +28,7 @@ export async function registerUserService(name: string, role: Role, email: strin
 }
 
 
-export async function loginUserService(email: string, password: string) {
+export async function loginUser(email: string, password: string) {
     const user = await db.query.users.findFirst({
         where: eq(users.email, email),
     });
@@ -49,7 +49,7 @@ export async function loginUserService(email: string, password: string) {
 }
 
 
-export async function findOrCreateOAuthUserService(
+export async function findOrCreateOAuthUser(
     email: string,
     oauthId: string,
     provider: "google"
@@ -69,7 +69,7 @@ export async function findOrCreateOAuthUserService(
     return { user: sanitize(user), token };
 }
 
-export async function deleteUserService(userId: string, c: Context) {
+export async function deleteUser(userId: string, c: Context) {
     const [softDeletedUser] = await db
         .update(users)
         .set({
@@ -101,7 +101,7 @@ function sanitize(user: User) {
 const CODE_EXPIRY_MINUTES = 15;
 
 
-export async function generateAndSendVerificationCodeService(
+export async function generateAndSendVerificationCode(
     userId: string,
     email: string
 ): Promise<ServiceResult> {
@@ -129,7 +129,7 @@ export async function generateAndSendVerificationCodeService(
     return { success: true };
 }
 
-export async function verifyEmailCodeService(
+export async function verifyEmailCode(
     input: VerifyEmailInput
 ): Promise<ServiceResult> {
     const { email, code } = input;
@@ -223,7 +223,7 @@ export async function requestPasswordReset(
     return { success: true };
 }
 
-export async function resetPasswordService(
+export async function resetPassword(
     input: ResetPasswordInput
 ): Promise<ServiceResult> {
     const { token, newPassword, email } = input;

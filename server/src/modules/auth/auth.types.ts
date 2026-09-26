@@ -1,4 +1,4 @@
-export type Role = "user" | "admin" | "moderator";
+export type Role = "user" | "admin" | undefined;
 
 export interface JWTPayload {
   sub: string;
