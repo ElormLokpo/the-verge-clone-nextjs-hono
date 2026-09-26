@@ -1,7 +1,7 @@
 export type Role = "user" | "admin" | "moderator";
 
 export interface JWTPayload {
-  sub: string;       
+  sub: string;
   email: string;
   role: Role;
   iat?: number;
@@ -18,3 +18,23 @@ export interface AuthUser {
 export interface AppVariables {
   user: AuthUser;
 }
+
+
+export type VerifyEmailInput = {
+  email: string;
+  code: string;
+};
+
+export type ForgotPasswordInput = {
+  email: string;
+};
+
+export type ResetPasswordInput = {
+  token: string;
+  newPassword: string;
+};
+
+export type ServiceResult<T = void> =
+  | { success: true; data?: T }
+  | { success: false; error: string; status?: number };
+

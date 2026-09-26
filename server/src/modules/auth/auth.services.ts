@@ -2,9 +2,10 @@ import bcrypt from "bcryptjs";
 import { and, eq, isNull } from "drizzle-orm";
 import { db } from "../../db"
 import { users, type NewUser, type User } from "../../db/schema";
-import { signToken, JWTPayload, Role } from "./";
+import { signToken, JWTPayload, Role, VerifyEmailInput, ServiceResult } from "./";
 import { Context } from "hono";
-
+import { randomInt } from "crypto";
+import { sendEmail } from "../../config";
 
 export async function registerUserService(name: string, role: Role, email: string, password: string) {
     const existing = await db.query.users.findFirst({
@@ -19,7 +20,7 @@ export async function registerUserService(name: string, role: Role, email: strin
 
     const [user] = await db
         .insert(users)
-        .values({ email, passwordHash, role: role  ?? "user", name } satisfies NewUser)
+        .values({ email, passwordHash, role: role ?? "user", name } satisfies NewUser)
         .returning();
 
     const token = await signToken(buildPayload(user));
@@ -36,7 +37,7 @@ export async function loginUserService(email: string, password: string) {
         throw new Error("Invalid credentials");
     }
 
-    if (user.deleteAt){
+    if (user.deleteAt) {
         throw new Error("Account has been deleted");
     }
 
@@ -75,14 +76,14 @@ export async function deleteUserService(userId: string, c: Context) {
             deleteAt: new Date(),
             updatedAt: new Date(),
         })
-        .where(and(eq(users.id, userId), isNull(users.deleteAt)))        
-        .returning();           
+        .where(and(eq(users.id, userId), isNull(users.deleteAt)))
+        .returning();
 
-        if (!softDeletedUser) {
-            return c.json({ error: "User not found or already deleted" }, 404);
-        }
+    if (!softDeletedUser) {
+        return c.json({ error: "User not found or already deleted" }, 404);
+    }
 
-        return softDeletedUser;
+    return softDeletedUser;
 }
 
 
@@ -93,4 +94,82 @@ function buildPayload(user: User): JWTPayload {
 function sanitize(user: User) {
     const { passwordHash, ...safe } = user;
     return safe;
+}
+
+
+
+const CODE_EXPIRY_MINUTES = 15;
+const CODE_LENGTH = 6;
+
+export async function generateAndSendVerificationCodeService(
+    userId: string,
+    email: string
+): Promise<ServiceResult> {
+    const code = randomInt(100000, 999999).toString(); 
+    const hashedCode = await bcrypt.hash(code, 10);
+    const expires = new Date(Date.now() + CODE_EXPIRY_MINUTES * 60 * 1000);
+
+    await db
+        .update(users)
+        .set({
+            emailVerificationCode: hashedCode,
+            emailVerificationExpires: expires,
+        })
+        .where(eq(users.id, userId));
+
+    await sendEmail({
+        to: email,
+        subject: "Verify your email",
+        html: `
+      <p>Your verification code is: <strong>${code}</strong></p>
+      <p>This code expires in ${CODE_EXPIRY_MINUTES} minutes.</p>
+    `,
+    });
+
+    return { success: true };
+}
+
+export async function verifyEmailCodeService(
+    input: VerifyEmailInput
+): Promise<ServiceResult> {
+    const { email, code } = input;
+
+    const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, email.toLowerCase()))
+        .limit(1);
+
+    if (!user) {
+        return { success: false, error: "Invalid email or code", status: 400 };
+    }
+
+    if (user.isEmailVerified) {
+        return { success: false, error: "Email already verified", status: 400 };
+    }
+
+    if (
+        !user.emailVerificationCode ||
+        !user.emailVerificationExpires ||
+        user.emailVerificationExpires < new Date()
+    ) {
+        return { success: false, error: "Code expired or invalid", status: 400 };
+    }
+
+    const isValid = await bcrypt.compare(code, user.emailVerificationCode);
+    if (!isValid) {
+        return { success: false, error: "Invalid code", status: 400 };
+    }
+
+    
+    await db
+        .update(users)
+        .set({
+            isEmailVerified: true,
+            emailVerificationCode: null,
+            emailVerificationExpires: null,
+        })
+        .where(eq(users.id, user.id));
+
+    return { success: true };
 }

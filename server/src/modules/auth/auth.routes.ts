@@ -13,6 +13,9 @@ auth.post("/login", zValidator(loginSchema), authController.login);
 auth.post("/logout", authController.logout);
 auth.get("/me", authMiddleware, authController.me);
 
+auth.post("/verify-email", authMiddleware,authController.verifyEmail);
+auth.post("/resend-verification", authMiddleware, authController.resendVerification);
+
 auth.delete("/delete-user/:id", authMiddleware, requireRole("admin"), authController.deleteUser);
 
 

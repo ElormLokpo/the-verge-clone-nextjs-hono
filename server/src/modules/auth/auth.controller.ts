@@ -56,3 +56,34 @@ export async function me(c: Context) {
     const user = c.get("user");
     return c.json({ user });
 }
+
+export async function resendVerification(c: Context) {
+    const user = c.get("user");
+    const { email } = await c.req.json<{ email: string }>();
+
+
+    const result = await authService.generateAndSendVerificationCodeService(user.id, email);
+
+    if (!result.success) {
+        return c.json({ error: result.error }, 400);
+    }
+
+    return c.json({ message: "Verification code sent" });
+}
+
+export async function verifyEmail(c: Context) {
+    const body = await c.req.json<authService.VerifyEmailInput>();
+
+   
+    if (!body.email || !body.code) {
+        return c.json({ error: "Email and code are required" }, 400);
+    }
+
+    const result = await authService.verifyEmailCodeService(body);
+
+    if (!result.success) {
+        return c.json({ error: result.error }, 400);
+    }
+
+    return c.json({ message: "Email verified successfully" });
+}
