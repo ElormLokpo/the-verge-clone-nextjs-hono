@@ -2,10 +2,11 @@ import bcrypt from "bcryptjs";
 import { and, eq, isNull } from "drizzle-orm";
 import { db } from "../../db"
 import { users, type NewUser, type User } from "../../db/schema";
-import { signToken, JWTPayload, Role, VerifyEmailInput, ServiceResult, ForgotPasswordInput, ResetPasswordInput } from "./";
+import { JWTPayload, VerifyEmailInput, ServiceResult, ForgotPasswordInput, ResetPasswordInput, Role, CODE_EXPIRY_MINUTES, RESET_TOKEN_EXPIRY_MINUTES, FRONTEND_RESET_URL } from "./auth.types";
+import { signToken } from "./auth.jwt"
 import { Context } from "hono";
 import { randomBytes, randomInt } from "crypto";
-import { env, sendEmail } from "../../config";
+import { sendEmail } from "../../config";
 
 export async function registerUser(name: string, role: Role, email: string, password: string) {
     const existing = await db.query.users.findFirst({
@@ -24,6 +25,8 @@ export async function registerUser(name: string, role: Role, email: string, pass
         .returning();
 
     const token = await signToken(buildPayload(user));
+    await generateAndSendVerificationCode(user.id, email);
+
     return { user: sanitize(user), token };
 }
 
@@ -92,13 +95,23 @@ function buildPayload(user: User): JWTPayload {
 }
 
 function sanitize(user: User) {
-    const { passwordHash, ...safe } = user;
+    const {
+        passwordHash,
+        oauthId,
+        oauthProvider,
+        createdAt,
+        updatedAt,
+        deleteAt,
+        emailVerificationCode,
+        emailVerificationExpires,
+        passwordResetToken,
+        passwordResetExpires, ...safe } = user;
     return safe;
 }
 
 
 
-const CODE_EXPIRY_MINUTES = 15;
+
 
 
 export async function generateAndSendVerificationCode(
@@ -175,8 +188,6 @@ export async function verifyEmailCode(
 }
 
 
-const RESET_TOKEN_EXPIRY_MINUTES = 30;
-const FRONTEND_RESET_URL = env.FRONTEND_URL + "/reset-password";
 
 export async function requestPasswordReset(
     input: ForgotPasswordInput

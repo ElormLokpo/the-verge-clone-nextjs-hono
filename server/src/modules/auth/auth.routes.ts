@@ -1,6 +1,9 @@
 import { Hono } from "hono";
-import * as authController from "./";
-import { type AppVariables, authMiddleware, requireRole, getGoogleAuthUrl, findOrCreateOAuthUserService, exchangeCodeForTokens, getGoogleUser } from "./";
+import * as authController from "./auth.controller";
+import { type AppVariables } from "./auth.types"
+import { authMiddleware, requireRole } from "./auth.middleware"
+import { findOrCreateOAuthUser } from "./auth.services"
+import { getGoogleAuthUrl, getGoogleUser, exchangeCodeForTokens } from "./auth.oauth"
 import { setCookie } from "hono/cookie";
 import { env, loginSchema, registerSchema, emailSchema, verifyEmailSchema, zValidator, resetPasswordSchema } from "../../config";
 
@@ -35,7 +38,7 @@ auth.get("/google/callback", async (c) => {
     const tokens = await exchangeCodeForTokens(code);
     const googleUser = await getGoogleUser(tokens.access_token);
 
-    const { user, token } = await findOrCreateOAuthUserService(
+    const { user, token } = await findOrCreateOAuthUser(
         googleUser.email,
         googleUser.sub,
         "google"

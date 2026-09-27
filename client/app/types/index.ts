@@ -1,0 +1,28 @@
+
+export type RegisterUserRequest = {
+    name: string,
+    email: string,
+    password: string,
+    role: string
+}
+
+export type LoginUserRequest = {
+    email: string,
+    password: string
+}
+
+export type VerifyEmailRequest = {
+    email: string | undefined,
+    code: string
+}
+
+export type AuthResponseType = {
+    user: {
+        id: string,
+        name: string,
+        email: string,
+        isEmailVerified: boolean,
+        role: string
+    },
+    token: string
+}

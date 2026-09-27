@@ -8,6 +8,7 @@ import z from "zod";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import Link from "next/link";
+import { useLoginUser, useRegisterUser } from "@/app/hooks";
 
 
 export default function Auth() {
@@ -99,12 +100,13 @@ const signUpSchema = z
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 const SignUpForm = () => {
+    const { mutate, isPending } = useRegisterUser();
 
     const {
         register,
         handleSubmit,
-        reset,
-        formState: { errors, isSubmitting },
+
+        formState: { errors },
     } = useForm<SignUpFormValues>({
         resolver: zodResolver(signUpSchema),
         defaultValues: {
@@ -116,8 +118,10 @@ const SignUpForm = () => {
     });
 
     const onSubmit = async (data: SignUpFormValues) => {
-        console.log("data", data)
-
+        const { confirmPassword, ...rest } = data;
+        const finalData = { ...rest, role: "user" }
+        mutate(finalData);
+        console.log("data", finalData);
     };
 
     return (
@@ -173,10 +177,10 @@ const SignUpForm = () => {
 
                 <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isPending}
                     className="mt-2 w-full bg-indigo-600 hover:bg-black px-4 py-3.5 font-polysans text-sm font-medium text-white transition-colors focus:outline-none disabled:opacity-50"
                 >
-                    {isSubmitting ? "Creating Account..." : "Sign Up"}
+                    {isPending ? "Creating Account..." : "Sign Up"}
                 </button>
             </form>
         </div>
@@ -203,11 +207,13 @@ type SignInFormValues = z.infer<typeof signInSchema>;
 
 const SignInForm = () => {
 
+    const { mutate, isPending } = useLoginUser();
+
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<SignInFormValues>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
@@ -220,7 +226,7 @@ const SignInForm = () => {
     });
 
     const onSubmit = async (data: SignInFormValues) => {
-        console.log("data", data)
+        mutate(data);
 
     };
 
@@ -248,7 +254,7 @@ const SignInForm = () => {
                     errors={errors}
                 />
 
-                 <div className="text-right">
+                <div className="text-right">
                     <Link href="/auth/forgot-password" className="text-sm hover:underline">Forgot Password?</Link>
                 </div>
 
@@ -256,10 +262,10 @@ const SignInForm = () => {
 
                 <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isPending}
                     className="mt-2 w-full bg-indigo-600 hover:bg-black px-4 py-3.5 font-polysans text-sm font-medium text-white transition-colors focus:outline-none disabled:opacity-50"
                 >
-                    {isSubmitting ? "Signing In..." : "Sign In"}
+                    {isPending ? "Signing In..." : "Sign In"}
                 </button>
             </form>
         </div>

@@ -1,6 +1,7 @@
 import { createMiddleware } from "hono/factory";
 import { getCookie } from "hono/cookie";
-import  { type AppVariables, verifyToken, Role } from "./";
+import  { type AppVariables, Role } from "./auth.types";
+import { verifyToken } from "./auth.jwt";
 
 export const authMiddleware = createMiddleware<{ Variables: AppVariables }>(
   async (c, next) => {

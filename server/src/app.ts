@@ -14,8 +14,11 @@ export const createApp = () => {
     app.use("*", secureHeaders());
     app.use("*", cors({
         origin: (origin) => {
-            if (!origin) return "*";
-            return env.ALLOWED_DOMAINS.includes(origin) ? origin : "";
+            if (!origin) return undefined;
+
+            return env.ALLOWED_DOMAINS.includes(origin)
+                ? origin
+                : undefined;
         },
         allowHeaders: ["Content-Type", "Authorization"],
         allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -36,7 +39,7 @@ export const createApp = () => {
 
     app.route("/auth", authRoutes)
     app.onError(errorMiddleware);
-    
+
     return app;
 }
 
