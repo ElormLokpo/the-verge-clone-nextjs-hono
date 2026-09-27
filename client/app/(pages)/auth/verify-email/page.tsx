@@ -1,6 +1,8 @@
 "use client"
 import { Input } from "@/app/components/ui/input";
 import { Typography } from "@/app/components/ui/typography"
+import { useVerifyEmail } from "@/app/hooks";
+import { useAuthStore } from "@/app/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -50,6 +52,8 @@ type VerifyEmailValues = z.infer<typeof verifyEmailSchema>;
 
 
 const VerifyEmailForm = () => {
+    const authenticatedUserEmail = useAuthStore((state) => state.user?.email);
+    const {mutate, isPending} = useVerifyEmail();
 
     const {
         register,
@@ -67,7 +71,8 @@ const VerifyEmailForm = () => {
     });
 
     const onSubmit = async (data: VerifyEmailValues) => {
-        console.log("data", data)
+        const findalData = {email: authenticatedUserEmail, code: data.code}
+        mutate(findalData);
 
     };
 

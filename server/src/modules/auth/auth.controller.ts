@@ -1,8 +1,8 @@
 import type { Context } from "hono";
-import { getCookie, setCookie, deleteCookie } from "hono/cookie";
+import { setCookie, deleteCookie } from "hono/cookie";
 import * as authService from "./auth.services";
-import { COOKIE_NAME, COOKIE_OPTIONS, ForgotPasswordInput, ResetPasswordInput, Role } from "./";
-import {VerifyEmailInput} from "./"
+import { COOKIE_NAME, COOKIE_OPTIONS, } from "./auth.jwt";
+import { VerifyEmailInput, ForgotPasswordInput, ResetPasswordInput, Role } from "./auth.types"
 
 
 export async function register(c: Context) {
