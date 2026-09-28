@@ -25,8 +25,8 @@ export const AuthLayout = ({ children }: { children: ReactNode }) => {
 
                 <div className="relative z-10 flex min-h-screen items-center justify-center">
                     <div>
-                        <div className="text-white text-5xl font-bold text-italic mb-5 text-center">
-                            TheVerge
+                        <div className="text-white text-5xl flex items-center justify-center  mb-5 text-center">
+                            <Image src="/logo-dark-transparent.png" alt="logo" width={200} height={50} />
                         </div>
                         <div>
                             {children}
