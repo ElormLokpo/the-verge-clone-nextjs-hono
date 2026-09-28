@@ -5,7 +5,7 @@ import { env } from "./config";
 
 const app = createApp();
 
-console.log(`Server running on PORT:${env.PORT}`);
+(`Server running on PORT:${env.PORT}`);
 
 export default {
   fetch: app.fetch,

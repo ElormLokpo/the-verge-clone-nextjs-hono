@@ -105,7 +105,7 @@ const SignUpForm = () => {
     const {
         register,
         handleSubmit,
-
+        reset,
         formState: { errors },
     } = useForm<SignUpFormValues>({
         resolver: zodResolver(signUpSchema),
@@ -121,7 +121,7 @@ const SignUpForm = () => {
         const { confirmPassword, ...rest } = data;
         const finalData = { ...rest, role: "user" }
         mutate(finalData);
-        console.log("data", finalData);
+        reset();
     };
 
     return (
@@ -168,11 +168,6 @@ const SignUpForm = () => {
                     register={register}
                     errors={errors}
                 />
-
-                <div className="text-right">
-                    <Link href="/auth/forgot-password" className="text-sm hover:underline">Forgot Password?</Link>
-                </div>
-
 
 
                 <button
@@ -227,7 +222,7 @@ const SignInForm = () => {
 
     const onSubmit = async (data: SignInFormValues) => {
         mutate(data);
-
+        reset();
     };
 
     return (

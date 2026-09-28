@@ -59,7 +59,7 @@ const VerifyEmailForm = () => {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<VerifyEmailValues>({
         resolver: zodResolver(verifyEmailSchema),
         defaultValues: {
@@ -73,6 +73,7 @@ const VerifyEmailForm = () => {
     const onSubmit = async (data: VerifyEmailValues) => {
         const findalData = {email: authenticatedUserEmail, code: data.code}
         mutate(findalData);
+        reset()
 
     };
 
@@ -81,9 +82,6 @@ const VerifyEmailForm = () => {
 
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-
-
-
                 <Input<VerifyEmailValues>
                     name="code"
                     type="number"
@@ -96,10 +94,10 @@ const VerifyEmailForm = () => {
 
                 <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isPending}
                     className="mt-2 w-full bg-indigo-600 hover:bg-black px-4 py-3.5 font-polysans text-sm font-medium text-white transition-colors focus:outline-none disabled:opacity-50"
                 >
-                    {isSubmitting ? "Verifying..." : "Verify email"}
+                    {isPending ? "Verifying..." : "Verify email"}
                 </button>
             </form>
         </div>

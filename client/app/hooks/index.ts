@@ -1,8 +1,8 @@
 "use client"
 import { useMutation } from "@tanstack/react-query"
 import { api } from "../api"
-import { AuthResponseType, LoginUserRequest, RegisterUserRequest, VerifyEmailRequest } from "../types"
-import { API_ROUTES } from "../constants"
+import { AuthResponseType, EmailType, LoginUserRequest, RegisterUserRequest, ResetPasswordRequest, VerifyEmailRequest } from "../types"
+import { API_ROUTES, CLIENT_ROUTES } from "../constants"
 import { toast } from "sonner"
 import { useAuthStore } from "../store"
 import { useRouter } from "next/navigation"
@@ -17,14 +17,13 @@ export const useRegisterUser = () => {
     return useMutation({
         mutationFn: async (data: RegisterUserRequest): Promise<AuthResponseType> => api.post(API_ROUTES.register, data),
         onSuccess: (data: AuthResponseType) => {
-            console.log("success", data)
 
             setAuth(data.user, data.token)
             toast.success("Account created successfully");
-            router.push("/auth/verify-email");
+            router.push(CLIENT_ROUTES.verifyEmail);
 
         },
-        onError: (error) => {
+        onError: () => {
             toast.error("Something went wrong. Please try again later");
         }
     })
@@ -40,12 +39,12 @@ export const useVerifyEmail = () => {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }).then((data) => console.log(data)),
+        }).then((data) => data),
         onSuccess: () => {
             toast.success("Email verified successfully");
-            router.push("/")
+            router.push(CLIENT_ROUTES.home)
         },
-        onError: (error) => {
+        onError: () => {
             toast.error("Something went wrong. Please try again later");
         }
     })
@@ -53,12 +52,46 @@ export const useVerifyEmail = () => {
 
 
 export const useLoginUser = () => {
+    const router = useRouter();
+
     return useMutation({
-        mutationFn: async (data: LoginUserRequest) => api.post(API_ROUTES.login, data).then((data) => console.log(data)),
+        mutationFn: async (data: LoginUserRequest) => api.post(API_ROUTES.login, data).then((data) => data),
         onSuccess: () => {
             toast.success("Logged in successful");
+            router.push(CLIENT_ROUTES.home);
         },
-        onError: (error) => {
+        onError: () => {
+            toast.error("Something went wrong. Please try again later");
+        }
+    })
+}
+
+
+export const useForgotPassword = () => {
+
+    return useMutation({
+        mutationFn: async (data: EmailType) => api.post(API_ROUTES.forgotPassword, data).then((data) => data),
+        onSuccess: () => {
+            toast.success("Password reset link sent to your email");
+
+        },
+        onError: () => {
+            toast.error("Something went wrong. Please try again later");
+        }
+    })
+}
+
+
+export const useResetPassword = () => {
+    const router = useRouter();
+
+    return useMutation({
+        mutationFn: async (data: ResetPasswordRequest) => api.post(API_ROUTES.resetPassword, data).then((data) => data),
+        onSuccess: () => {
+            toast.success("Password reset successfully");
+            router.push(CLIENT_ROUTES.signIn);
+        },
+        onError: () => {
             toast.error("Something went wrong. Please try again later");
         }
     })

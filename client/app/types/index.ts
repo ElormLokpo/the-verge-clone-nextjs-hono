@@ -16,6 +16,10 @@ export type VerifyEmailRequest = {
     code: string
 }
 
+export type EmailType = {
+    email: string,
+}
+
 export type AuthResponseType = {
     user: {
         id: string,
@@ -26,3 +30,10 @@ export type AuthResponseType = {
     },
     token: string
 }
+
+
+export type ResetPasswordRequest = {
+    token: string;
+    newPassword: string;
+    email: string;
+};

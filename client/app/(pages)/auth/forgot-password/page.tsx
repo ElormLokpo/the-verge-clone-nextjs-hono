@@ -1,6 +1,7 @@
 "use client"
 import { Input } from "@/app/components/ui/input";
 import { Typography } from "@/app/components/ui/typography"
+import { useForgotPassword } from "@/app/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -40,7 +41,7 @@ const forgotPasswordSchema = z
     .object({
         email: z
             .email("Please enter a valid email address")
-            
+
 
 
     })
@@ -51,11 +52,13 @@ type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 
 const ForgotPasswordForm = () => {
 
+    const { mutate, isPending, isSuccess } = useForgotPassword();
+
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<ForgotPasswordValues>({
         resolver: zodResolver(forgotPasswordSchema),
         defaultValues: {
@@ -64,18 +67,20 @@ const ForgotPasswordForm = () => {
     });
 
     const onSubmit = async (data: ForgotPasswordValues) => {
-        console.log("data", data)
+
+
+        mutate(data);
+        reset();
 
     };
 
     return (
         <div className=" w-full ">
-
+            {isSuccess ?? <div className="w-full flex justify-center items-center py-5">
+                <Typography variant="regular" text="A password reset link has been to your email." className="text-center underline"></Typography>
+            </div>}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-
-
-
                 <Input<ForgotPasswordValues>
                     name="email"
                     type="email"
@@ -88,10 +93,10 @@ const ForgotPasswordForm = () => {
 
                 <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isPending}
                     className="mt-2 w-full bg-indigo-600 hover:bg-black px-4 py-3.5 font-polysans text-sm font-medium text-white transition-colors focus:outline-none disabled:opacity-50"
                 >
-                    {isSubmitting ? "Verifying..." : "Verify email"}
+                    {isPending ? "Verifying..." : "Verify email"}
                 </button>
             </form>
         </div>

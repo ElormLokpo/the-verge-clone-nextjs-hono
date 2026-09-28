@@ -1,13 +1,15 @@
-
-
 "use client"
 import { Input } from "@/app/components/ui/input";
 import { Typography } from "@/app/components/ui/typography"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+import { useResetPassword } from "@/app/hooks";
 
 export const ResetPasswordPage = () => {
+
 
     return (
         <div className="bg-white w-132 py-10 px-3">
@@ -28,7 +30,9 @@ export const ResetPasswordPage = () => {
             </div>
 
             <div className="px-16 mb-4">
-                <ResetPasswordForm />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <ResetPasswordForm />
+                </Suspense>
             </div>
 
 
@@ -54,12 +58,18 @@ type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 
 
 const ResetPasswordForm = () => {
+    const searchParams = useSearchParams();
+
+    const token = searchParams.get('token') as string;
+    const email = searchParams.get('email') as string;
+
+    const { mutate, isPending } = useResetPassword();
 
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<ResetPasswordValues>({
         resolver: zodResolver(resetPasswordSchema),
         defaultValues: {
@@ -69,8 +79,9 @@ const ResetPasswordForm = () => {
     });
 
     const onSubmit = async (data: ResetPasswordValues) => {
-        console.log("data", data)
-
+      
+        mutate({ newPassword: data.password, email, token })
+        reset();
     };
 
     return (
@@ -104,10 +115,10 @@ const ResetPasswordForm = () => {
 
                 <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isPending}
                     className="mt-2 w-full bg-indigo-600 hover:bg-black px-4 py-3.5 font-polysans text-sm font-medium text-white transition-colors focus:outline-none disabled:opacity-50"
                 >
-                    {isSubmitting ? "Verifying..." : "Verify email"}
+                    {isPending ? "Resetting..." : "Reset password"}
                 </button>
             </form>
         </div>
