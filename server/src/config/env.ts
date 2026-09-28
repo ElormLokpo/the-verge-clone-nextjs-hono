@@ -31,7 +31,8 @@ const envSchema = z.object({
     .min(1, { message: "Google userinfo url is required" }),
 
   JWT_SECRET: z.string().min(1, { message: "JWT secret is required" }),
-  FRONTEND_URL: z.string(),
+  FRONTEND_URL_LOCAL: z.string(),
+  FRONTEND_URL_PROD: z.string()
 });
 
 export const env = envSchema.parse(process.env);

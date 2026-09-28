@@ -83,5 +83,5 @@ auth.get("/google/callback", async (c) => {
     path: "/",
   });
 
-  return c.redirect(env.FRONTEND_URL + "/dashboard");
+  return c.redirect(env.NODE_ENV === "production" ? env.FRONTEND_URL_PROD : env.FRONTEND_URL_LOCAL + "/dashboard");
 });
