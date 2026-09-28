@@ -18,12 +18,14 @@ declare module "hono" {
 export function zValidator<T extends ZodTypeAny>(schema: T) {
   return createMiddleware(async (c, next) => {
     const body = await c.req.json();
-    const parsed = await schema.parseAsync(body); 
-    c.set("validatedBody", parsed);              
+    const parsed = await schema.parseAsync(body);
+    c.set("validatedBody", parsed);
     await next();
   });
 }
 
-export function getValidatedBody<T>(c: Parameters<typeof createMiddleware>[0]): T {
+export function getValidatedBody<T>(
+  c: Parameters<typeof createMiddleware>[0],
+): T {
   return c.get("validatedBody") as T;
 }

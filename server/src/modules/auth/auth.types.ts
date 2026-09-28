@@ -16,11 +16,9 @@ export interface AuthUser {
   role: Role;
 }
 
-
 export interface AppVariables {
   user: AuthUser;
 }
-
 
 export type VerifyEmailInput = {
   email: string;
@@ -42,5 +40,5 @@ export type ServiceResult<T = void> =
   | { success: false; error: string; status?: number };
 
 export const RESET_TOKEN_EXPIRY_MINUTES = 30;
-export const FRONTEND_RESET_URL = env.FRONTEND_URL + "/reset-password";
+export const FRONTEND_RESET_URL = env.FRONTEND_URL + "/auth/reset-password";
 export const CODE_EXPIRY_MINUTES = 15;

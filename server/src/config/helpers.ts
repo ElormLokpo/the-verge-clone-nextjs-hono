@@ -1,5 +1,4 @@
-import { ZodError, z, type ZodTypeAny } from "zod";
-import type { Context } from "hono";
+import { ZodError } from "zod";
 
 export interface AppError {
   success: false;
@@ -8,7 +7,6 @@ export interface AppError {
 }
 
 export function parseError(err: unknown): { status: number; body: AppError } {
-
   if (err instanceof ZodError) {
     const errors: Record<string, string[]> = {};
 
@@ -27,7 +25,6 @@ export function parseError(err: unknown): { status: number; body: AppError } {
       },
     };
   }
-
 
   if (err instanceof Error) {
     const knownMessages: Record<string, number> = {
@@ -48,7 +45,6 @@ export function parseError(err: unknown): { status: number; body: AppError } {
     };
   }
 
-
   return {
     status: 500,
     body: {
@@ -58,11 +54,16 @@ export function parseError(err: unknown): { status: number; body: AppError } {
   };
 }
 
-
-export function sendEmail({ to, subject, html }: { to: string, subject: string, html: string }) {
-  console.log(`Sending email to ${to} with subject ${subject} and html ${html}`);
+export function sendEmail({
+  to,
+  subject,
+  html,
+}: {
+  to: string;
+  subject: string;
+  html: string;
+}) {
+  console.log(
+    `Sending email to ${to} with subject ${subject} and html ${html}`,
+  );
 }
-
-
-
-

@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-
-    --font-polysans: var(--font-polysans), "polySans Fallback", Helvetica, Arial, sans-serif;
+  --font-polysans:
+    var(--font-polysans), "polySans Fallback", Helvetica, Arial, sans-serif;
 }

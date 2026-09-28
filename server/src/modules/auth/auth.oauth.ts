@@ -1,8 +1,7 @@
 import { env } from "bun";
 
-const GOOGLE_AUTH_URL = env.GOOGLE_AUTH_URL!; 
+const GOOGLE_AUTH_URL = env.GOOGLE_AUTH_URL!;
 const GOOGLE_USERINFO_URL = env.GOOGLE_USERINFO_URL!;
-
 
 export function getGoogleAuthUrl(state: string): string {
   const params = new URLSearchParams({
@@ -22,12 +21,14 @@ interface GoogleTokens {
 }
 
 interface GoogleUser {
-  sub: string;  
+  sub: string;
   email: string;
   name: string;
 }
 
-export async function exchangeCodeForTokens(code: string): Promise<GoogleTokens> {
+export async function exchangeCodeForTokens(
+  code: string,
+): Promise<GoogleTokens> {
   const res = await fetch(env.GOOGLE_TOKEN_URL!, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },

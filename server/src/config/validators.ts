@@ -14,12 +14,10 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-
 export const verifyEmailSchema = z.object({
   email: z.email("Invalid email address"),
   code: z.string().min(1, "Code is required"),
 });
-
 
 export const emailSchema = z.object({
   email: z.email("Invalid email address"),
