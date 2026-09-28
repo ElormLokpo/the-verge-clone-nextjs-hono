@@ -1,11 +1,10 @@
 import { createMiddleware } from "hono/factory";
 import { getCookie } from "hono/cookie";
-import  { type AppVariables, Role } from "./auth.types";
+import { type AppVariables, Role } from "./auth.types";
 import { verifyToken } from "./auth.jwt";
 
 export const authMiddleware = createMiddleware<{ Variables: AppVariables }>(
   async (c, next) => {
-
     const cookieToken = getCookie(c, "auth_token");
     const headerToken = c.req.header("Authorization")?.replace("Bearer ", "");
     const token = cookieToken ?? headerToken;
@@ -25,7 +24,7 @@ export const authMiddleware = createMiddleware<{ Variables: AppVariables }>(
     } catch {
       return c.json({ error: "Invalid or expired token" }, 401);
     }
-  }
+  },
 );
 
 export function requireRole(...roles: Role[]) {

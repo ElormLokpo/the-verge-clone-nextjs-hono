@@ -8,40 +8,38 @@ import { sql } from "drizzle-orm";
 import { auth as authRoutes } from "./modules/auth/auth.routes";
 
 export const createApp = () => {
-    const app = new Hono().basePath("/api/v1");
+  const app = new Hono().basePath("/api/v1");
 
-    app.use("*", logger());
-    app.use("*", secureHeaders());
-    app.use("*", cors({
-        origin: (origin) => {
-            if (!origin) return undefined;
+  app.use("*", logger());
+  app.use("*", secureHeaders());
+  app.use(
+    "*",
+    cors({
+      origin: (origin) => {
+        if (!origin) return undefined;
 
-            return env.ALLOWED_DOMAINS.includes(origin)
-                ? origin
-                : undefined;
-        },
-        allowHeaders: ["Content-Type", "Authorization"],
-        allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        credentials: true,
+        return env.ALLOWED_DOMAINS.includes(origin) ? origin : undefined;
+      },
+      allowHeaders: ["Content-Type", "Authorization"],
+      allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      credentials: true,
+    }),
+  );
 
-    }));
+  app.all("/health", async (c: Context) => {
+    try {
+      await db.execute(sql`SELECT 1`);
+      return c.json({ message: "Database ping successful" }, 200);
+    } catch (err) {
+      console.error(err);
+      return c.json({ message: "Database ping unsucessful" }, 500);
+    }
+  });
 
-    app.all("/health", async (c: Context) => {
-        try {
-            await db.execute(sql`SELECT 1`);
-            return c.json({ message: "Database ping successful" }, 200)
+  app.route("/auth", authRoutes);
+  app.onError(errorMiddleware);
 
-        } catch (err) {
-            console.error(err);
-            return c.json({ message: "Database ping unsucessful" }, 500)
-        }
-    });
-
-    app.route("/auth", authRoutes)
-    app.onError(errorMiddleware);
-
-    return app;
-}
-
+  return app;
+};
 
 export type App = ReturnType<typeof createApp>;

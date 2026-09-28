@@ -16,11 +16,9 @@ export interface AuthUser {
   role: Role;
 }
 
-
 export interface AppVariables {
   user: AuthUser;
 }
-
 
 export type VerifyEmailInput = {
   email: string;
