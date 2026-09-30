@@ -16,7 +16,7 @@ const polySans = Plus_Jakarta_Sans({
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${polySans.variable}`}>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full bg-[#131313] flex flex-col mb-30">
         <RootProviders>{children}</RootProviders>
       </body>
     </html>
