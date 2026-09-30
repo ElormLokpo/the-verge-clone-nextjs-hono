@@ -35,3 +35,32 @@ export type ResetPasswordRequest = {
   newPassword: string;
   email: string;
 };
+
+
+export type Article = {
+  id: string;
+  title: string;
+  slug: string;
+  summary: string;
+
+  author: {
+    name: string;
+    image: string;
+  };
+
+  coverPhoto: string;
+
+  date: string;
+  readTime: string;
+  category: string;
+
+  body: string;
+
+  comments: {
+    id: string;
+    author: string;
+    image: string;
+    body: string;
+    date: string;
+  }[];
+};
