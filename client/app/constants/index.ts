@@ -13,4 +13,5 @@ export const CLIENT_ROUTES = {
   forgotPassword: `/auth/forgot-password`,
   resetPassword: `/auth/reset-password`,
   home: `/`,
+  createPost: `/post/create-post`,
 };

@@ -33,5 +33,55 @@ export const resetPasswordSchema = z.object({
   email: z.email("Invalid email address"),
 });
 
+
+export const createPostSchema = z.object({
+  title: z
+    .string()
+    .min(1)
+    .max(255),
+
+  summary: z
+    .string()
+    .min(1),
+
+  body: z
+    .string()
+    .min(1),
+
+  category: z
+    .string()
+    .min(1)
+    .max(100),
+
+  coverPhoto: z
+    .string()
+    .url()
+    .optional()
+    .nullable(),
+
+  published: z
+    .boolean()
+    .default(false),
+});
+
+export const createCommentSchema = z.object({
+  body: z
+    .string()
+    .min(1)
+    .max(5000),
+});
+
+export const updateCommentSchema = z.object({
+  body: z
+    .string()
+    .min(1)
+    .max(5000),
+});
+
+export const updatePostSchema = createPostSchema.partial();
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
+
+export type PostInput = z.infer<typeof createPostSchema>;
+export type UpdatePostInput = z.infer<typeof updatePostSchema>;

@@ -57,12 +57,15 @@ export const useVerifyEmail = () => {
 
 export const useLoginUser = () => {
   const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   return useMutation({
-    mutationFn: async (data: LoginUserRequest) =>
-      api.post(API_ROUTES.login, data).then((data) => data),
-    onSuccess: () => {
+    mutationFn: async (data: LoginUserRequest): Promise<AuthResponseType> =>
+      api.post(API_ROUTES.login, data).then((data) => data) as Promise<AuthResponseType>,
+    onSuccess: (data: AuthResponseType) => {
       toast.success("Logged in successful");
+    
+      setAuth(data.user, data.token);
       router.push(CLIENT_ROUTES.home);
     },
     onError: () => {
