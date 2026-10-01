@@ -5,8 +5,6 @@ import { Article } from "./types";
 import { VscComment } from "react-icons/vsc";
 
 
-
-
 export default function Home() {
   return (
     <div className="h-screen w-screen bg-[#131313] px-70 py-16 mb-30">

@@ -6,6 +6,8 @@ import { env, errorMiddleware } from "./config";
 import { db } from "./db";
 import { sql } from "drizzle-orm";
 import { auth as authRoutes } from "./modules/auth/auth.routes";
+import { postRoutes } from "./modules/posts/post.routes";
+import { commentRoutes } from "./modules/comments/comment.route";
 
 export const createApp = () => {
   const app = new Hono().basePath("/api/v1");
@@ -37,6 +39,8 @@ export const createApp = () => {
   });
 
   app.route("/auth", authRoutes);
+  app.route("/posts", postRoutes);
+  app.route("/comments", commentRoutes);
   app.onError(errorMiddleware);
 
   return app;
