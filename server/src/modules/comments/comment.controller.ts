@@ -13,8 +13,7 @@ export async function createComment(c: Context) {
 
   const body = await c.req.json();
 
-  const parsed =
-    createCommentSchema.safeParse(body);
+  const parsed = createCommentSchema.safeParse(body);
 
   if (!parsed.success) {
     return c.json(
@@ -27,12 +26,11 @@ export async function createComment(c: Context) {
   }
 
   try {
-    const comment =
-      await commentService.createComment(
-        postId as string,
-        user.id,
-        parsed.data.body,
-      );
+    const comment = await commentService.createComment(
+      postId as string,
+      user.id,
+      parsed.data.body,
+    );
 
     return c.json(
       {
@@ -41,10 +39,7 @@ export async function createComment(c: Context) {
       201,
     );
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === "POST_NOT_FOUND"
-    ) {
+    if (error instanceof Error && error.message === "POST_NOT_FOUND") {
       return c.json(
         {
           message: "Post not found",
@@ -60,10 +55,7 @@ export async function createComment(c: Context) {
 export async function getComments(c: Context) {
   const postId = c.req.param("postId");
 
-  const comments =
-    await commentService.getCommentsByPost(
-      postId as string,
-    );
+  const comments = await commentService.getCommentsByPost(postId as string);
 
   return c.json({
     data: comments,
@@ -76,8 +68,7 @@ export async function updateComment(c: Context) {
 
   const body = await c.req.json();
 
-  const parsed =
-    updateCommentSchema.safeParse(body);
+  const parsed = updateCommentSchema.safeParse(body);
 
   if (!parsed.success) {
     return c.json(
@@ -90,21 +81,18 @@ export async function updateComment(c: Context) {
   }
 
   try {
-    const comment =
-      await commentService.updateComment(
-        commentId as string,
-        user.id,
-        parsed.data.body,
-      );
+    const comment = await commentService.updateComment(
+      commentId as string,
+      user.id,
+      parsed.data.body,
+    );
 
     return c.json({
       data: comment,
     });
   } catch (error) {
     if (error instanceof Error) {
-      if (
-        error.message === "COMMENT_NOT_FOUND"
-      ) {
+      if (error.message === "COMMENT_NOT_FOUND") {
         return c.json(
           {
             message: "Comment not found",
@@ -116,8 +104,7 @@ export async function updateComment(c: Context) {
       if (error.message === "FORBIDDEN") {
         return c.json(
           {
-            message:
-              "You are not allowed to modify this comment",
+            message: "You are not allowed to modify this comment",
           },
           403,
         );
@@ -133,18 +120,15 @@ export async function deleteComment(c: Context) {
   const commentId = c.req.param("id");
 
   try {
-    const result =
-      await commentService.deleteComment(
-        commentId as string,
-        user.id,
-      );
+    const result = await commentService.deleteComment(
+      commentId as string,
+      user.id,
+    );
 
     return c.json(result);
   } catch (error) {
     if (error instanceof Error) {
-      if (
-        error.message === "COMMENT_NOT_FOUND"
-      ) {
+      if (error.message === "COMMENT_NOT_FOUND") {
         return c.json(
           {
             message: "Comment not found",
@@ -156,8 +140,7 @@ export async function deleteComment(c: Context) {
       if (error.message === "FORBIDDEN") {
         return c.json(
           {
-            message:
-              "You are not allowed to delete this comment",
+            message: "You are not allowed to delete this comment",
           },
           403,
         );

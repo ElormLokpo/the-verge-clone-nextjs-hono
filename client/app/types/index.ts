@@ -36,7 +36,6 @@ export type ResetPasswordRequest = {
   email: string;
 };
 
-
 export type Article = {
   id: string;
   title: string;
@@ -64,3 +63,15 @@ export type Article = {
     date: string;
   }[];
 };
+
+
+export type CreatePostRequest = {
+  title: string;
+  summary: string;
+  body: string;
+  category: string;
+  coverPhoto?: string | null;
+  published: boolean;
+};
+
+export type UpdatePostRequest = Partial<CreatePostRequest>;
