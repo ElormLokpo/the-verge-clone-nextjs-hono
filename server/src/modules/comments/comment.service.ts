@@ -1,14 +1,7 @@
-import {
-  asc,
-  eq,
-} from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 import { db } from "../../db";
-import {
-  comments,
-  posts,
-  users,
-} from "../../db/schema";
+import { comments, posts, users } from "../../db/schema";
 
 export async function createComment(
   postId: string,
@@ -39,9 +32,7 @@ export async function createComment(
   return comment;
 }
 
-export async function getCommentsByPost(
-  postId: string,
-) {
+export async function getCommentsByPost(postId: string) {
   const result = await db
     .select({
       id: comments.id,
@@ -50,26 +41,20 @@ export async function getCommentsByPost(
       author: {
         id: users.id,
         name: users.name,
-       
       },
 
       createdAt: comments.createdAt,
       updatedAt: comments.updatedAt,
     })
     .from(comments)
-    .innerJoin(
-      users,
-      eq(comments.authorId, users.id),
-    )
+    .innerJoin(users, eq(comments.authorId, users.id))
     .where(eq(comments.postId, postId))
     .orderBy(asc(comments.createdAt));
 
   return result;
 }
 
-export async function getCommentById(
-  commentId: string,
-) {
+export async function getCommentById(commentId: string) {
   const result = await db
     .select()
     .from(comments)
@@ -84,8 +69,7 @@ export async function updateComment(
   authorId: string,
   body: string,
 ) {
-  const existingComment =
-    await getCommentById(commentId);
+  const existingComment = await getCommentById(commentId);
 
   if (!existingComment) {
     throw new Error("COMMENT_NOT_FOUND");
@@ -107,12 +91,8 @@ export async function updateComment(
   return updatedComment;
 }
 
-export async function deleteComment(
-  commentId: string,
-  authorId: string,
-) {
-  const existingComment =
-    await getCommentById(commentId);
+export async function deleteComment(commentId: string, authorId: string) {
+  const existingComment = await getCommentById(commentId);
 
   if (!existingComment) {
     throw new Error("COMMENT_NOT_FOUND");
@@ -122,9 +102,7 @@ export async function deleteComment(
     throw new Error("FORBIDDEN");
   }
 
-  await db
-    .delete(comments)
-    .where(eq(comments.id, commentId));
+  await db.delete(comments).where(eq(comments.id, commentId));
 
   return {
     message: "Comment deleted successfully",

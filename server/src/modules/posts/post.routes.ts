@@ -6,31 +6,12 @@ import * as postController from "./post.controller";
 
 export const postRoutes = new Hono();
 
+postRoutes.get("/all", postController.getPosts);
 
+postRoutes.get("/:slug", postController.getPost);
 
-postRoutes.get("/", postController.getPosts);
+postRoutes.post("/create", authMiddleware, postController.createPost);
 
-postRoutes.get(
-  "/:slug",
-  postController.getPost,
-);
+postRoutes.patch("/:id", authMiddleware, postController.updatePost);
 
-
-
-postRoutes.post(
-  "/",
-  authMiddleware,
-  postController.createPost,
-);
-
-postRoutes.patch(
-  "/:id",
-  authMiddleware,
-  postController.updatePost,
-);
-
-postRoutes.delete(
-  "/:id",
-  authMiddleware,
-  postController.deletePost,
-);
+postRoutes.delete("/:id", authMiddleware, postController.deletePost);

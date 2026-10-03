@@ -4,6 +4,11 @@ export const API_ROUTES = {
   verifyEmail: `auth/verify-email`,
   forgotPassword: `auth/forgot-password`,
   resetPassword: `auth/reset-password`,
+  getPosts: `posts/all`,
+  getPost: `posts/:id`,
+  createPost: `posts/create`,
+  updatePost: `posts/:id`,
+  deletePost: `posts/:id`,
 };
 
 export const CLIENT_ROUTES = {

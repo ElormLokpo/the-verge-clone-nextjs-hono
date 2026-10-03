@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { RxHamburgerMenu } from "react-icons/rx";
 import Image from "next/image";
@@ -8,7 +8,7 @@ import { CLIENT_ROUTES } from "../constants";
 import { useAuthStore } from "../store";
 
 export const TopNav = () => {
-  const token = useAuthStore((state) => state.token)
+  const token = useAuthStore((state) => state.token);
 
   const navItems = [
     { title: "Tech", link: "" },
@@ -41,15 +41,18 @@ export const TopNav = () => {
         </div>
         {navItems.map((item, index) => (
           <div key={index} className="flex items-center text-white  gap-5">
-            <span className="text-lg hover: cursor-pointer hover:text-stone-600">{item.title}</span>
+            <span className="text-lg hover: cursor-pointer hover:text-stone-600">
+              {item.title}
+            </span>
             <span>{"/"}</span>
           </div>
         ))}
 
         {token && (
           <Link href={CLIENT_ROUTES.createPost} className="flex items-center">
-         
-            <span className="text-lg hover: cursor-pointer text-[#3cffd0] hover:text-[#3cffd0]/50">Create Post</span>
+            <span className="text-lg hover: cursor-pointer text-[#3cffd0] hover:text-[#3cffd0]/50">
+              Create Post
+            </span>
           </Link>
         )}
 

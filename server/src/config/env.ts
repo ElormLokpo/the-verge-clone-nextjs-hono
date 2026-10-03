@@ -32,7 +32,7 @@ const envSchema = z.object({
 
   JWT_SECRET: z.string().min(1, { message: "JWT secret is required" }),
   FRONTEND_URL_LOCAL: z.string(),
-  FRONTEND_URL_PROD: z.string()
+  FRONTEND_URL_PROD: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

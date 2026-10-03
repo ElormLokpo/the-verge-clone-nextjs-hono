@@ -927,7 +927,5 @@ export const articles = [
 ];
 
 export function getRandomItems<T>(array: T[], n: number): T[] {
-  return [...array]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, n);
+  return [...array].sort(() => Math.random() - 0.5).slice(0, n);
 }
