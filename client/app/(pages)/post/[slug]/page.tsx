@@ -13,16 +13,23 @@ import { useGetPost } from "@/app/hooks/postsHook";
 
 export default function PostPage() {
     const { slug } = useParams<{ slug: string }>();
-    const post = useGetPost(slug)?.data?.data;
-    const isLoading = useGetPost(slug)?.isLoading;
 
-    if (isLoading || !post) {
-        return <div>Loading...</div>
+    const { data, isLoading, isError } = useGetPost(slug);
+
+    const post = data?.data;
+
+    if (isLoading) {
+        return <div>Loading...</div>;
     }
 
-    console.log("Post data:", post, "slug");
+    if (isError) {
+        return <div>Failed to load post.</div>;
+    }
 
-    console.log("Slug:", slug);
+    if (!post) {
+        return <div>Post not found.</div>;
+    }
+   
 
 
     return (
@@ -33,18 +40,17 @@ export default function PostPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
-                    <div>
 
-                        <div className="relative  mb-2 ">
-                            <Image
-                                src={post.coverPhoto}
-                                alt="hero"
-                                width={500}
-                                height={500}
-                                className="object-cover"
-                            />
-                        </div>
+
+                    <div className="relative w-120 mb-2 ">
+                        <Image
+                            src={post.coverPhoto}
+                            alt="hero"
+                            fill
+                            className="object-cover"
+                        />
                     </div>
+
                     <div>
                         <div className="mb-4 font-['polySans',Helvetica,Arial,sans-serif] underline decoration-1 font-medium text-[65px] leading-16.25">{post.title}</div>
 

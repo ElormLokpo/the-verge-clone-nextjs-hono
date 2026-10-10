@@ -51,13 +51,13 @@ export const useGetPosts = () => {
 export const useGetPost = (slug: string) => {
     const token = useAuthStore((state) => state.token);
     return useQuery({
-        queryKey: ["post"],
+        queryKey: [`${slug}`],
         queryFn: async () =>
             api.get(`${API_ROUTES.getPost}/${slug}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-              
+
             }),
         refetchOnWindowFocus: false,
         refetchOnMount: false,
