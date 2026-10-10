@@ -1,4 +1,5 @@
-import { useRouter } from "next/router";
+"use client"
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "../store";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { CreatePostRequest, UpdatePostRequest } from "../types";
@@ -47,18 +48,16 @@ export const useGetPosts = () => {
     });
 };
 
-export const useGetPost = () => {
+export const useGetPost = (slug: string) => {
     const token = useAuthStore((state) => state.token);
     return useQuery({
-        queryKey: ["post"],
-        queryFn: async (id: string) =>
-            api.get(API_ROUTES.getPost, {
+        queryKey: [`${slug}`],
+        queryFn: async () =>
+            api.get(`${API_ROUTES.getPost}/${slug}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-                params: {
-                    id,
-                },
+
             }),
         refetchOnWindowFocus: false,
         refetchOnMount: false,

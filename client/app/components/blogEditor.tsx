@@ -12,7 +12,7 @@ export function BlogEditor({ onChange }: BlogEditorProps) {
   const editor = useEditor({
     extensions: [StarterKit],
 
-    content: "<p>Start writing your article...</p>",
+    content: "<p>Start writing your post...</p>",
 
     immediatelyRender: false,
     onUpdate: ({ editor }) => {

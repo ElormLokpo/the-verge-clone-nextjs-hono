@@ -9,7 +9,7 @@ import {
 
 
 
-export const articles = [
+export const posts = [
     {
         id: "1",
         title: "The next generation of phones is finally getting interesting",
@@ -951,13 +951,13 @@ async function seed() {
             }
         >();
 
-        for (const article of articles) {
-            const authorKey = article.author.name;
+        for (const post of posts) {
+            const authorKey = post.author.name;
 
             if (!authorMap.has(authorKey)) {
                 authorMap.set(authorKey, {
-                    name: article.author.name,
-                    image: article.author.image,
+                    name: post.author.name,
+                    image: post.author.image,
                 });
             }
         }
@@ -1000,14 +1000,14 @@ async function seed() {
 
         const postIdMap = new Map<string, string>();
 
-        for (const article of articles) {
+        for (const post of posts) {
             const authorId = userIdMap.get(
-                article.author.name,
+                post.author.name,
             );
 
             if (!authorId) {
                 throw new Error(
-                    `Author not found: ${article.author.name}`,
+                    `Author not found: ${post.author.name}`,
                 );
             }
 
@@ -1015,7 +1015,7 @@ async function seed() {
             const existingPost =
                 await db.query.posts.findFirst({
                     where: (posts, { eq }) =>
-                        eq(posts.slug, article.slug),
+                        eq(posts.slug, post.slug),
                 });
 
             let postId: string;
@@ -1026,19 +1026,19 @@ async function seed() {
                 const [post] = await db
                     .insert(posts)
                     .values({
-                        title: article.title,
-                        slug: article.slug,
-                        summary: article.summary,
-                        body: article.body,
-                        coverPhoto: article.coverPhoto,
-                        category: article.category,
+                        title: post.title,
+                        slug: post.slug,
+                        summary: post.summary,
+                        body: post.body,
+                        coverPhoto: post.coverPhoto,
+                        category: post.category,
                         authorId,
 
 
-                        published: new Date(article.date),
+                        published: new Date(post.date),
 
-                        createdAt: new Date(article.date),
-                        updatedAt: new Date(article.date),
+                        createdAt: new Date(post.date),
+                        updatedAt: new Date(post.date),
                     })
                     .returning({
                         id: posts.id,
@@ -1047,7 +1047,7 @@ async function seed() {
                 postId = post.id;
             }
 
-            postIdMap.set(article.slug, postId);
+            postIdMap.set(post.slug, postId);
         }
 
         console.log(
@@ -1058,16 +1058,16 @@ async function seed() {
 
         let commentCount = 0;
 
-        for (const article of articles) {
-            const postId = postIdMap.get(article.slug);
+        for (const post of posts) {
+            const postId = postIdMap.get(post.slug);
 
             if (!postId) {
                 throw new Error(
-                    `Post not found: ${article.slug}`,
+                    `Post not found: ${post.slug}`,
                 );
             }
 
-            for (const comment of article.comments) {
+            for (const comment of post.comments) {
 
                 let commentAuthor =
                     await db.query.users.findFirst({
