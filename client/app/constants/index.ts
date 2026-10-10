@@ -5,7 +5,7 @@ export const API_ROUTES = {
   forgotPassword: `auth/forgot-password`,
   resetPassword: `auth/reset-password`,
   getPosts: `posts/all`,
-  getPost: `posts/:id`,
+  getPost: `posts`,
   createPost: `posts/create`,
   updatePost: `posts/:id`,
   deletePost: `posts/:id`,

@@ -36,7 +36,7 @@ export type ResetPasswordRequest = {
   email: string;
 };
 
-export type Article = {
+export type Post = {
   id: string;
   title: string;
   slug: string;
@@ -49,19 +49,21 @@ export type Article = {
 
   coverPhoto: string;
 
-  date: string;
+  createdAt: string;
   readTime: string;
   category: string;
 
   body: string;
 
-  comments: {
-    id: string;
-    author: string;
-    image: string;
-    body: string;
-    date: string;
-  }[];
+  // comments: {
+  //   id: string;
+  //   author: string;
+  //   image: string;
+  //   body: string;
+  //   date: string;
+  // }[];
+
+  commentCount: number;
 };
 
 
