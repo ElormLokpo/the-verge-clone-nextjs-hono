@@ -54,18 +54,8 @@ export type Post = {
   category: string;
 
   body: string;
-
-  // comments: {
-  //   id: string;
-  //   author: string;
-  //   image: string;
-  //   body: string;
-  //   date: string;
-  // }[];
-
   commentCount: number;
 };
-
 
 export type CreatePostRequest = {
   title: string;
@@ -74,6 +64,21 @@ export type CreatePostRequest = {
   category: string;
   coverPhoto?: string | null;
   published: boolean;
+};
+
+export type CreateCommentRequest = {
+  postId: string;
+  body: string;
+};
+
+export type CommentResponse = {
+  id: string;
+  author: {
+    id: string;
+    name: string;
+  };
+  body: string;
+  createdAt: string;
 };
 
 export type UpdatePostRequest = Partial<CreatePostRequest>;

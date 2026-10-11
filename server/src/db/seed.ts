@@ -1,47 +1,41 @@
 import "dotenv/config";
 
 import { db } from "./index";
-import {
-    users,
-    posts,
-    comments,
-} from "./schema";
-
-
+import { users, posts, comments } from "./schema";
 
 export const posts = [
-    {
-        id: "1",
-        title: "The next generation of phones is finally getting interesting",
-        slug: "next-generation-phones-finally-getting-interesting",
-        summary:
-            "After years of incremental upgrades, smartphone makers are experimenting with new materials, displays, cameras, and AI features that could fundamentally change how we use our phones.",
-        author: {
-            name: "Alex Chen",
-            image: "https://i.pravatar.cc/150?img=12",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "1",
+    title: "The next generation of phones is finally getting interesting",
+    slug: "next-generation-phones-finally-getting-interesting",
+    summary:
+      "After years of incremental upgrades, smartphone makers are experimenting with new materials, displays, cameras, and AI features that could fundamentally change how we use our phones.",
+    author: {
+      name: "Alex Chen",
+      image: "https://i.pravatar.cc/150?img=12",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-28",
+    readTime: "8 min read",
+    category: "Mobile",
+    comments: [
+      {
+        id: "c1",
+        author: "Marcus Williams",
+        image: "https://i.pravatar.cc/150?img=11",
+        body: "The camera improvements are great, but I still want better battery life.",
         date: "2026-09-28",
-        readTime: "8 min read",
-        category: "Mobile",
-        comments: [
-            {
-                id: "c1",
-                author: "Marcus Williams",
-                image: "https://i.pravatar.cc/150?img=11",
-                body: "The camera improvements are great, but I still want better battery life.",
-                date: "2026-09-28",
-            },
-            {
-                id: "c2",
-                author: "Sarah Kim",
-                image: "https://i.pravatar.cc/150?img=47",
-                body: "Foldables are finally starting to feel like actual products instead of prototypes.",
-                date: "2026-09-28",
-            },
-        ],
-        body: `
+      },
+      {
+        id: "c2",
+        author: "Sarah Kim",
+        image: "https://i.pravatar.cc/150?img=47",
+        body: "Foldables are finally starting to feel like actual products instead of prototypes.",
+        date: "2026-09-28",
+      },
+    ],
+    body: `
       <p>For the better part of a decade, the smartphone industry has been stuck in a comfortable rhythm. Every year brought a slightly better camera, a brighter display, a faster processor, and a battery that was supposed to last just a little longer.</p>
 
       <p>That formula is beginning to change.</p>
@@ -71,40 +65,40 @@ export const posts = [
 
       <p>The interesting question isn't whether these features work. It's whether people will actually find them useful enough to change their behavior.</p>
     `,
-    },
+  },
 
-    {
-        id: "2",
-        title: "I spent a week letting AI organize my entire life",
-        slug: "week-letting-ai-organize-entire-life",
-        summary:
-            "AI assistants promise to make our lives easier. I gave one access to my calendar, notes, tasks, and daily routines to see whether it could actually deliver.",
-        author: {
-            name: "Maya Rodriguez",
-            image: "https://i.pravatar.cc/150?img=32",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "2",
+    title: "I spent a week letting AI organize my entire life",
+    slug: "week-letting-ai-organize-entire-life",
+    summary:
+      "AI assistants promise to make our lives easier. I gave one access to my calendar, notes, tasks, and daily routines to see whether it could actually deliver.",
+    author: {
+      name: "Maya Rodriguez",
+      image: "https://i.pravatar.cc/150?img=32",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-27",
+    readTime: "11 min read",
+    category: "AI",
+    comments: [
+      {
+        id: "c3",
+        author: "Daniel Brooks",
+        image: "https://i.pravatar.cc/150?img=13",
+        body: "This is exactly the kind of experiment I wanted to see.",
         date: "2026-09-27",
-        readTime: "11 min read",
-        category: "AI",
-        comments: [
-            {
-                id: "c3",
-                author: "Daniel Brooks",
-                image: "https://i.pravatar.cc/150?img=13",
-                body: "This is exactly the kind of experiment I wanted to see.",
-                date: "2026-09-27",
-            },
-            {
-                id: "c4",
-                author: "Nina Patel",
-                image: "https://i.pravatar.cc/150?img=44",
-                body: "Giving an AI access to my calendar still feels terrifying.",
-                date: "2026-09-27",
-            },
-        ],
-        body: `
+      },
+      {
+        id: "c4",
+        author: "Nina Patel",
+        image: "https://i.pravatar.cc/150?img=44",
+        body: "Giving an AI access to my calendar still feels terrifying.",
+        date: "2026-09-27",
+      },
+    ],
+    body: `
       <p>I have approximately 47 unfinished tasks, three calendars, two note-taking apps, and an alarming number of browser tabs.</p>
 
       <p>So when an AI assistant promised it could organize my life, I decided to give it a chance.</p>
@@ -141,40 +135,40 @@ export const posts = [
 
       <p>That distinction might become one of the biggest challenges for personal AI assistants.</p>
     `,
-    },
+  },
 
-    {
-        id: "3",
-        title: "The desktop PC is having another moment",
-        slug: "desktop-pc-having-another-moment",
-        summary:
-            "Powerful processors, smaller cases, and increasingly capable graphics cards are making desktop computers exciting again.",
-        author: {
-            name: "Jon Porter",
-            image: "https://i.pravatar.cc/150?img=68",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1587831990711-23ca6441447b?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "3",
+    title: "The desktop PC is having another moment",
+    slug: "desktop-pc-having-another-moment",
+    summary:
+      "Powerful processors, smaller cases, and increasingly capable graphics cards are making desktop computers exciting again.",
+    author: {
+      name: "Jon Porter",
+      image: "https://i.pravatar.cc/150?img=68",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-25",
+    readTime: "7 min read",
+    category: "Computing",
+    comments: [
+      {
+        id: "c5",
+        author: "Chris Adams",
+        image: "https://i.pravatar.cc/150?img=68",
+        body: "Give me a good desktop and a mechanical keyboard and I'm happy.",
         date: "2026-09-25",
-        readTime: "7 min read",
-        category: "Computing",
-        comments: [
-            {
-                id: "c5",
-                author: "Chris Adams",
-                image: "https://i.pravatar.cc/150?img=68",
-                body: "Give me a good desktop and a mechanical keyboard and I'm happy.",
-                date: "2026-09-25",
-            },
-            {
-                id: "c6",
-                author: "James Carter",
-                image: "https://i.pravatar.cc/150?img=69",
-                body: "Small form factor PCs are the future.",
-                date: "2026-09-25",
-            },
-        ],
-        body: `
+      },
+      {
+        id: "c6",
+        author: "James Carter",
+        image: "https://i.pravatar.cc/150?img=69",
+        body: "Small form factor PCs are the future.",
+        date: "2026-09-25",
+      },
+    ],
+    body: `
       <p>Laptops may dominate the computer market, but something unexpected is happening on the desktop.</p>
 
       <p>People are building PCs again.</p>
@@ -199,33 +193,33 @@ export const posts = [
 
       <p>For more information about modern PC hardware, check out <a href="https://example.com/hardware">our hardware guide</a>.</p>
     `,
-    },
+  },
 
-    {
-        id: "4",
-        title: "Why everyone suddenly wants a mechanical keyboard",
-        slug: "why-everyone-wants-mechanical-keyboards",
-        summary:
-            "Mechanical keyboards have escaped the gaming world and become a mainstream productivity accessory.",
-        author: {
-            name: "David Pierce",
-            image: "https://i.pravatar.cc/150?img=52",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "4",
+    title: "Why everyone suddenly wants a mechanical keyboard",
+    slug: "why-everyone-wants-mechanical-keyboards",
+    summary:
+      "Mechanical keyboards have escaped the gaming world and become a mainstream productivity accessory.",
+    author: {
+      name: "David Pierce",
+      image: "https://i.pravatar.cc/150?img=52",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-23",
+    readTime: "6 min read",
+    category: "Tech",
+    comments: [
+      {
+        id: "c7",
+        author: "Kevin Smith",
+        image: "https://i.pravatar.cc/150?img=15",
+        body: "Once you go mechanical, it's hard to go back.",
         date: "2026-09-23",
-        readTime: "6 min read",
-        category: "Tech",
-        comments: [
-            {
-                id: "c7",
-                author: "Kevin Smith",
-                image: "https://i.pravatar.cc/150?img=15",
-                body: "Once you go mechanical, it's hard to go back.",
-                date: "2026-09-23",
-            },
-        ],
-        body: `
+      },
+    ],
+    body: `
       <p>There was a time when mechanical keyboards were mostly associated with gamers and extremely dedicated computer nerds.</p>
 
       <p>That has changed.</p>
@@ -258,40 +252,40 @@ export const posts = [
 
       <p>And honestly, that's part of the fun.</p>
     `,
-    },
+  },
 
-    {
-        id: "5",
-        title: "The strange return of dedicated music players",
-        slug: "strange-return-dedicated-music-players",
-        summary:
-            "Streaming services made dedicated music players almost obsolete. A new generation of listeners is bringing them back.",
-        author: {
-            name: "Chris Welch",
-            image: "https://i.pravatar.cc/150?img=60",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1524650359799-842906ca1c06?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "5",
+    title: "The strange return of dedicated music players",
+    slug: "strange-return-dedicated-music-players",
+    summary:
+      "Streaming services made dedicated music players almost obsolete. A new generation of listeners is bringing them back.",
+    author: {
+      name: "Chris Welch",
+      image: "https://i.pravatar.cc/150?img=60",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1524650359799-842906ca1c06?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-21",
+    readTime: "9 min read",
+    category: "Audio",
+    comments: [
+      {
+        id: "c8",
+        author: "Anthony Green",
+        image: "https://i.pravatar.cc/150?img=33",
+        body: "Sometimes having fewer features is exactly what you want.",
         date: "2026-09-21",
-        readTime: "9 min read",
-        category: "Audio",
-        comments: [
-            {
-                id: "c8",
-                author: "Anthony Green",
-                image: "https://i.pravatar.cc/150?img=33",
-                body: "Sometimes having fewer features is exactly what you want.",
-                date: "2026-09-21",
-            },
-            {
-                id: "c9",
-                author: "Emily Stone",
-                image: "https://i.pravatar.cc/150?img=48",
-                body: "I miss having an actual music library instead of endless recommendations.",
-                date: "2026-09-21",
-            },
-        ],
-        body: `
+      },
+      {
+        id: "c9",
+        author: "Emily Stone",
+        image: "https://i.pravatar.cc/150?img=48",
+        body: "I miss having an actual music library instead of endless recommendations.",
+        date: "2026-09-21",
+      },
+    ],
+    body: `
       <p>For years, the idea of carrying a separate music player seemed completely absurd.</p>
 
       <p>Your phone already had access to millions of songs.</p>
@@ -320,33 +314,33 @@ export const posts = [
 
       <p>See our <a href="https://example.com/audio">complete audio coverage</a> for more.</p>
     `,
-    },
+  },
 
-    {
-        id: "6",
-        title: "Your smart home doesn't need to be this complicated",
-        slug: "smart-home-doesnt-need-to-be-complicated",
-        summary:
-            "Smart home technology has become incredibly capable — and incredibly confusing. Here's why simplicity might be the next big trend.",
-        author: {
-            name: "Jennifer Pattison Tuohy",
-            image: "https://i.pravatar.cc/150?img=45",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1558008258-3256797b43f3?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "6",
+    title: "Your smart home doesn't need to be this complicated",
+    slug: "smart-home-doesnt-need-to-be-complicated",
+    summary:
+      "Smart home technology has become incredibly capable — and incredibly confusing. Here's why simplicity might be the next big trend.",
+    author: {
+      name: "Jennifer Pattison Tuohy",
+      image: "https://i.pravatar.cc/150?img=45",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1558008258-3256797b43f3?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-19",
+    readTime: "10 min read",
+    category: "Smart Home",
+    comments: [
+      {
+        id: "c10",
+        author: "Robert Johnson",
+        image: "https://i.pravatar.cc/150?img=70",
+        body: "My smart lights stopped working after I changed Wi-Fi. Never again.",
         date: "2026-09-19",
-        readTime: "10 min read",
-        category: "Smart Home",
-        comments: [
-            {
-                id: "c10",
-                author: "Robert Johnson",
-                image: "https://i.pravatar.cc/150?img=70",
-                body: "My smart lights stopped working after I changed Wi-Fi. Never again.",
-                date: "2026-09-19",
-            },
-        ],
-        body: `
+      },
+    ],
+    body: `
       <p>The dream of the smart home is compelling.</p>
 
       <p>Your lights turn on automatically. Your thermostat adjusts itself. Your doors lock when you leave.</p>
@@ -371,40 +365,40 @@ export const posts = [
 
       <p>For now, though, <a href="https://example.com/smart-home">choosing the right ecosystem</a> still matters.</p>
     `,
-    },
+  },
 
-    {
-        id: "7",
-        title: "Streaming services are becoming cable again",
-        slug: "streaming-services-becoming-cable-again",
-        summary:
-            "The promise of cheap, simple streaming has faded as consumers collect more subscriptions and increasingly expensive bundles.",
-        author: {
-            name: "Julia Alexander",
-            image: "https://i.pravatar.cc/150?img=49",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "7",
+    title: "Streaming services are becoming cable again",
+    slug: "streaming-services-becoming-cable-again",
+    summary:
+      "The promise of cheap, simple streaming has faded as consumers collect more subscriptions and increasingly expensive bundles.",
+    author: {
+      name: "Julia Alexander",
+      image: "https://i.pravatar.cc/150?img=49",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-17",
+    readTime: "8 min read",
+    category: "Entertainment",
+    comments: [
+      {
+        id: "c11",
+        author: "Tom Wilson",
+        image: "https://i.pravatar.cc/150?img=18",
+        body: "We basically recreated cable but with more apps.",
         date: "2026-09-17",
-        readTime: "8 min read",
-        category: "Entertainment",
-        comments: [
-            {
-                id: "c11",
-                author: "Tom Wilson",
-                image: "https://i.pravatar.cc/150?img=18",
-                body: "We basically recreated cable but with more apps.",
-                date: "2026-09-17",
-            },
-            {
-                id: "c12",
-                author: "Rachel Moore",
-                image: "https://i.pravatar.cc/150?img=29",
-                body: "At least I can cancel subscriptions instantly.",
-                date: "2026-09-17",
-            },
-        ],
-        body: `
+      },
+      {
+        id: "c12",
+        author: "Rachel Moore",
+        image: "https://i.pravatar.cc/150?img=29",
+        body: "At least I can cancel subscriptions instantly.",
+        date: "2026-09-17",
+      },
+    ],
+    body: `
       <p>Streaming was supposed to kill cable.</p>
 
       <p>Instead, it appears to have learned some of cable's most frustrating lessons.</p>
@@ -433,33 +427,33 @@ export const posts = [
 
       <p>We've put together <a href="https://example.com/streaming-guide">a guide to the major streaming bundles</a>.</p>
     `,
-    },
+  },
 
-    {
-        id: "8",
-        title: "The laptop that wants to replace your desktop",
-        slug: "laptop-wants-to-replace-your-desktop",
-        summary:
-            "Modern laptops are becoming powerful enough to handle workloads that once required a dedicated desktop machine.",
-        author: {
-            name: "Monica Chin",
-            image: "https://i.pravatar.cc/150?img=38",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "8",
+    title: "The laptop that wants to replace your desktop",
+    slug: "laptop-wants-to-replace-your-desktop",
+    summary:
+      "Modern laptops are becoming powerful enough to handle workloads that once required a dedicated desktop machine.",
+    author: {
+      name: "Monica Chin",
+      image: "https://i.pravatar.cc/150?img=38",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-15",
+    readTime: "7 min read",
+    category: "Computing",
+    comments: [
+      {
+        id: "c13",
+        author: "Peter Evans",
+        image: "https://i.pravatar.cc/150?img=21",
+        body: "Laptop docks have basically replaced desktops for me.",
         date: "2026-09-15",
-        readTime: "7 min read",
-        category: "Computing",
-        comments: [
-            {
-                id: "c13",
-                author: "Peter Evans",
-                image: "https://i.pravatar.cc/150?img=21",
-                body: "Laptop docks have basically replaced desktops for me.",
-                date: "2026-09-15",
-            },
-        ],
-        body: `
+      },
+    ],
+    body: `
       <p>The modern laptop is an impressive piece of engineering.</p>
 
       <p>It can edit video, compile enormous software projects, run virtual machines, and even execute AI models locally.</p>
@@ -484,40 +478,40 @@ export const posts = [
 
       <p><strong>The desktop isn't disappearing.</strong> It's simply becoming more specialized.</p>
     `,
-    },
+  },
 
-    {
-        id: "9",
-        title: "Why developers are falling in love with local AI",
-        slug: "developers-falling-in-love-with-local-ai",
-        summary:
-            "Running AI models locally is becoming easier, cheaper, and more capable — especially for developers who care about privacy and control.",
-        author: {
-            name: "James Vincent",
-            image: "https://i.pravatar.cc/150?img=57",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "9",
+    title: "Why developers are falling in love with local AI",
+    slug: "developers-falling-in-love-with-local-ai",
+    summary:
+      "Running AI models locally is becoming easier, cheaper, and more capable — especially for developers who care about privacy and control.",
+    author: {
+      name: "James Vincent",
+      image: "https://i.pravatar.cc/150?img=57",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-13",
+    readTime: "12 min read",
+    category: "AI",
+    comments: [
+      {
+        id: "c14",
+        author: "Michael Lee",
+        image: "https://i.pravatar.cc/150?img=14",
+        body: "The tooling around local models has improved so much this year.",
         date: "2026-09-13",
-        readTime: "12 min read",
-        category: "AI",
-        comments: [
-            {
-                id: "c14",
-                author: "Michael Lee",
-                image: "https://i.pravatar.cc/150?img=14",
-                body: "The tooling around local models has improved so much this year.",
-                date: "2026-09-13",
-            },
-            {
-                id: "c15",
-                author: "Adam Foster",
-                image: "https://i.pravatar.cc/150?img=59",
-                body: "Privacy is the biggest reason I started running models locally.",
-                date: "2026-09-13",
-            },
-        ],
-        body: `
+      },
+      {
+        id: "c15",
+        author: "Adam Foster",
+        image: "https://i.pravatar.cc/150?img=59",
+        body: "Privacy is the biggest reason I started running models locally.",
+        date: "2026-09-13",
+      },
+    ],
+    body: `
       <p>Not long ago, running an AI model locally required expensive hardware and a considerable amount of technical knowledge.</p>
 
       <p>That's changing quickly.</p>
@@ -548,33 +542,33 @@ export const posts = [
 
       <p>For developers, that possibility is particularly exciting.</p>
     `,
-    },
+  },
 
-    {
-        id: "10",
-        title: "The camera industry has a new problem: smartphones",
-        slug: "camera-industry-new-problem-smartphones",
-        summary:
-            "Dedicated cameras continue to offer incredible image quality, but computational photography is making smartphones increasingly difficult to beat.",
-        author: {
-            name: "Becca Farsace",
-            image: "https://i.pravatar.cc/150?img=41",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "10",
+    title: "The camera industry has a new problem: smartphones",
+    slug: "camera-industry-new-problem-smartphones",
+    summary:
+      "Dedicated cameras continue to offer incredible image quality, but computational photography is making smartphones increasingly difficult to beat.",
+    author: {
+      name: "Becca Farsace",
+      image: "https://i.pravatar.cc/150?img=41",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-10",
+    readTime: "9 min read",
+    category: "Photography",
+    comments: [
+      {
+        id: "c16",
+        author: "Lucas Martin",
+        image: "https://i.pravatar.cc/150?img=25",
+        body: "Nothing beats a real lens, but phones are getting ridiculously good.",
         date: "2026-09-10",
-        readTime: "9 min read",
-        category: "Photography",
-        comments: [
-            {
-                id: "c16",
-                author: "Lucas Martin",
-                image: "https://i.pravatar.cc/150?img=25",
-                body: "Nothing beats a real lens, but phones are getting ridiculously good.",
-                date: "2026-09-10",
-            },
-        ],
-        body: `
+      },
+    ],
+    body: `
       <p>Dedicated cameras still produce beautiful photographs.</p>
 
       <p>But smartphones have one enormous advantage: <strong>computational photography</strong>.</p>
@@ -599,40 +593,40 @@ export const posts = [
 
       <p>For everyone else, however, the phone in their pocket is probably enough.</p>
     `,
-    },
+  },
 
-    {
-        id: "11",
-        title: "The future of work might be a room in your house",
-        slug: "future-of-work-room-in-your-house",
-        summary:
-            "Remote work has changed what people expect from their homes, offices, and employers.",
-        author: {
-            name: "Alex Heath",
-            image: "https://i.pravatar.cc/150?img=53",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "11",
+    title: "The future of work might be a room in your house",
+    slug: "future-of-work-room-in-your-house",
+    summary:
+      "Remote work has changed what people expect from their homes, offices, and employers.",
+    author: {
+      name: "Alex Heath",
+      image: "https://i.pravatar.cc/150?img=53",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-08",
+    readTime: "8 min read",
+    category: "Work",
+    comments: [
+      {
+        id: "c17",
+        author: "Daniel King",
+        image: "https://i.pravatar.cc/150?img=35",
+        body: "The hardest part of working from home is knowing when to stop.",
         date: "2026-09-08",
-        readTime: "8 min read",
-        category: "Work",
-        comments: [
-            {
-                id: "c17",
-                author: "Daniel King",
-                image: "https://i.pravatar.cc/150?img=35",
-                body: "The hardest part of working from home is knowing when to stop.",
-                date: "2026-09-08",
-            },
-            {
-                id: "c18",
-                author: "Olivia Harris",
-                image: "https://i.pravatar.cc/150?img=42",
-                body: "I don't miss commuting at all.",
-                date: "2026-09-08",
-            },
-        ],
-        body: `
+      },
+      {
+        id: "c18",
+        author: "Olivia Harris",
+        image: "https://i.pravatar.cc/150?img=42",
+        body: "I don't miss commuting at all.",
+        date: "2026-09-08",
+      },
+    ],
+    body: `
       <p>The office used to be a place you went to work.</p>
 
       <p>For millions of people, work has moved into the home.</p>
@@ -657,40 +651,40 @@ export const posts = [
 
       <p>Whether those experiments succeed remains an open question.</p>
     `,
-    },
+  },
 
-    {
-        id: "12",
-        title: "Everything is becoming a subscription, and people are tired of it",
-        slug: "everything-becoming-subscription",
-        summary:
-            "Software changed the way we pay for products. Now companies across almost every industry are trying to turn one-time purchases into recurring revenue.",
-        author: {
-            name: "Nilay Patel",
-            image: "https://i.pravatar.cc/150?img=67",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "12",
+    title: "Everything is becoming a subscription, and people are tired of it",
+    slug: "everything-becoming-subscription",
+    summary:
+      "Software changed the way we pay for products. Now companies across almost every industry are trying to turn one-time purchases into recurring revenue.",
+    author: {
+      name: "Nilay Patel",
+      image: "https://i.pravatar.cc/150?img=67",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-05",
+    readTime: "10 min read",
+    category: "Business",
+    comments: [
+      {
+        id: "c19",
+        author: "Mark Thompson",
+        image: "https://i.pravatar.cc/150?img=64",
+        body: "I don't need a monthly subscription for everything I own.",
         date: "2026-09-05",
-        readTime: "10 min read",
-        category: "Business",
-        comments: [
-            {
-                id: "c19",
-                author: "Mark Thompson",
-                image: "https://i.pravatar.cc/150?img=64",
-                body: "I don't need a monthly subscription for everything I own.",
-                date: "2026-09-05",
-            },
-            {
-                id: "c20",
-                author: "Sophia Clark",
-                image: "https://i.pravatar.cc/150?img=36",
-                body: "Subscriptions make sense for software but less sense for physical products.",
-                date: "2026-09-05",
-            },
-        ],
-        body: `
+      },
+      {
+        id: "c20",
+        author: "Sophia Clark",
+        image: "https://i.pravatar.cc/150?img=36",
+        body: "Subscriptions make sense for software but less sense for physical products.",
+        date: "2026-09-05",
+      },
+    ],
+    body: `
       <p>There was a time when buying something meant you owned it.</p>
 
       <p>That idea is becoming increasingly unusual.</p>
@@ -715,33 +709,33 @@ export const posts = [
 
       <p>We've collected some of the strangest subscription products <a href="https://example.com/subscriptions">in this list</a>.</p>
     `,
-    },
+  },
 
-    {
-        id: "13",
-        title: "Smart glasses are finally starting to make sense",
-        slug: "smart-glasses-finally-starting-to-make-sense",
-        summary:
-            "After years of awkward prototypes, smart glasses are becoming smaller, more useful, and significantly less embarrassing to wear.",
-        author: {
-            name: "Victoria Song",
-            image: "https://i.pravatar.cc/150?img=46",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "13",
+    title: "Smart glasses are finally starting to make sense",
+    slug: "smart-glasses-finally-starting-to-make-sense",
+    summary:
+      "After years of awkward prototypes, smart glasses are becoming smaller, more useful, and significantly less embarrassing to wear.",
+    author: {
+      name: "Victoria Song",
+      image: "https://i.pravatar.cc/150?img=46",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-09-03",
+    readTime: "9 min read",
+    category: "Gadgets",
+    comments: [
+      {
+        id: "c21",
+        author: "Ethan Brown",
+        image: "https://i.pravatar.cc/150?img=17",
+        body: "I would absolutely wear these if they looked like normal glasses.",
         date: "2026-09-03",
-        readTime: "9 min read",
-        category: "Gadgets",
-        comments: [
-            {
-                id: "c21",
-                author: "Ethan Brown",
-                image: "https://i.pravatar.cc/150?img=17",
-                body: "I would absolutely wear these if they looked like normal glasses.",
-                date: "2026-09-03",
-            },
-        ],
-        body: `
+      },
+    ],
+    body: `
       <p>Smart glasses have spent years trapped somewhere between science fiction and novelty gadget.</p>
 
       <p>That may finally be changing.</p>
@@ -766,40 +760,40 @@ export const posts = [
 
       <p>We've tested several of the latest models in our <a href="https://example.com/glasses">smart glasses guide</a>.</p>
     `,
-    },
+  },
 
-    {
-        id: "14",
-        title: "What happens when your AI assistant knows too much?",
-        slug: "what-happens-when-ai-knows-too-much",
-        summary:
-            "The most useful AI assistants may also become the systems with the most intimate knowledge of our lives.",
-        author: {
-            name: "Lauren Goode",
-            image: "https://i.pravatar.cc/150?img=23",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "14",
+    title: "What happens when your AI assistant knows too much?",
+    slug: "what-happens-when-ai-knows-too-much",
+    summary:
+      "The most useful AI assistants may also become the systems with the most intimate knowledge of our lives.",
+    author: {
+      name: "Lauren Goode",
+      image: "https://i.pravatar.cc/150?img=23",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-08-30",
+    readTime: "13 min read",
+    category: "AI",
+    comments: [
+      {
+        id: "c22",
+        author: "Henry Wilson",
+        image: "https://i.pravatar.cc/150?img=6",
+        body: "This is the part of AI that concerns me the most.",
         date: "2026-08-30",
-        readTime: "13 min read",
-        category: "AI",
-        comments: [
-            {
-                id: "c22",
-                author: "Henry Wilson",
-                image: "https://i.pravatar.cc/150?img=6",
-                body: "This is the part of AI that concerns me the most.",
-                date: "2026-08-30",
-            },
-            {
-                id: "c23",
-                author: "Grace Miller",
-                image: "https://i.pravatar.cc/150?img=10",
-                body: "Convenience and privacy are going to be a difficult balance.",
-                date: "2026-08-30",
-            },
-        ],
-        body: `
+      },
+      {
+        id: "c23",
+        author: "Grace Miller",
+        image: "https://i.pravatar.cc/150?img=10",
+        body: "Convenience and privacy are going to be a difficult balance.",
+        date: "2026-08-30",
+      },
+    ],
+    body: `
       <p>The most useful AI assistant would know a lot about you.</p>
 
       <p>It would know where you work, who your friends are, what you're working on, what you bought last week, and what meetings you have tomorrow.</p>
@@ -830,33 +824,33 @@ export const posts = [
 
       <p>That conversation is only beginning.</p>
     `,
-    },
+  },
 
-    {
-        id: "15",
-        title: "The humble web browser is becoming an operating system",
-        slug: "web-browser-becoming-operating-system",
-        summary:
-            "Browsers have evolved from simple document viewers into powerful platforms capable of running entire applications.",
-        author: {
-            name: "David Pierce",
-            image: "https://i.pravatar.cc/150?img=52",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "15",
+    title: "The humble web browser is becoming an operating system",
+    slug: "web-browser-becoming-operating-system",
+    summary:
+      "Browsers have evolved from simple document viewers into powerful platforms capable of running entire applications.",
+    author: {
+      name: "David Pierce",
+      image: "https://i.pravatar.cc/150?img=52",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-08-27",
+    readTime: "8 min read",
+    category: "Internet",
+    comments: [
+      {
+        id: "c24",
+        author: "Sam Anderson",
+        image: "https://i.pravatar.cc/150?img=4",
+        body: "Chrome is basically my operating system at this point.",
         date: "2026-08-27",
-        readTime: "8 min read",
-        category: "Internet",
-        comments: [
-            {
-                id: "c24",
-                author: "Sam Anderson",
-                image: "https://i.pravatar.cc/150?img=4",
-                body: "Chrome is basically my operating system at this point.",
-                date: "2026-08-27",
-            },
-        ],
-        body: `
+      },
+    ],
+    body: `
       <p>Open a modern browser and you can do almost anything.</p>
 
       <p>You can edit photos, write code, manage finances, edit videos, play games, collaborate with coworkers, and communicate with friends.</p>
@@ -881,33 +875,33 @@ export const posts = [
 
       <p>But for many people, it is becoming the most important piece of software running on it.</p>
     `,
-    },
+  },
 
-    {
-        id: "16",
-        title: "The internet is getting faster, but websites are getting heavier",
-        slug: "internet-faster-websites-heavier",
-        summary:
-            "Connection speeds continue to improve, but modern websites are consuming more resources than ever before.",
-        author: {
-            name: "Sean Hollister",
-            image: "https://i.pravatar.cc/150?img=61",
-        },
-        coverPhoto:
-            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80",
+  {
+    id: "16",
+    title: "The internet is getting faster, but websites are getting heavier",
+    slug: "internet-faster-websites-heavier",
+    summary:
+      "Connection speeds continue to improve, but modern websites are consuming more resources than ever before.",
+    author: {
+      name: "Sean Hollister",
+      image: "https://i.pravatar.cc/150?img=61",
+    },
+    coverPhoto:
+      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80",
+    date: "2026-08-24",
+    readTime: "7 min read",
+    category: "Internet",
+    comments: [
+      {
+        id: "c25",
+        author: "Eric Davis",
+        image: "https://i.pravatar.cc/150?img=31",
+        body: "Some websites genuinely feel slower than they did ten years ago.",
         date: "2026-08-24",
-        readTime: "7 min read",
-        category: "Internet",
-        comments: [
-            {
-                id: "c25",
-                author: "Eric Davis",
-                image: "https://i.pravatar.cc/150?img=31",
-                body: "Some websites genuinely feel slower than they did ten years ago.",
-                date: "2026-08-24",
-            },
-        ],
-        body: `
+      },
+    ],
+    body: `
       <p>Internet connections have become dramatically faster.</p>
 
       <p>Yet some websites somehow feel slower.</p>
@@ -934,209 +928,169 @@ export const posts = [
 
       <p>For developers interested in performance, our <a href="https://example.com/performance">web performance guide</a> covers the basics.</p>
     `,
-    },
+  },
 ];
 
 async function seed() {
-    console.log(" Seeding database...");
+  console.log(" Seeding database...");
 
-    try {
+  try {
+    const authorMap = new Map<
+      string,
+      {
+        name: string;
+        image: string | null;
+      }
+    >();
 
+    for (const post of posts) {
+      const authorKey = post.author.name;
 
-        const authorMap = new Map<
-            string,
-            {
-                name: string;
-                image: string | null;
-            }
-        >();
-
-        for (const post of posts) {
-            const authorKey = post.author.name;
-
-            if (!authorMap.has(authorKey)) {
-                authorMap.set(authorKey, {
-                    name: post.author.name,
-                    image: post.author.image,
-                });
-            }
-        }
-
-
-
-        const userIdMap = new Map<string, string>();
-
-        for (const author of authorMap.values()) {
-            const existingUser = await db.query.users.findFirst({
-                where: (users, { eq }) =>
-                    eq(users.name, author.name),
-            });
-
-            if (existingUser) {
-                userIdMap.set(author.name, existingUser.id);
-                continue;
-            }
-
-            const [user] = await db
-                .insert(users)
-                .values({
-                    name: author.name,
-                    email: `${author.name
-                        .toLowerCase()
-                        .replace(/\s+/g, ".")}@example.com`,
-                })
-                .returning({
-                    id: users.id,
-                });
-
-            userIdMap.set(author.name, user.id);
-        }
-
-        console.log(
-            `Seeded ${userIdMap.size} users`,
-        );
-
-
-
-        const postIdMap = new Map<string, string>();
-
-        for (const post of posts) {
-            const authorId = userIdMap.get(
-                post.author.name,
-            );
-
-            if (!authorId) {
-                throw new Error(
-                    `Author not found: ${post.author.name}`,
-                );
-            }
-
-
-            const existingPost =
-                await db.query.posts.findFirst({
-                    where: (posts, { eq }) =>
-                        eq(posts.slug, post.slug),
-                });
-
-            let postId: string;
-
-            if (existingPost) {
-                postId = existingPost.id;
-            } else {
-                const [post] = await db
-                    .insert(posts)
-                    .values({
-                        title: post.title,
-                        slug: post.slug,
-                        summary: post.summary,
-                        body: post.body,
-                        coverPhoto: post.coverPhoto,
-                        category: post.category,
-                        authorId,
-
-
-                        published: new Date(post.date),
-
-                        createdAt: new Date(post.date),
-                        updatedAt: new Date(post.date),
-                    })
-                    .returning({
-                        id: posts.id,
-                    });
-
-                postId = post.id;
-            }
-
-            postIdMap.set(post.slug, postId);
-        }
-
-        console.log(
-            `Seeded ${postIdMap.size} posts`,
-        );
-
-
-
-        let commentCount = 0;
-
-        for (const post of posts) {
-            const postId = postIdMap.get(post.slug);
-
-            if (!postId) {
-                throw new Error(
-                    `Post not found: ${post.slug}`,
-                );
-            }
-
-            for (const comment of post.comments) {
-
-                let commentAuthor =
-                    await db.query.users.findFirst({
-                        where: (users, { eq }) =>
-                            eq(users.name, comment.author),
-                    });
-
-                if (!commentAuthor) {
-                    const [createdUser] = await db
-                        .insert(users)
-                        .values({
-                            name: comment.author,
-                            email: `${comment.author
-                                .toLowerCase()
-                                .replace(/\s+/g, ".")}@example.com`,
-
-                        })
-                        .returning();
-
-                    commentAuthor = createdUser;
-                }
-
-
-                const existingComment =
-                    await db.query.comments.findFirst({
-                        where: (comments, { and, eq }) =>
-                            and(
-                                eq(comments.postId, postId),
-                                eq(
-                                    comments.body,
-                                    comment.body,
-                                ),
-                                eq(
-                                    comments.authorId,
-                                    commentAuthor.id,
-                                ),
-                            ),
-                    });
-
-                if (existingComment) {
-                    continue;
-                }
-
-                await db.insert(comments).values({
-                    body: comment.body,
-                    postId,
-                    authorId: commentAuthor.id,
-
-                    createdAt: new Date(comment.date),
-                    updatedAt: new Date(comment.date),
-                });
-
-                commentCount++;
-            }
-        }
-
-        console.log(
-            `Seeded ${commentCount} comments`,
-        );
-
-        console.log("Database seeding complete");
-    } catch (error) {
-        console.error(
-            "❌ Database seeding failed:",
-            error,
-        );
-
-        process.exit(1);
+      if (!authorMap.has(authorKey)) {
+        authorMap.set(authorKey, {
+          name: post.author.name,
+          image: post.author.image,
+        });
+      }
     }
+
+    const userIdMap = new Map<string, string>();
+
+    for (const author of authorMap.values()) {
+      const existingUser = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.name, author.name),
+      });
+
+      if (existingUser) {
+        userIdMap.set(author.name, existingUser.id);
+        continue;
+      }
+
+      const [user] = await db
+        .insert(users)
+        .values({
+          name: author.name,
+          email: `${author.name
+            .toLowerCase()
+            .replace(/\s+/g, ".")}@example.com`,
+        })
+        .returning({
+          id: users.id,
+        });
+
+      userIdMap.set(author.name, user.id);
+    }
+
+    console.log(`Seeded ${userIdMap.size} users`);
+
+    const postIdMap = new Map<string, string>();
+
+    for (const post of posts) {
+      const authorId = userIdMap.get(post.author.name);
+
+      if (!authorId) {
+        throw new Error(`Author not found: ${post.author.name}`);
+      }
+
+      const existingPost = await db.query.posts.findFirst({
+        where: (posts, { eq }) => eq(posts.slug, post.slug),
+      });
+
+      let postId: string;
+
+      if (existingPost) {
+        postId = existingPost.id;
+      } else {
+        const [post] = await db
+          .insert(posts)
+          .values({
+            title: post.title,
+            slug: post.slug,
+            summary: post.summary,
+            body: post.body,
+            coverPhoto: post.coverPhoto,
+            category: post.category,
+            authorId,
+
+            published: new Date(post.date),
+
+            createdAt: new Date(post.date),
+            updatedAt: new Date(post.date),
+          })
+          .returning({
+            id: posts.id,
+          });
+
+        postId = post.id;
+      }
+
+      postIdMap.set(post.slug, postId);
+    }
+
+    console.log(`Seeded ${postIdMap.size} posts`);
+
+    let commentCount = 0;
+
+    for (const post of posts) {
+      const postId = postIdMap.get(post.slug);
+
+      if (!postId) {
+        throw new Error(`Post not found: ${post.slug}`);
+      }
+
+      for (const comment of post.comments) {
+        let commentAuthor = await db.query.users.findFirst({
+          where: (users, { eq }) => eq(users.name, comment.author),
+        });
+
+        if (!commentAuthor) {
+          const [createdUser] = await db
+            .insert(users)
+            .values({
+              name: comment.author,
+              email: `${comment.author
+                .toLowerCase()
+                .replace(/\s+/g, ".")}@example.com`,
+            })
+            .returning();
+
+          commentAuthor = createdUser;
+        }
+
+        const existingComment = await db.query.comments.findFirst({
+          where: (comments, { and, eq }) =>
+            and(
+              eq(comments.postId, postId),
+              eq(comments.body, comment.body),
+              eq(comments.authorId, commentAuthor.id),
+            ),
+        });
+
+        if (existingComment) {
+          continue;
+        }
+
+        await db.insert(comments).values({
+          body: comment.body,
+          postId,
+          authorId: commentAuthor.id,
+
+          createdAt: new Date(comment.date),
+          updatedAt: new Date(comment.date),
+        });
+
+        commentCount++;
+      }
+    }
+
+    console.log(`Seeded ${commentCount} comments`);
+
+    console.log("Database seeding complete");
+  } catch (error) {
+    console.error("❌ Database seeding failed:", error);
+
+    process.exit(1);
+  }
 }
 
 seed();

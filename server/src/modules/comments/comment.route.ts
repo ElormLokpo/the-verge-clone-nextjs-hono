@@ -6,13 +6,9 @@ import * as commentController from "./comment.controller";
 
 export const commentRoutes = new Hono();
 
-commentRoutes.get("/post/:postId", commentController.getComments);
+commentRoutes.get("/:postId", commentController.getComments);
 
-commentRoutes.post(
-  "/post/:postId",
-  authMiddleware,
-  commentController.createComment,
-);
+commentRoutes.post("", authMiddleware, commentController.createComment);
 
 commentRoutes.patch("/:id", authMiddleware, commentController.updateComment);
 
