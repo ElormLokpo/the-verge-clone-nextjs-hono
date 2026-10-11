@@ -48,6 +48,7 @@ export const createPostSchema = z.object({
 });
 
 export const createCommentSchema = z.object({
+  postId: z.string().min(1),
   body: z.string().min(1).max(5000),
 });
 

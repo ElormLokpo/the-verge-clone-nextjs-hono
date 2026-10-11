@@ -9,8 +9,6 @@ import * as commentService from "./comment.service";
 
 export async function createComment(c: Context) {
   const user = c.get("user");
-  const postId = c.req.param("postId");
-
   const body = await c.req.json();
 
   const parsed = createCommentSchema.safeParse(body);
@@ -27,7 +25,7 @@ export async function createComment(c: Context) {
 
   try {
     const comment = await commentService.createComment(
-      postId as string,
+      parsed.data.postId,
       user.id,
       parsed.data.body,
     );

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import { TopNav } from "./components/topNav";
 import { HeaderSectionSkeleton } from "../app/components/ui/skeleton";
@@ -8,8 +8,6 @@ import { VscComment } from "react-icons/vsc";
 import { useGetPosts, useNavigate } from "./hooks";
 
 export default function Home() {
-
-
   return (
     <div className="h-screen w-screen bg-[#131313] px-70 py-16 mb-30">
       <div className="flex flex-col gap-3 items-end justify-end mb-10">
@@ -55,18 +53,22 @@ const HeaderSection = () => {
   const { navigateTo } = useNavigate();
 
   const { data: postFromServer, isLoading } = useGetPosts();
-  const post: Post[] = getRandomItems(!isLoading ? postFromServer?.data : [], 1)
+  const post: Post[] = getRandomItems(
+    !isLoading ? postFromServer?.data : [],
+    1,
+  );
 
   console.log("postFromServer", post);
 
-
-
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />
+    return <HeaderSectionSkeleton />;
   }
 
   return (
-    <div className="hover:cursor-pointer" onClick={() => navigateTo(`/post/${post[0].slug}`)}>
+    <div
+      className="hover:cursor-pointer"
+      onClick={() => navigateTo(`/post/${post[0].slug}`)}
+    >
       <div className="absolute z-10 top-40 left-60">
         <Image
           src="/logo-dark-lg-transparent.png"
@@ -88,7 +90,7 @@ const HeaderSection = () => {
 
       <div className="text-white px-30 relative top-[-50]">
         <div className="text-[3.5rem] hover:underline hover:decoration-[#3cffd0] decoration-1 font-black mb-4 leading-12 tracking-tighter">
-          {postFromServer.data[0].title}
+          {post[0].title}
         </div>
         <div className="text-[1.5rem] mb-2 font-serif leading-8 tracking-tighter">
           {post[0].summary}
@@ -110,12 +112,14 @@ const HeaderSection = () => {
 };
 
 const FourGridSectionContainer = () => {
-
   const { data: postFromServer, isLoading } = useGetPosts();
-  const post: Post[] = getRandomItems(!isLoading ? postFromServer?.data : [], 4)
+  const post: Post[] = getRandomItems(
+    !isLoading ? postFromServer?.data : [],
+    4,
+  );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />
+    return <HeaderSectionSkeleton />;
   }
 
   return (
@@ -146,45 +150,51 @@ const FourGridSectionContainer = () => {
 const FourGridSection = ({ post }: { post: Post }) => {
   const { navigateTo } = useNavigate();
 
-  return < div className="flex hover:cursor-pointer gap-3 text-white" onClick={() => navigateTo(`/post/${post.slug}`)} >
-    <div className="w-40 relative">
-      <Image
-        src={post.coverPhoto}
-        alt="hero"
-        fill
-        className="object-cover"
-      />
-    </div>
-
-    <div className="">
-      <div className="text-xl mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
-        {post.title}
+  return (
+    <div
+      className="flex hover:cursor-pointer gap-3 text-white"
+      onClick={() => navigateTo(`/post/${post.slug}`)}
+    >
+      <div className="w-40 relative">
+        <Image src={post.coverPhoto} alt="hero" fill className="object-cover" />
       </div>
 
-      <div className="text-sm flex gap-4 text-stone-400">
-        <span className="text-[#3cffd0]">{post.author.name}</span>
-        <span className="flex items-center gap-2">
-          <span>
-            <VscComment />
+      <div className="">
+        <div className="text-xl mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
+          {post.title}
+        </div>
+
+        <div className="text-sm flex gap-4 text-stone-400">
+          <span className="text-[#3cffd0]">{post.author.name}</span>
+          <span className="flex items-center gap-2">
+            <span>
+              <VscComment />
+            </span>
+            {post.commentCount} Comment{post.commentCount > 1 && "s"}
           </span>
-          {post.commentCount} Comment{post.commentCount > 1 && "s"}
-        </span>
+        </div>
       </div>
     </div>
-  </div >
+  );
 };
 
 export const FiveGridSectionContainer = () => {
   const { data: postFromServer, isLoading } = useGetPosts();
-  const post: Post[] = getRandomItems(!isLoading ? postFromServer?.data : [], 5);
+  const post: Post[] = getRandomItems(
+    !isLoading ? postFromServer?.data : [],
+    5,
+  );
   const { navigateTo } = useNavigate();
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />
+    return <HeaderSectionSkeleton />;
   }
 
   return (
-    <div className="border-t-2 border-[#3cffd0] py-1 hover:cursor-pointer text-white" onClick={() => navigateTo(`/post/${post[0].slug}`)}>
+    <div
+      className="border-t-2 border-[#3cffd0] py-1 hover:cursor-pointer text-white"
+      onClick={() => navigateTo(`/post/${post[0].slug}`)}
+    >
       <div className="text-xl flex gap-3 items-center mb-4">
         <span className="font-bold">
           {post[0].category}
@@ -245,43 +255,46 @@ export const FiveGridSectionContainer = () => {
 const FiveGridSection = ({ post }: { post: Post }) => {
   const { navigateTo } = useNavigate();
 
-  return <div className="grid grid-cols-6 hover:cursor-pointer gap-3 text-white" onClick={() => navigateTo(`/post/${post.slug}`)}>
-    <div className="col-span-4">
-      <div className="text-lg mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
-        {post.title}
-      </div>
-      <div className="text-sm text-stone-300 mb-2 font-serif leading-6 tracking-tighter">
-        {post.summary}
-      </div>
+  return (
+    <div
+      className="grid grid-cols-6 hover:cursor-pointer gap-3 text-white"
+      onClick={() => navigateTo(`/post/${post.slug}`)}
+    >
+      <div className="col-span-4">
+        <div className="text-lg mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
+          {post.title}
+        </div>
+        <div className="text-sm text-stone-300 mb-2 font-serif leading-6 tracking-tighter">
+          {post.summary}
+        </div>
 
-      <div className="text-sm flex gap-4 text-stone-400">
-        <span className="text-[#3cffd0]">{post.author.name}</span>
-        <span className="flex items-center gap-2">
-          <span>
-            <VscComment />
+        <div className="text-sm flex gap-4 text-stone-400">
+          <span className="text-[#3cffd0]">{post.author.name}</span>
+          <span className="flex items-center gap-2">
+            <span>
+              <VscComment />
+            </span>
+            {post.commentCount} Comment{post.commentCount > 1 && "s"}
           </span>
-          {post.commentCount} Comment{post.commentCount > 1 && "s"}
-        </span>
+        </div>
+      </div>
+
+      <div className="w-35 relative col-span-2 p-3">
+        <Image src={post.coverPhoto} alt="hero" fill className="object-cover" />
       </div>
     </div>
-
-    <div className="w-35 relative col-span-2 p-3">
-      <Image
-        src={post.coverPhoto}
-        alt="hero"
-        fill
-        className="object-cover"
-      />
-    </div>
-  </div>
+  );
 };
 
 const LinkSectionContainer = () => {
   const { data: postFromServer, isLoading } = useGetPosts();
-  const post: Post[] = getRandomItems(!isLoading ? postFromServer?.data : [], 5);
+  const post: Post[] = getRandomItems(
+    !isLoading ? postFromServer?.data : [],
+    5,
+  );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />
+    return <HeaderSectionSkeleton />;
   }
 
   return (
@@ -299,41 +312,45 @@ const LinkSectionContainer = () => {
   );
 };
 
-const LinkSecktion = ({
-  post,
-  index,
-}: {
-  post: Post;
-  index: number;
-}) => {
+const LinkSecktion = ({ post, index }: { post: Post; index: number }) => {
   const { navigateTo } = useNavigate();
 
-  return <div className="flex hover:cursor-pointer gap-3 text-white" onClick={() => navigateTo(`/post/${post.slug}`)}>
-    <div className="w-20 relative ">
-      <div className="bg-stone-700 mx-4 h-full text-center flex items-center justify-center text-lg hover:bg-indigo-600">
-        {index}
+  return (
+    <div
+      className="flex hover:cursor-pointer gap-3 text-white"
+      onClick={() => navigateTo(`/post/${post.slug}`)}
+    >
+      <div className="w-20 relative ">
+        <div className="bg-stone-700 mx-4 h-full text-center flex items-center justify-center text-lg hover:bg-indigo-600">
+          {index}
+        </div>
+      </div>
+
+      <div className="">
+        <div className="text-xl mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
+          {post.title}
+        </div>
+
+        <div className="text-sm flex gap-4 text-stone-400">
+          <span className="text-[#3cffd0]">{post.author.name}</span>
+          <span className="flex items-center gap-2">
+            {formatDate(post.createdAt)}
+          </span>
+        </div>
       </div>
     </div>
-
-    <div className="">
-      <div className="text-xl mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
-        {post.title}
-      </div>
-
-      <div className="text-sm flex gap-4 text-stone-400">
-        <span className="text-[#3cffd0]">{post.author.name}</span>
-        <span className="flex items-center gap-2">{formatDate(post.createdAt)}</span>
-      </div>
-    </div>
-  </div>
+  );
 };
 
 const RightSectionContainer = () => {
   const { data: postFromServer, isLoading } = useGetPosts();
-  const post: Post[] = getRandomItems(!isLoading ? postFromServer?.data : [], 11);
+  const post: Post[] = getRandomItems(
+    !isLoading ? postFromServer?.data : [],
+    11,
+  );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />
+    return <HeaderSectionSkeleton />;
   }
 
   return (
@@ -377,11 +394,14 @@ const RightSectionContainer = () => {
   );
 };
 
-const ImageBottomSection = ({ post }: { post: Post }) => {
+export const ImageBottomSection = ({ post }: { post: Post }) => {
   const { navigateTo } = useNavigate();
 
   return (
-    <div className="hover:cursor-pointer" onClick={() => navigateTo(`/post/${post.slug}`)}>
+    <div
+      className="hover:cursor-pointer"
+      onClick={() => navigateTo(`/post/${post.slug}`)}
+    >
       <div>
         <div className="text-white">
           <div className="text-[1.2rem] hover:underline hover:decoration-[#3cffd0] decoration-1 font-black mb-1 leading-5 tracking-tighter">

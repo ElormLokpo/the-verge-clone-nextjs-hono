@@ -10,6 +10,8 @@ postRoutes.get("/all", postController.getPosts);
 
 postRoutes.get("/:slug", postController.getPost);
 
+postRoutes.get("/category/:category", postController.getPostByCategory);
+
 postRoutes.post("/create", authMiddleware, postController.createPost);
 
 postRoutes.patch("/:id", authMiddleware, postController.updatePost);

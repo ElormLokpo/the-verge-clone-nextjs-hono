@@ -12,11 +12,10 @@ export default function CreatePostPage() {
   const [category, setCategory] = useState("Technology");
   const [coverPhoto, setCoverPhoto] = useState("");
   const [body, setBody] = useState("");
-  const { mutate, isPending } = useCreatePost()
+  const { mutate, isPending } = useCreatePost();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
 
     const post = {
       title,
@@ -48,10 +47,11 @@ export default function CreatePostPage() {
           </div>
 
           <button
+            disabled={isPending}
             type="submit"
             className=" bg-indigo-600 hover:bg-indigo-800 px-9 py-3 text-sm font-medium text-white"
           >
-            Publish
+            {isPending ? "Publishing post..." : "Publish post"}
           </button>
         </div>
 

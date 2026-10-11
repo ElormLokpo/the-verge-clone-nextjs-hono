@@ -3,9 +3,6 @@ export * from "./authHook";
 export * from "./postsHook";
 import { useRouter } from "next/navigation";
 
-
-
-
 export function useNavigate() {
   const router = useRouter();
 

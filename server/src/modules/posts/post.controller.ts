@@ -58,6 +58,17 @@ export async function getPost(c: Context) {
   });
 }
 
+export async function getPostByCategory(c: Context) {
+  const category = c.req.param("category");
+
+  const posts = await postService.getPostByCategory(category as string);
+
+  return c.json({
+    data: posts,
+  });
+}
+
+
 export async function updatePost(c: Context) {
   const user = c.get("user");
   const postId = c.req.param("id");

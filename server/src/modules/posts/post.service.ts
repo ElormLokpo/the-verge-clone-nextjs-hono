@@ -100,6 +100,38 @@ export async function getPostBySlug(slug: string) {
   return result[0] ?? null;
 }
 
+export async function getPostByCategory(category: string) {
+  const result = await db
+    .select({
+      id: posts.id,
+      title: posts.title,
+      slug: posts.slug,
+      summary: posts.summary,
+      body: posts.body,
+      coverPhoto: posts.coverPhoto,
+      category: posts.category,
+
+      author: {
+        id: users.id,
+        name: users.name,
+      },
+
+      createdAt: posts.createdAt,
+      updatedAt: posts.updatedAt,
+
+      commentCount: sql<number>`
+        count(${comments.id})
+      `,
+    })
+    .from(posts)
+    .leftJoin(users, eq(posts.authorId, users.id))
+    .leftJoin(comments, eq(comments.postId, posts.id))
+    .where(and(eq(posts.category, category), sql`${posts.published} IS NOT NULL`))
+    .groupBy(posts.id, users.id);
+
+  return result ?? null;
+}
+
 export async function getPostById(id: string) {
   const result = await db.select().from(posts).where(eq(posts.id, id)).limit(1);
 
