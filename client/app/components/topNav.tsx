@@ -35,13 +35,13 @@ export const TopNav = ({
         className={`flex justify-end items-center  gap-5 mb-3 ${textColor ?? "text-white"} `}
       >
         <div className={`${textColor ? "" : "bg-[#3cffd0]"} p-1 `}>
-          <div className="text-xs text-stone-900">SUBSCRIBE</div>
+          {/* <div className={`text-xs ${textColor ?? "text-stone-900"}`}>SUBSCRIBE</div> */}
         </div>
         <div className="flex gap-1 hover:cursor-pointer">
           <div>
             <TiUser className={`${textColor ?? "text-[#3cffd0]"}`} />
           </div>
-          <Link href={token ? "" : CLIENT_ROUTES.signIn} className="text-xs">
+          <Link href={token ? "" : CLIENT_ROUTES.signIn} className={`text-xs ${textColor ? "" : "text-white"}`}>
             {token ? "ACCOUNT" : "SIGN IN"}
           </Link>
         </div>
@@ -58,6 +58,7 @@ export const TopNav = ({
         </div>
         {navItems.map((item, index) => (
           <div
+            onClick={() => navigateTo(`/category/${item.title}`)}
             key={index}
             className={`flex items-center ${textColor ?? "text-white"}  gap-5`}
           >
@@ -78,7 +79,7 @@ export const TopNav = ({
           </Link>
         )}
 
-        <div className="text-lg flex items-center ">
+        {/* <div className="text-lg flex items-center ">
           <IoMdNotificationsOutline
             className={`${textColor ?? "text-white "}`}
           />
@@ -86,7 +87,7 @@ export const TopNav = ({
 
         <div className="text-lg flex items-center ">
           <RxHamburgerMenu className={`${textColor ?? "text-white "}`} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -114,8 +114,9 @@ const BlogContent = ({ content }: BlogContentProps) => {
         prose-blockquote:border-l-4
         prose-blockquote:border-[#D6F31F]
         prose-blockquote:pl-4
-        prose-a:text-blue-600
+        prose-a:text-stone-400
         prose-a:underline
+        prose-li:text-stone-400
       "
       dangerouslySetInnerHTML={{ __html: sanitizedContent }}
     />
@@ -157,7 +158,7 @@ function CommentsSection({
 
     createComment(newComment);
 
-    console.log("New comment", newComment);
+    
     setComment("");
   }
 

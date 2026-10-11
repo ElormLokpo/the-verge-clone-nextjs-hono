@@ -63,6 +63,23 @@ export const useGetPost = (slug: string) => {
   });
 };
 
+export const useGetPostByCategory = (category: string) => {
+  const token = useAuthStore((state) => state.token);
+  return useQuery({
+    queryKey: [`${category}`],
+    queryFn: async () =>
+      api.get(`${API_ROUTES.getPostByCategory}/${category}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchInterval: 1000 * 60 * 5,
+  });
+};
+
 export const useUpdatePost = () => {
   const token = useAuthStore((state) => state.token);
   return useMutation({

@@ -90,7 +90,7 @@ const HeaderSection = () => {
 
       <div className="text-white px-30 relative top-[-50]">
         <div className="text-[3.5rem] hover:underline hover:decoration-[#3cffd0] decoration-1 font-black mb-4 leading-12 tracking-tighter">
-          {postFromServer.data[0].title}
+          {post[0].title}
         </div>
         <div className="text-[1.5rem] mb-2 font-serif leading-8 tracking-tighter">
           {post[0].summary}
@@ -394,7 +394,7 @@ const RightSectionContainer = () => {
   );
 };
 
-const ImageBottomSection = ({ post }: { post: Post }) => {
+export const ImageBottomSection = ({ post }: { post: Post }) => {
   const { navigateTo } = useNavigate();
 
   return (
