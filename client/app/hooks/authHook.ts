@@ -8,6 +8,7 @@ import {
   RegisterUserRequest,
   ResetPasswordRequest,
   VerifyEmailRequest,
+  VerifyUserResponseType,
 } from "../types";
 import { API_ROUTES, CLIENT_ROUTES } from "../constants";
 import { toast } from "sonner";
@@ -35,18 +36,19 @@ export const useRegisterUser = () => {
 export const useVerifyEmail = () => {
   const token = useAuthStore((state) => state.token);
   const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   return useMutation({
-    mutationFn: async (data: VerifyEmailRequest) =>
+    mutationFn: async (data: VerifyEmailRequest): Promise<VerifyUserResponseType> =>
       api
         .post(API_ROUTES.verifyEmail, data, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
-        .then((data) => data),
-    onSuccess: () => {
+        }),
+    onSuccess: (data) => {
       toast.success("Email verified successfully");
+      setAuth(data.user, token as string);
       router.push(CLIENT_ROUTES.home);
     },
     onError: () => {
@@ -70,7 +72,8 @@ export const useLoginUser = () => {
       setAuth(data.user, data.token);
       router.push(CLIENT_ROUTES.home);
     },
-    onError: () => {
+    onError: (data) => {
+      console.log("error", data);
       toast.error("Something went wrong. Please try again later");
     },
   });
@@ -98,6 +101,29 @@ export const useResetPassword = () => {
     onSuccess: () => {
       toast.success("Password reset successfully");
       router.push(CLIENT_ROUTES.signIn);
+    },
+    onError: () => {
+      toast.error("Something went wrong. Please try again later");
+    },
+  });
+};
+
+
+export const useSendEmailVerification = () => {
+  const router = useRouter();
+  const token = useAuthStore((state) => state.token);
+
+
+  return useMutation({
+    mutationFn: async (data: EmailType) =>
+      api.post(API_ROUTES.resendVerification, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((data) => data),
+    onSuccess: () => {
+      toast.success("Verification code sent successfully");
+      router.push(CLIENT_ROUTES.verifyEmail);
     },
     onError: () => {
       toast.error("Something went wrong. Please try again later");

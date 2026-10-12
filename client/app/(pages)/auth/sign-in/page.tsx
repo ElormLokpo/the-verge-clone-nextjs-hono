@@ -8,6 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import Link from "next/link";
 import { useLoginUser, useRegisterUser } from "@/app/hooks";
+import { useEffect } from "react";
 
 export default function Auth() {
   return (
@@ -106,12 +107,14 @@ const signUpSchema = z
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 const SignUpForm = () => {
-  const { mutate, isPending } = useRegisterUser();
+  const { mutate, isPending, isSuccess, isError } = useRegisterUser();
 
   const {
     register,
     handleSubmit,
     reset,
+
+    setError,
     formState: { errors },
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -129,8 +132,40 @@ const SignUpForm = () => {
 
     const finalData = { ...rest, role: "user" };
     mutate(finalData);
-    reset();
+
   };
+
+  useEffect(() => {
+    if (isError) {
+      setError("email", {
+        type: "manual",
+        message: " ",
+      });
+
+      setError("name", {
+        type: "manual",
+        message: " ",
+      });
+
+      setError("confirmPassword", {
+        type: "manual",
+        message: " ",
+      });
+
+      setError("password", {
+        type: "manual",
+        message: "Invalid credentials.",
+      });
+    }
+  }, [isError, setError]);
+
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
+
 
   return (
     <div className=" w-full ">
@@ -195,12 +230,13 @@ const signInSchema = z.object({
 type SignInFormValues = z.infer<typeof signInSchema>;
 
 const SignInForm = () => {
-  const { mutate, isPending } = useLoginUser();
+  const { mutate, isPending, isSuccess, isError } = useLoginUser();
 
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -212,8 +248,31 @@ const SignInForm = () => {
 
   const onSubmit = async (data: SignInFormValues) => {
     mutate(data);
-    reset();
+
   };
+
+  useEffect(() => {
+    if (isError) {
+      setError("email", {
+        type: "manual",
+        message: " ",
+      });
+
+      setError("password", {
+        type: "manual",
+        message: "Invalid credentials.",
+      });
+    }
+  }, [isError, setError]);
+
+  useEffect(() => {
+
+
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
+
 
   return (
     <div className=" w-full ">

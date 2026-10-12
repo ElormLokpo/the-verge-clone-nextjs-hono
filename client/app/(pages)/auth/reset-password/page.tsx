@@ -7,6 +7,7 @@ import z from "zod";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { useResetPassword } from "@/app/hooks";
+import { useEffect } from "react";
 
 export const ResetPasswordPage = () => {
   return (
@@ -55,7 +56,7 @@ const ResetPasswordForm = () => {
   const token = searchParams.get("token") as string;
   const email = searchParams.get("email") as string;
 
-  const { mutate, isPending } = useResetPassword();
+  const { mutate, isPending, isSuccess } = useResetPassword();
 
   const {
     register,
@@ -72,8 +73,14 @@ const ResetPasswordForm = () => {
 
   const onSubmit = async (data: ResetPasswordValues) => {
     mutate({ newPassword: data.password, email, token });
-    reset();
+
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
 
   return (
     <div className=" w-full ">

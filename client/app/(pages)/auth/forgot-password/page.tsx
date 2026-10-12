@@ -5,6 +5,7 @@ import { useForgotPassword } from "@/app/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { useEffect } from "react";
 
 export const ForgotPasswordPage = () => {
   return (
@@ -57,8 +58,14 @@ const ForgotPasswordForm = () => {
 
   const onSubmit = async (data: ForgotPasswordValues) => {
     mutate(data);
-    reset();
+
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
 
   return (
     <div className=" w-full ">

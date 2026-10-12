@@ -1,6 +1,5 @@
 "use client";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import { RxHamburgerMenu } from "react-icons/rx";
+
 import Image from "next/image";
 import { TiUser } from "react-icons/ti";
 import Link from "next/link";
@@ -18,6 +17,8 @@ export const TopNav = ({
   borderColor?: string;
 }) => {
   const token = useAuthStore((state) => state.token);
+  const clearAuth = useAuthStore((state) => state.clearAuth);
+
   const { navigateTo } = useNavigate();
 
   const navItems = [
@@ -29,21 +30,27 @@ export const TopNav = ({
     { title: "Policy", link: "" },
   ];
 
+  const handleSignOut = () => {
+    if (token) {
+      clearAuth();
+    }else{
+      navigateTo(CLIENT_ROUTES.signIn);
+    }
+  };
+
   return (
     <div>
       <div
         className={`flex justify-end items-center  gap-5 mb-3 ${textColor ?? "text-white"} `}
       >
-        <div className={`${textColor ? "" : "bg-[#3cffd0]"} p-1 `}>
-          {/* <div className={`text-xs ${textColor ?? "text-stone-900"}`}>SUBSCRIBE</div> */}
-        </div>
+
         <div className="flex gap-1 hover:cursor-pointer">
           <div>
             <TiUser className={`${textColor ?? "text-[#3cffd0]"}`} />
           </div>
-          <Link href={token ? "" : CLIENT_ROUTES.signIn} className={`text-xs ${textColor ? "" : "text-white"}`}>
-            {token ? "ACCOUNT" : "SIGN IN"}
-          </Link>
+          <div onClick={handleSignOut} className={`text-xs ${textColor ? "" : "text-white"} hover:underline decoration-1 decoration-[#3cffd0]`}>
+            {token ? "SIGN OUT" : "SIGN IN"}
+          </div>
         </div>
       </div>
 
@@ -79,15 +86,7 @@ export const TopNav = ({
           </Link>
         )}
 
-        {/* <div className="text-lg flex items-center ">
-          <IoMdNotificationsOutline
-            className={`${textColor ?? "text-white "}`}
-          />
-        </div>
 
-        <div className="text-lg flex items-center ">
-          <RxHamburgerMenu className={`${textColor ?? "text-white "}`} />
-        </div> */}
       </div>
     </div>
   );
