@@ -33,7 +33,7 @@ export const TopNav = ({
   const handleSignOut = () => {
     if (token) {
       clearAuth();
-    }else{
+    } else {
       navigateTo(CLIENT_ROUTES.signIn);
     }
   };
@@ -43,12 +43,14 @@ export const TopNav = ({
       <div
         className={`flex justify-end items-center  gap-5 mb-3 ${textColor ?? "text-white"} `}
       >
-
         <div className="flex gap-1 hover:cursor-pointer">
           <div>
             <TiUser className={`${textColor ?? "text-[#3cffd0]"}`} />
           </div>
-          <div onClick={handleSignOut} className={`text-xs ${textColor ? "" : "text-white"} hover:underline decoration-1 decoration-[#3cffd0]`}>
+          <div
+            onClick={handleSignOut}
+            className={`text-xs ${textColor ? "" : "text-white"} hover:underline decoration-1 decoration-[#3cffd0]`}
+          >
             {token ? "SIGN OUT" : "SIGN IN"}
           </div>
         </div>
@@ -85,8 +87,6 @@ export const TopNav = ({
             </span>
           </Link>
         )}
-
-
       </div>
     </div>
   );

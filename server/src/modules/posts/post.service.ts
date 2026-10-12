@@ -126,7 +126,9 @@ export async function getPostByCategory(category: string) {
     .from(posts)
     .leftJoin(users, eq(posts.authorId, users.id))
     .leftJoin(comments, eq(comments.postId, posts.id))
-    .where(and(eq(posts.category, category), sql`${posts.published} IS NOT NULL`))
+    .where(
+      and(eq(posts.category, category), sql`${posts.published} IS NOT NULL`),
+    )
     .groupBy(posts.id, users.id);
 
   return result ?? null;

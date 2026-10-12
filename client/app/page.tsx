@@ -58,8 +58,6 @@ const HeaderSection = () => {
     1,
   );
 
-  console.log("postFromServer", post);
-
   if (isLoading || !postFromServer?.data) {
     return <HeaderSectionSkeleton />;
   }

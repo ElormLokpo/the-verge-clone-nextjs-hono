@@ -26,7 +26,6 @@ export default function CreatePostPage() {
       published: true,
     };
 
-    console.log(post);
     mutate(post);
   }
 

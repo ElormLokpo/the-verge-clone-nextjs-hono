@@ -58,7 +58,6 @@ const ForgotPasswordForm = () => {
 
   const onSubmit = async (data: ForgotPasswordValues) => {
     mutate(data);
-
   };
 
   useEffect(() => {

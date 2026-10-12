@@ -30,7 +30,6 @@ export type AuthResponseType = {
   token: string;
 };
 
-
 export type VerifyUserResponseType = {
   user: {
     id: string;
@@ -40,7 +39,7 @@ export type VerifyUserResponseType = {
     role: string;
   };
   message: string;
-}
+};
 
 export type ResetPasswordRequest = {
   token: string;

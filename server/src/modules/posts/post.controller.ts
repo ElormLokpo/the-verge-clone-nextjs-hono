@@ -68,7 +68,6 @@ export async function getPostByCategory(c: Context) {
   });
 }
 
-
 export async function updatePost(c: Context) {
   const user = c.get("user");
   const postId = c.req.param("id");
