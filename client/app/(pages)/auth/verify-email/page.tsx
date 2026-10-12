@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { useEffect } from "react";
-import Link from "next/link"
+import Link from "next/link";
 import { CLIENT_ROUTES } from "@/app/constants";
 
 export const VerifyEmailPage = () => {
@@ -63,7 +63,6 @@ const VerifyEmailForm = () => {
   const onSubmit = async (data: VerifyEmailValues) => {
     const findalData = { email: authenticatedUserEmail, code: data.code };
     mutate(findalData);
-
   };
 
   useEffect(() => {

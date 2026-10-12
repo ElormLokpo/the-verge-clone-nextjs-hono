@@ -132,7 +132,6 @@ const SignUpForm = () => {
 
     const finalData = { ...rest, role: "user" };
     mutate(finalData);
-
   };
 
   useEffect(() => {
@@ -159,13 +158,11 @@ const SignUpForm = () => {
     }
   }, [isError, setError]);
 
-
   useEffect(() => {
     if (isSuccess) {
       reset();
     }
   }, [isSuccess, reset]);
-
 
   return (
     <div className=" w-full ">
@@ -248,7 +245,6 @@ const SignInForm = () => {
 
   const onSubmit = async (data: SignInFormValues) => {
     mutate(data);
-
   };
 
   useEffect(() => {
@@ -266,13 +262,10 @@ const SignInForm = () => {
   }, [isError, setError]);
 
   useEffect(() => {
-
-
     if (isSuccess) {
       reset();
     }
   }, [isSuccess, reset]);
-
 
   return (
     <div className=" w-full ">

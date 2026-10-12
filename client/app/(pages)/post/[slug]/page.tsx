@@ -142,8 +142,6 @@ function CommentsSection({
   const { mutate: createComment, isPending } = useCreateComment(slug);
   const { data: commentsData } = useGetComments(postId || "");
 
-  console.log(commentsData);
-
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -158,7 +156,6 @@ function CommentsSection({
 
     createComment(newComment);
 
-    
     setComment("");
   }
 

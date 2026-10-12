@@ -168,9 +168,7 @@ export async function generateAndSendVerificationCode(
   return { success: true };
 }
 
-export async function verifyEmailCode(
-  input: VerifyEmailInput,
-) {
+export async function verifyEmailCode(input: VerifyEmailInput) {
   const { email, code } = input;
 
   const [user] = await db
@@ -207,9 +205,8 @@ export async function verifyEmailCode(
       emailVerificationCode: null,
       emailVerificationExpires: null,
     })
-    .where(eq(users.id, user.id)).returning();
-
- 
+    .where(eq(users.id, user.id))
+    .returning();
 
   return { success: true, data: sanitize(updatedUser) };
 }

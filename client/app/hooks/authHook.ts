@@ -39,13 +39,14 @@ export const useVerifyEmail = () => {
   const setAuth = useAuthStore((state) => state.setAuth);
 
   return useMutation({
-    mutationFn: async (data: VerifyEmailRequest): Promise<VerifyUserResponseType> =>
-      api
-        .post(API_ROUTES.verifyEmail, data, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }),
+    mutationFn: async (
+      data: VerifyEmailRequest,
+    ): Promise<VerifyUserResponseType> =>
+      api.post(API_ROUTES.verifyEmail, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
     onSuccess: (data) => {
       toast.success("Email verified successfully");
       setAuth(data.user, token as string);
@@ -72,8 +73,7 @@ export const useLoginUser = () => {
       setAuth(data.user, data.token);
       router.push(CLIENT_ROUTES.home);
     },
-    onError: (data) => {
-      console.log("error", data);
+    onError: () => {
       toast.error("Something went wrong. Please try again later");
     },
   });
@@ -108,19 +108,19 @@ export const useResetPassword = () => {
   });
 };
 
-
 export const useSendEmailVerification = () => {
   const router = useRouter();
   const token = useAuthStore((state) => state.token);
 
-
   return useMutation({
     mutationFn: async (data: EmailType) =>
-      api.post(API_ROUTES.resendVerification, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((data) => data),
+      api
+        .post(API_ROUTES.resendVerification, data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((data) => data),
     onSuccess: () => {
       toast.success("Verification code sent successfully");
       router.push(CLIENT_ROUTES.verifyEmail);

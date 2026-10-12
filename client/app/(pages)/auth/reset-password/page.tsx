@@ -73,7 +73,6 @@ const ResetPasswordForm = () => {
 
   const onSubmit = async (data: ResetPasswordValues) => {
     mutate({ newPassword: data.password, email, token });
-
   };
 
   useEffect(() => {

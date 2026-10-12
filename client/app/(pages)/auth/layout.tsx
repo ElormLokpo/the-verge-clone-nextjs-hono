@@ -1,5 +1,4 @@
 import Image from "next/image";
-import bgImage from "@/public/auth-page-background.jpg";
 import { ReactNode } from "react";
 
 export const AuthLayout = ({ children }: { children: ReactNode }) => {
@@ -8,7 +7,7 @@ export const AuthLayout = ({ children }: { children: ReactNode }) => {
       <main className="relative min-h-screen w-full overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <Image
-            src={bgImage}
+            src="/auth-page-background.jpg"
             alt="Background Image"
             placeholder="blur"
             quality={100}

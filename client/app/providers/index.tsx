@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Toaster } from "sonner";
 import QueryProvider from "./query-provider";
 import { useAuthStore } from "../store";
@@ -8,7 +8,6 @@ export const RootProviders = ({ children }: { children: React.ReactNode }) => {
   const user = useAuthStore((state) => state.user);
   const token = useAuthStore((state) => state.token);
 
-  console.log("user in root providers", user?.isEmailVerified);
   return (
     <>
       <QueryProvider>
@@ -19,5 +18,3 @@ export const RootProviders = ({ children }: { children: React.ReactNode }) => {
     </>
   );
 };
-
-

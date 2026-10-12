@@ -90,7 +90,7 @@ export async function verifyEmail(c: Context) {
     return c.json({ error: result.error }, 400);
   }
 
-  return c.json({ message: "Email verified successfully", user: result.data  });
+  return c.json({ message: "Email verified successfully", user: result.data });
 }
 
 export async function forgotPassword(c: Context) {

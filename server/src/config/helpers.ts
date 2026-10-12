@@ -53,4 +53,3 @@ export function parseError(err: unknown): { status: number; body: AppError } {
     },
   };
 }
-
