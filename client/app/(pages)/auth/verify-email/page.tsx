@@ -6,6 +6,9 @@ import { useAuthStore } from "@/app/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { useEffect } from "react";
+import Link from "next/link"
+import { CLIENT_ROUTES } from "@/app/constants";
 
 export const VerifyEmailPage = () => {
   return (
@@ -43,7 +46,7 @@ type VerifyEmailValues = z.infer<typeof verifyEmailSchema>;
 
 const VerifyEmailForm = () => {
   const authenticatedUserEmail = useAuthStore((state) => state.user?.email);
-  const { mutate, isPending } = useVerifyEmail();
+  const { mutate, isPending, isSuccess } = useVerifyEmail();
 
   const {
     register,
@@ -60,8 +63,14 @@ const VerifyEmailForm = () => {
   const onSubmit = async (data: VerifyEmailValues) => {
     const findalData = { email: authenticatedUserEmail, code: data.code };
     mutate(findalData);
-    reset();
+
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
 
   return (
     <div className=" w-full ">
@@ -78,10 +87,14 @@ const VerifyEmailForm = () => {
         <button
           type="submit"
           disabled={isPending}
-          className="mt-2 w-full bg-indigo-600 hover:bg-black px-4 py-3.5 font-polysans text-sm font-medium text-white transition-colors focus:outline-none disabled:opacity-50"
+          className="mt-2 w-full bg-indigo-600 hover:bg-black mb-3 px-4 py-3.5 font-polysans text-sm font-medium text-white transition-colors focus:outline-none disabled:opacity-50"
         >
           {isPending ? "Verifying..." : "Verify email"}
         </button>
+
+        <div className="w-full flex justify-center items-center mt-2 text-xs underline text-gray-500">
+          <Link href={CLIENT_ROUTES.home}>Skip for now</Link>
+        </div>
       </form>
     </div>
   );

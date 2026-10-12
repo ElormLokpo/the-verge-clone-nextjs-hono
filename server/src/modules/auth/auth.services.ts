@@ -170,7 +170,7 @@ export async function generateAndSendVerificationCode(
 
 export async function verifyEmailCode(
   input: VerifyEmailInput,
-): Promise<ServiceResult> {
+) {
   const { email, code } = input;
 
   const [user] = await db
@@ -200,16 +200,18 @@ export async function verifyEmailCode(
     return { success: false, error: "Invalid code", status: 400 };
   }
 
-  await db
+  const [updatedUser] = await db
     .update(users)
     .set({
       isEmailVerified: true,
       emailVerificationCode: null,
       emailVerificationExpires: null,
     })
-    .where(eq(users.id, user.id));
+    .where(eq(users.id, user.id)).returning();
 
-  return { success: true };
+ 
+
+  return { success: true, data: sanitize(updatedUser) };
 }
 
 export async function requestPasswordReset(input: ForgotPasswordInput) {

@@ -54,16 +54,3 @@ export function parseError(err: unknown): { status: number; body: AppError } {
   };
 }
 
-export function sendEmail({
-  to,
-  subject,
-  html,
-}: {
-  to: string;
-  subject: string;
-  html: string;
-}) {
-  console.log(
-    `Sending email to ${to} with subject ${subject} and html ${html}`,
-  );
-}

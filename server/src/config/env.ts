@@ -33,6 +33,7 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(1, { message: "JWT secret is required" }),
   FRONTEND_URL_LOCAL: z.string(),
   FRONTEND_URL_PROD: z.string(),
+  EMAIL_API_KEY: z.string().min(1, { message: "Email api key is required" }),
 });
 
 export const env = envSchema.parse(process.env);

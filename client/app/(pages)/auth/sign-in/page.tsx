@@ -8,6 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import Link from "next/link";
 import { useLoginUser, useRegisterUser } from "@/app/hooks";
+import { useEffect } from "react";
 
 export default function Auth() {
   return (
@@ -106,7 +107,7 @@ const signUpSchema = z
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 const SignUpForm = () => {
-  const { mutate, isPending } = useRegisterUser();
+  const { mutate, isPending, isSuccess } = useRegisterUser();
 
   const {
     register,
@@ -129,9 +130,16 @@ const SignUpForm = () => {
 
     const finalData = { ...rest, role: "user" };
     mutate(finalData);
-    reset();
+
   };
 
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
+
+ 
   return (
     <div className=" w-full ">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
@@ -195,7 +203,7 @@ const signInSchema = z.object({
 type SignInFormValues = z.infer<typeof signInSchema>;
 
 const SignInForm = () => {
-  const { mutate, isPending } = useLoginUser();
+  const { mutate, isPending, isSuccess } = useLoginUser();
 
   const {
     register,
@@ -212,8 +220,17 @@ const SignInForm = () => {
 
   const onSubmit = async (data: SignInFormValues) => {
     mutate(data);
-    reset();
+
   };
+
+useEffect(() => {
+    console.log("success",isSuccess);
+
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
+
 
   return (
     <div className=" w-full ">

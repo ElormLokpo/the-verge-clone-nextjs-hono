@@ -30,6 +30,18 @@ export type AuthResponseType = {
   token: string;
 };
 
+
+export type VerifyUserResponseType = {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    isEmailVerified: boolean;
+    role: string;
+  };
+  message: string;
+}
+
 export type ResetPasswordRequest = {
   token: string;
   newPassword: string;

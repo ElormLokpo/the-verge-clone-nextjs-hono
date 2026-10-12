@@ -84,7 +84,7 @@ export default function CreatePostPage() {
               <select
                 value={category}
                 onChange={(event) => setCategory(event.target.value)}
-                className="w-full  border border-stone-500 p-3"
+                className="w-full bg-stone-900  border border-stone-500 p-3"
               >
                 <option>Technology</option>
                 <option>AI</option>
