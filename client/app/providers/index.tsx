@@ -6,12 +6,13 @@ import { VerifyEmailComponent } from "../components/verifyEmail";
 
 export const RootProviders = ({ children }: { children: React.ReactNode }) => {
   const user = useAuthStore((state) => state.user);
+  const token = useAuthStore((state) => state.token);
 
   console.log("user in root providers", user?.isEmailVerified);
   return (
     <>
       <QueryProvider>
-        {user?.isEmailVerified ? "" : <VerifyEmailComponent />}
+        {user?.isEmailVerified || !token ? "" : <VerifyEmailComponent />}
         {children}
         <Toaster />
       </QueryProvider>

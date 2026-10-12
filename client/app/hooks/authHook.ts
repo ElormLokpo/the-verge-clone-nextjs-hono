@@ -72,7 +72,8 @@ export const useLoginUser = () => {
       setAuth(data.user, data.token);
       router.push(CLIENT_ROUTES.home);
     },
-    onError: () => {
+    onError: (data) => {
+      console.log("error", data);
       toast.error("Something went wrong. Please try again later");
     },
   });

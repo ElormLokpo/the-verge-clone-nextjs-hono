@@ -107,12 +107,14 @@ const signUpSchema = z
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 const SignUpForm = () => {
-  const { mutate, isPending, isSuccess } = useRegisterUser();
+  const { mutate, isPending, isSuccess, isError } = useRegisterUser();
 
   const {
     register,
     handleSubmit,
     reset,
+
+    setError,
     formState: { errors },
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -134,12 +136,37 @@ const SignUpForm = () => {
   };
 
   useEffect(() => {
+    if (isError) {
+      setError("email", {
+        type: "manual",
+        message: " ",
+      });
+
+      setError("name", {
+        type: "manual",
+        message: " ",
+      });
+
+      setError("confirmPassword", {
+        type: "manual",
+        message: " ",
+      });
+
+      setError("password", {
+        type: "manual",
+        message: "Invalid credentials.",
+      });
+    }
+  }, [isError, setError]);
+
+
+  useEffect(() => {
     if (isSuccess) {
       reset();
     }
   }, [isSuccess, reset]);
 
- 
+
   return (
     <div className=" w-full ">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
@@ -203,12 +230,13 @@ const signInSchema = z.object({
 type SignInFormValues = z.infer<typeof signInSchema>;
 
 const SignInForm = () => {
-  const { mutate, isPending, isSuccess } = useLoginUser();
+  const { mutate, isPending, isSuccess, isError } = useLoginUser();
 
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -223,8 +251,22 @@ const SignInForm = () => {
 
   };
 
-useEffect(() => {
-    console.log("success",isSuccess);
+  useEffect(() => {
+    if (isError) {
+      setError("email", {
+        type: "manual",
+        message: " ",
+      });
+
+      setError("password", {
+        type: "manual",
+        message: "Invalid credentials.",
+      });
+    }
+  }, [isError, setError]);
+
+  useEffect(() => {
+
 
     if (isSuccess) {
       reset();
