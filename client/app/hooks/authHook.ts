@@ -132,14 +132,13 @@ export const useSendEmailVerification = () => {
   });
 };
 
-
 export const useGoogleOauth = () => {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
 
   return useMutation({
-    mutationFn: async (data: OauthRequest): Promise<AuthResponseType> => api
-      .post(API_ROUTES.googleOauth, data),
+    mutationFn: async (data: OauthRequest): Promise<AuthResponseType> =>
+      api.post(API_ROUTES.googleOauth, data),
     onSuccess: (data) => {
       toast.success("Logged in successfully");
       setAuth(data.user, data.token as string);
@@ -147,6 +146,6 @@ export const useGoogleOauth = () => {
     },
     onError: () => {
       toast.error("Something went wrong. Please try again later");
-    }
-  })
-}
+    },
+  });
+};

@@ -42,11 +42,9 @@ export const TopNav = ({
   return (
     <div>
       <div
-        className={`flex justify-end items-center  gap-5 mb-3 ${textColor ?? "text-white"} `}
+        className={`flex justify-end items-center 2xl:text-sm text-xs gap-5 mb-3 ${textColor ?? "text-white"} `}
       >
-        {token && <div>
-          {user?.name}
-        </div>}
+        {token && <div>{user?.name}</div>}
 
         <div className="flex gap-1 hover:cursor-pointer">
           <div>
@@ -76,7 +74,7 @@ export const TopNav = ({
             key={index}
             className={`flex items-center ${textColor ?? "text-white"}  gap-5`}
           >
-            <span className="text-lg hover: cursor-pointer hover:text-stone-600">
+            <span className="text-sm 2xl:text-lg hover: cursor-pointer hover:text-stone-600">
               {item.title}
             </span>
             <span>{"/"}</span>
@@ -86,7 +84,7 @@ export const TopNav = ({
         {token && (
           <Link href={CLIENT_ROUTES.createPost} className="flex items-center">
             <span
-              className={`text-lg hover: cursor-pointer ${textColor ?? "text-[#3cffd0]"} ${textColor ? "hover:text-stone-500" : "hover:text-[#3cffd0]/50"}`}
+              className={`text-sm 2xl:text-lg hover: cursor-pointer ${textColor ?? "text-[#3cffd0]"} ${textColor ? "hover:text-stone-500" : "hover:text-[#3cffd0]/50"}`}
             >
               Create Post
             </span>

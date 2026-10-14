@@ -6,7 +6,6 @@
     var(--font-polysans), "polySans Fallback", Helvetica, Arial, sans-serif;
 }
 
-
 button:hover {
   cursor: pointer;
 }

@@ -4,7 +4,6 @@ import { type AppVariables } from "./auth.types";
 import { authMiddleware, requireRole } from "./auth.middleware";
 
 import {
- 
   loginSchema,
   registerSchema,
   emailSchema,

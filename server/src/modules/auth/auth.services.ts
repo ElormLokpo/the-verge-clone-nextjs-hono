@@ -309,7 +309,6 @@ export async function resetPassword(
   return { success: true };
 }
 
-
 export async function googleOauth(oauthData: OauthRequest) {
   const { name, email, email_verified } = oauthData;
 
@@ -336,5 +335,4 @@ export async function googleOauth(oauthData: OauthRequest) {
 
   const token = await signToken(buildPayload(user));
   return { success: true, user: sanitize(user), token };
-
 }

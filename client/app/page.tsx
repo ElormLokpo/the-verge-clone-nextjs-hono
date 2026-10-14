@@ -10,13 +10,14 @@ import { ClipLoader } from "react-spinners";
 import { ErrorScreen } from "./components/errorScreen";
 
 export default function Home() {
-
   const { isLoading, isError } = useGetPosts();
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-screen w-screen">
-      <ClipLoader color="#3cffd0" />
-    </div>;
+    return (
+      <div className="flex justify-center items-center h-screen w-screen">
+        <ClipLoader color="#3cffd0" />
+      </div>
+    );
   }
 
   if (isError) {
@@ -24,13 +25,13 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen w-screen bg-[#131313] px-70 py-16 mb-30">
-      <div className="flex flex-col gap-3 items-end justify-end mb-10">
+    <div className="h-screen w-screen bg-[#131313] md:px-50 2xl:px-70 py-16 mb-30">
+      <div className="hidden  md:flex flex-col gap-3 items-end justify-end mb-10">
         <TopNav />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-2">
+      <div className=" lg:grid lg:grid-cols-3 gap-4">
+        <div className="hidden md:block lg:col-span-2">
           <div className="mb-20">
             <HeaderSection />
           </div>
@@ -56,12 +57,15 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="col-span-1 text-white p-5 border-l border-dashed border-stone-700">
+        <div className="col-span-1 block md:hidden lg:block text-white p-5 border-l border-dashed border-stone-700">
+          <div className="block md:hidden">
+            <HeaderSection />
+          </div>
+
           <RightSectionContainer />
         </div>
       </div>
     </div>
-
   );
 }
 
@@ -75,9 +79,11 @@ const HeaderSection = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <div className="flex justify-center items-center h-50 w-full">
-      <ClipLoader color="#3cffd0" />
-    </div>;
+    return (
+      <div className="flex justify-center items-center h-50 w-full">
+        <ClipLoader color="#3cffd0" />
+      </div>
+    );
   }
 
   return (
@@ -85,7 +91,7 @@ const HeaderSection = () => {
       className="hover:cursor-pointer"
       onClick={() => navigateTo(`/post/${post[0].slug}`)}
     >
-      <div className="absolute z-10 top-40 left-60">
+      <div className="absolute hidden lg:blockz-10 lg:left-30 lg:top-30 2xl:z-10 2xl:top-40 2xl:left-60">
         <Image
           src="/logo-dark-lg-transparent.png"
           alt="hero"
@@ -104,17 +110,17 @@ const HeaderSection = () => {
         <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
       </div>
 
-      <div className="text-white px-30 relative top-[-50]">
-        <div className="text-[3.5rem] hover:underline hover:decoration-[#3cffd0] decoration-1 font-black mb-4 leading-12 tracking-tighter">
+      <div className="text-white px-12 md:px-30 relative top-[-50]">
+        <div className="text-[1.9rem] md:text-[2.2rem] lg:text-[2.7rem] 2xl:text-[3.5rem] hover:underline hover:decoration-[#3cffd0] decoration-1 font-black mb-4 leading-12 tracking-tighter">
           {post[0].title}
         </div>
-        <div className="text-[1.5rem] mb-2 font-serif leading-8 tracking-tighter">
+        <div className="md:text-[1rem] lg:text-[1.2rem] 2xl:text-[1.5rem] mb-2 font-serif leading-8 tracking-tighter">
           {post[0].summary}
         </div>
         <div className="text-sm flex gap-4 text-stone-400">
           <span className="text-[#3cffd0]">{post[0].author.name}</span>
           <span>{formatDate(post[0].createdAt)}</span>
-          <span className="flex items-center gap-2">
+          <span className="hidden md:flex items-center gap-2">
             <span>
               <VscComment />
             </span>
@@ -135,9 +141,11 @@ const FourGridSectionContainer = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <div className="flex justify-center items-center h-50 w-full">
-      <ClipLoader color="#3cffd0" />
-    </div>;;
+    return (
+      <div className="flex justify-center items-center h-50 w-full">
+        <ClipLoader color="#3cffd0" />
+      </div>
+    );
   }
 
   return (
@@ -178,17 +186,22 @@ const FourGridSection = ({ post }: { post: Post }) => {
       </div>
 
       <div className="">
-        <div className="text-xl mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
+        <div className="text-sm 2xl:text-xl mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
           {post.title}
         </div>
 
-        <div className="text-sm flex gap-4 text-stone-400">
+        <div className="text-xs 2xl:text-sm flex gap-4 text-stone-400">
           <span className="text-[#3cffd0]">{post.author.name}</span>
           <span className="flex items-center gap-2">
             <span>
               <VscComment />
             </span>
-            {post.commentCount} Comment{post.commentCount > 1 && "s"}
+
+            {post.commentCount}
+            <span className="hidden 2xl:block">
+              {" "}
+              Comment{post.commentCount > 1 && "s"}
+            </span>
           </span>
         </div>
       </div>
@@ -205,9 +218,11 @@ export const FiveGridSectionContainer = () => {
   const { navigateTo } = useNavigate();
 
   if (isLoading || !postFromServer?.data) {
-    return <div className="flex justify-center items-center h-50 w-full">
-      <ClipLoader color="#3cffd0" />
-    </div>;;
+    return (
+      <div className="flex justify-center items-center h-50 w-full">
+        <ClipLoader color="#3cffd0" />
+      </div>
+    );
   }
 
   return (
@@ -215,7 +230,7 @@ export const FiveGridSectionContainer = () => {
       className="border-t-2 border-[#3cffd0] py-1 hover:cursor-pointer text-white"
       onClick={() => navigateTo(`/post/${post[0].slug}`)}
     >
-      <div className="text-xl flex gap-3 items-center mb-4">
+      <div className="lg:text-lg 2xl:text-xl flex gap-3 items-center mb-4">
         <span className="font-bold">
           {post[0].category}
           <span className="text-[#3cffd0]">{" / "}</span>
@@ -239,13 +254,13 @@ export const FiveGridSectionContainer = () => {
 
           <div>
             <div className="text-white">
-              <div className="text-[2rem] hover:underline hover:decoration-[#3cffd0] decoration-1 font-black mb-4 leading-8 tracking-tighter">
+              <div className="md:text-[1.3rem] lg:text-[1.6rem] 2xl:text-[2rem] hover:underline hover:decoration-[#3cffd0] decoration-1 font-black mb-4 leading-8 tracking-tighter">
                 {post[0].title}
               </div>
-              <div className="text-[1.4rem] text-stone-100 mb-2 font-serif leading-8 tracking-tighter">
+              <div className="lg:text-[1.1rem] 2xl:text-[1.4rem] text-stone-100 mb-2 font-serif leading-8 tracking-tighter">
                 {post[0].summary}
               </div>
-              <div className="text-sm flex gap-4 text-stone-400">
+              <div className="md:text-xs 2xl:text-sm flex gap-4 text-stone-400">
                 <span className="text-[#3cffd0]">{post[0].author.name}</span>
 
                 <span className="flex items-center gap-2">
@@ -281,14 +296,14 @@ const FiveGridSection = ({ post }: { post: Post }) => {
       onClick={() => navigateTo(`/post/${post.slug}`)}
     >
       <div className="col-span-4">
-        <div className="text-lg mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
+        <div className="2xl:text-lg mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
           {post.title}
         </div>
-        <div className="text-sm text-stone-300 mb-2 font-serif leading-6 tracking-tighter">
+        <div className="text-xs 2xl:text-sm text-stone-300 mb-2 font-serif leading-6 tracking-tighter">
           {post.summary}
         </div>
 
-        <div className="text-sm flex gap-4 text-stone-400">
+        <div className="text-xs 2xl:text-sm flex gap-4 text-stone-400">
           <span className="text-[#3cffd0]">{post.author.name}</span>
           <span className="flex items-center gap-2">
             <span>
@@ -299,7 +314,7 @@ const FiveGridSection = ({ post }: { post: Post }) => {
         </div>
       </div>
 
-      <div className="w-35 relative col-span-2 p-3">
+      <div className="2xl:w-35 relative col-span-2 p-3">
         <Image src={post.coverPhoto} alt="hero" fill className="object-cover" />
       </div>
     </div>
@@ -314,9 +329,11 @@ const LinkSectionContainer = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <div className="flex justify-center items-center h-50 w-full">
-      <ClipLoader color="#3cffd0" />
-    </div>;;
+    return (
+      <div className="flex justify-center items-center h-50 w-full">
+        <ClipLoader color="#3cffd0" />
+      </div>
+    );
   }
 
   return (
@@ -349,11 +366,11 @@ const LinkSecktion = ({ post, index }: { post: Post; index: number }) => {
       </div>
 
       <div className="">
-        <div className="text-xl mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
+        <div className="lg:text-xl mb-2 font-semibold tracking-tighter leading-5 hover:underline hover:decoration-[#3cffd0] decoration-1">
           {post.title}
         </div>
 
-        <div className="text-sm flex gap-4 text-stone-400">
+        <div className="text-xs lg:text-sm flex gap-4 text-stone-400">
           <span className="text-[#3cffd0]">{post.author.name}</span>
           <span className="flex items-center gap-2">
             {formatDate(post.createdAt)}
@@ -372,9 +389,11 @@ const RightSectionContainer = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <div className="flex justify-center items-center h-50 w-full">
-      <ClipLoader color="#3cffd0" />
-    </div>;;
+    return (
+      <div className="flex justify-center items-center h-50 w-full">
+        <ClipLoader color="#3cffd0" />
+      </div>
+    );
   }
 
   return (

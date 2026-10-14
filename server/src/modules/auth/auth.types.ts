@@ -46,11 +46,8 @@ export const FRONTEND_RESET_URL =
     : env.FRONTEND_URL_LOCAL + "/auth/reset-password";
 export const CODE_EXPIRY_MINUTES = 15;
 
-
-
-
 export type OauthRequest = {
   name: string;
   email: string;
   email_verified: boolean;
-}
+};
