@@ -12,8 +12,7 @@ export const API_ROUTES = {
   createPost: `posts/create`,
   updatePost: `posts/:id`,
   deletePost: `posts/:id`,
-  createComment: `comments`,
-  getComments: `comments/`,
+  comments: `comments`,
 };
 
 export const CLIENT_ROUTES = {

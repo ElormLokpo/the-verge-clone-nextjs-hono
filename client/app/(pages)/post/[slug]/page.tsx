@@ -9,9 +9,12 @@ import DOMPurify from "isomorphic-dompurify";
 import { FormEvent, useState } from "react";
 import { useParams } from "next/navigation";
 import { useGetPost } from "@/app/hooks/postsHook";
-import { useCreateComment, useGetComments } from "@/app/hooks/commentsHook";
+import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from "@/app/hooks/commentsHook";
 import { CommentResponse } from "@/app/types";
 import { formatDate } from "@/app/lib/utils";
+import { useAuthStore } from "@/app/store";
+import { MdOutlineDelete } from "react-icons/md";
+import { RiEditLine } from "react-icons/ri";
 
 export default function PostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -139,8 +142,19 @@ function CommentsSection({
 }) {
   const [comment, setComment] = useState("");
 
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [edittedComment, setEdittedComment] = useState("");
+
+  const [deletingCommentId, setDeletingCommentId] = useState<string | null>(null);
+
+
+  const userId = useAuthStore((state) => state.user?.id);
+
   const { mutate: createComment, isPending } = useCreateComment(slug);
   const { data: commentsData } = useGetComments(postId || "");
+
+  const { mutate: updateComment, isPending: isUpdating } = useUpdateComment()
+  const { mutateAsync: deleteComment, isPending: isDeleting } = useDeleteComment();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -157,6 +171,22 @@ function CommentsSection({
     createComment(newComment);
 
     setComment("");
+  }
+
+  const handleDeleteComment = async (id: string) => {
+    setDeletingCommentId(id);
+
+    try {
+      await deleteComment(id);
+    } finally {
+      setDeletingCommentId(null);
+    }
+  }
+
+  const handleUpdateComment = async (id: string) => {
+    const content = edittedComment.trim();
+
+    await updateComment({ id, data: { body: content } });
   }
 
   if (!commentsData?.data) {
@@ -232,11 +262,72 @@ function CommentsSection({
                   <time className="text-xs text-stone-400">
                     {formatDate(comment.createdAt)}
                   </time>
+
+                  {comment.author.id === userId && <span> | </span>}
+
+
+                  {comment.author.id === userId && <div className="flex gap-4 items-center">
+
+                    <button onClick={() => {
+                      setEditingCommentId(comment.id);
+                      setEdittedComment(comment.body)
+
+                    }} className="flex gap-1 items-center text-xs text-stone-200 hover:text-stone-300">
+                      <span><RiEditLine /> </span>
+                      <span>Edit</span>
+                    </button>
+
+                    <button key={comment.id} disabled={isDeleting} onClick={() => handleDeleteComment(comment.id)} className="flex gap-1 items-center text-xs text-red-500 hover:text-red-700">
+                      <span><MdOutlineDelete /> </span>
+                      <span>  {deletingCommentId === comment.id ? "Deleting..." : "Delete"}</span>
+                    </button>
+
+
+                  </div>}
                 </div>
 
-                <p className="whitespace-pre-wrap wrap-break-word text-sm leading-7 text-stone-300">
-                  {comment.body}
-                </p>
+                {editingCommentId === comment.id ? <form onSubmit={() => handleUpdateComment(comment.id)} className="mb-10">
+
+
+                  <textarea
+                    id="comment"
+                    value={edittedComment}
+                    onChange={(event) => setEdittedComment(event.target.value)}
+                    placeholder="Share your thoughts..."
+                    rows={4}
+                    maxLength={2000}
+                    className="w-full resize-y border border-stone-300  px-4 py-3 text-sm leading-6 text-stone-100 outline-none transition placeholder:text-stone-400 focus:border-stone-400 focus:ring-2 focus:ring-stone-100"
+                  />
+
+                  <div className="mt-3 flex items-center justify-between gap-4">
+                    <span className="text-xs text-stone-400">
+                      {edittedComment.length}/2000 characters
+                    </span>
+
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() => setEditingCommentId(null)}
+                        disabled={!edittedComment.trim() || isPending}
+                        className=" bg-stone-600 text-white px-5 py-2.5 text-sm font-medium  transition hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Cancel
+                      </button>
+
+                      <button
+                        type="submit"
+                        disabled={!edittedComment.trim() || isPending}
+                        className=" bg-[#D6F31F] px-5 py-2.5 text-sm font-medium text-stone-900 transition hover:bg-[#D6F31F]/50 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        {isPending ? "Editting comment..." : "Edit comment"}
+                      </button>
+                    </div>
+
+
+                  </div>
+                </form>
+                  : <p className="whitespace-pre-wrap wrap-break-word text-sm leading-7 text-stone-300">
+                    {comment.body}
+                  </p>}
               </div>
             </article>
           ))
