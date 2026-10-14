@@ -18,6 +18,7 @@ export const TopNav = ({
 }) => {
   const token = useAuthStore((state) => state.token);
   const clearAuth = useAuthStore((state) => state.clearAuth);
+  const user = useAuthStore((state) => state.user);
 
   const { navigateTo } = useNavigate();
 
@@ -43,6 +44,10 @@ export const TopNav = ({
       <div
         className={`flex justify-end items-center  gap-5 mb-3 ${textColor ?? "text-white"} `}
       >
+        {token && <div>
+          {user?.name}
+        </div>}
+
         <div className="flex gap-1 hover:cursor-pointer">
           <div>
             <TiUser className={`${textColor ?? "text-[#3cffd0]"}`} />

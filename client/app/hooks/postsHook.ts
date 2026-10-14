@@ -84,7 +84,7 @@ export const useUpdatePost = () => {
   const token = useAuthStore((state) => state.token);
   return useMutation({
     mutationFn: async (data: UpdatePostRequest) =>
-      api.put(API_ROUTES.updatePost, data, {
+      api.patch(API_ROUTES.posts, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -99,10 +99,12 @@ export const useUpdatePost = () => {
 };
 
 export const useDeletePost = () => {
+  const router = useRouter();
+
   const token = useAuthStore((state) => state.token);
   return useMutation({
     mutationFn: async (id: string) =>
-      api.delete(API_ROUTES.deletePost, {
+      api.delete(`${API_ROUTES.posts}/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -112,6 +114,8 @@ export const useDeletePost = () => {
       }),
     onSuccess: () => {
       toast.success("Post deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      router.push(CLIENT_ROUTES.home);
     },
     onError: () => {
       toast.error("Something went wrong. Please try again later");

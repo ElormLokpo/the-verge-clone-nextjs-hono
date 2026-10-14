@@ -5,14 +5,13 @@ export const API_ROUTES = {
   verifyEmail: `auth/verify-email`,
   forgotPassword: `auth/forgot-password`,
   resetPassword: `auth/reset-password`,
+  googleOauth: `auth/google-oauth`,
   getPosts: `posts/all`,
   getPost: `posts`,
   getPostByCategory: `posts/category`,
   createPost: `posts/create`,
-  updatePost: `posts/:id`,
-  deletePost: `posts/:id`,
-  createComment: `comments`,
-  getComments: `comments/`,
+  posts: "posts",
+  comments: `comments`,
 };
 
 export const CLIENT_ROUTES = {

@@ -1,13 +1,28 @@
 "use client";
 import Image from "next/image";
 import { TopNav } from "./components/topNav";
-import { HeaderSectionSkeleton } from "../app/components/ui/skeleton";
 import { formatDate, getRandomItems } from "../app/lib/utils";
 import { Post } from "./types";
 import { VscComment } from "react-icons/vsc";
 import { useGetPosts, useNavigate } from "./hooks";
 
+import { ClipLoader } from "react-spinners";
+import { ErrorScreen } from "./components/errorScreen";
+
 export default function Home() {
+
+  const { isLoading, isError } = useGetPosts();
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen w-screen">
+      <ClipLoader color="#3cffd0" />
+    </div>;
+  }
+
+  if (isError) {
+    return <ErrorScreen />;
+  }
+
   return (
     <div className="h-screen w-screen bg-[#131313] px-70 py-16 mb-30">
       <div className="flex flex-col gap-3 items-end justify-end mb-10">
@@ -46,6 +61,7 @@ export default function Home() {
         </div>
       </div>
     </div>
+
   );
 }
 
@@ -59,7 +75,9 @@ const HeaderSection = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />;
+    return <div className="flex justify-center items-center h-50 w-full">
+      <ClipLoader color="#3cffd0" />
+    </div>;
   }
 
   return (
@@ -117,7 +135,9 @@ const FourGridSectionContainer = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />;
+    return <div className="flex justify-center items-center h-50 w-full">
+      <ClipLoader color="#3cffd0" />
+    </div>;;
   }
 
   return (
@@ -185,7 +205,9 @@ export const FiveGridSectionContainer = () => {
   const { navigateTo } = useNavigate();
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />;
+    return <div className="flex justify-center items-center h-50 w-full">
+      <ClipLoader color="#3cffd0" />
+    </div>;;
   }
 
   return (
@@ -292,7 +314,9 @@ const LinkSectionContainer = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />;
+    return <div className="flex justify-center items-center h-50 w-full">
+      <ClipLoader color="#3cffd0" />
+    </div>;;
   }
 
   return (
@@ -348,7 +372,9 @@ const RightSectionContainer = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />;
+    return <div className="flex justify-center items-center h-50 w-full">
+      <ClipLoader color="#3cffd0" />
+    </div>;;
   }
 
   return (

@@ -4,11 +4,16 @@ import { Typography } from "@/app/components/ui/typography";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import Link from "next/link";
-import { useLoginUser, useRegisterUser } from "@/app/hooks";
+import { useGoogleOauth, useLoginUser, useRegisterUser } from "@/app/hooks";
 import { useEffect } from "react";
+import {
+  GoogleLogin,
+  type CredentialResponse,
+} from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode"
+import { toast } from "sonner";
 
 export default function Auth() {
   return (
@@ -18,8 +23,30 @@ export default function Auth() {
   );
 }
 
+
+type OauthResponse = {
+  name: string;
+  email: string;
+  email_verified: boolean;
+}
+
 export const AuthForm = () => {
   const [currentForm, setCurrentForm] = useState<string>("signUp");
+
+  const { mutate: googleOauthLogin } = useGoogleOauth();
+
+  const handleOAuth = async (
+    response: CredentialResponse
+  ) => {
+    const credential = response.credential;
+    const { name, email, email_verified } = jwtDecode(credential as string) as OauthResponse;
+
+    if (!credential) return;
+
+    console.log(name, email, email_verified);
+
+    await googleOauthLogin({ name, email, email_verified });
+  };
 
   return (
     <div className="bg-white w-132 py-10 px-3">
@@ -46,7 +73,7 @@ export const AuthForm = () => {
         {currentForm == "signUp" ? <SignUpForm /> : <SignInForm />}
       </div>
 
-      <div className="px-16 mb-4">
+      {/* <div className="px-16 mb-4">
         <button className="mt-2 w-full border border-stone-600 hover:bg-stone-100 px-4 py-3.5 font-polysans text-sm font-medium  transition-colors focus:outline-none disabled:opacity-50">
           <span className="flex gap-2 items-center justify-center">
             <span>
@@ -56,6 +83,13 @@ export const AuthForm = () => {
             <span>Sign In With Google</span>
           </span>
         </button>
+      </div> */}
+
+      <div className="px-16 mb-4">
+        <GoogleLogin
+          onSuccess={handleOAuth}
+          onError={() => toast.error("Google login failed. Tyy again later")}
+        />
       </div>
 
       <div className="flex justify-center items-center">
@@ -308,3 +342,7 @@ const SignInForm = () => {
     </div>
   );
 };
+
+
+
+

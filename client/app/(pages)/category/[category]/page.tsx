@@ -7,14 +7,24 @@ import { Post } from "@/app/types";
 import Image from "next/image";
 import { VscComment } from "react-icons/vsc";
 import { formatDate } from "@/app/lib/utils";
+import { LoadingScreen } from "@/app/components/loadingScreen";
+import { ErrorScreen } from "@/app/components/errorScreen";
 
 export default function PostCategoryPage() {
   const { category } = useParams<{ category: string }>();
 
-  const { data: posts, isLoading } = useGetPostByCategory(category);
+  const { data: posts, isLoading, isError } = useGetPostByCategory(category);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
+  }
+
+  if (isError) {
+    return <ErrorScreen />;
+  }
+
+  if (posts?.data.length === 0) {
+    return <div className="text-white text-4xl text-center flex justify-center items-center h-screen w-screen">There are no posts in this category.</div>;
   }
 
   const brief: Record<string, string> = {
