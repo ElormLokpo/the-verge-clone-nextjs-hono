@@ -40,10 +40,8 @@ export const useCreateComment = (slug: string) => {
   });
 };
 
-
 export const useUpdateComment = () => {
   const token = useAuthStore((state) => state.token);
-  const router = useRouter();
 
   return useMutation({
     mutationFn: async (variables: { id: string; data: { body: string } }) => {
@@ -53,12 +51,11 @@ export const useUpdateComment = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
     },
     onSuccess: () => {
       toast.success("Comment update successful");
       queryClient.invalidateQueries({ queryKey: ["comments"] });
-    
     },
 
     onError: () => {

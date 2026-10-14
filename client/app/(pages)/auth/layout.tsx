@@ -9,7 +9,7 @@ export const AuthLayout = ({ children }: { children: ReactNode }) => {
           <Image
             src="/auth-page-background.jpg"
             alt="Background Image"
-            
+
             quality={100}
             fill
             sizes="100vw"

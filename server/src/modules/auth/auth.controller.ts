@@ -7,7 +7,6 @@ import {
   ForgotPasswordInput,
   ResetPasswordInput,
   Role,
- 
 } from "./auth.types";
 
 export async function register(c: Context) {
@@ -120,11 +119,18 @@ export async function resetPassword(c: Context) {
   return c.json({ message: "Password has been reset successfully" });
 }
 
-
 export async function googleOauth(c: Context) {
-  const { name, email, email_verified } = await c.req.json<{ name: string, email: string, email_verified: boolean }>();
+  const { name, email, email_verified } = await c.req.json<{
+    name: string;
+    email: string;
+    email_verified: boolean;
+  }>();
 
-  const { user, token } = await authService.googleOauth({ name, email, email_verified });
+  const { user, token } = await authService.googleOauth({
+    name,
+    email,
+    email_verified,
+  });
 
   setCookie(c, COOKIE_NAME, token, COOKIE_OPTIONS);
   return c.json({ user, token }, 201);

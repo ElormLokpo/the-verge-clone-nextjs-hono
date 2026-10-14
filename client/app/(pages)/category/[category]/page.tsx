@@ -24,7 +24,11 @@ export default function PostCategoryPage() {
   }
 
   if (posts?.data.length === 0) {
-    return <div className="text-white text-4xl text-center flex justify-center items-center h-screen w-screen">There are no posts in this category.</div>;
+    return (
+      <div className="text-white text-4xl text-center flex justify-center items-center h-screen w-screen">
+        There are no posts in this category.
+      </div>
+    );
   }
 
   const brief: Record<string, string> = {
@@ -42,23 +46,23 @@ export default function PostCategoryPage() {
 
   return (
     <div>
-      <div className="bg-[#5200FF] px-100 pt-10 flex flex-col justify-between h-100 w-full mb-15 text-white ">
-        <div className="flex flex-col gap-3 items-end justify-end mb-10">
+      <div className=" bg-[#5200FF] xl:px-100 pt-10 flex flex-col justify-between xl:h-100 w-full mb-15 text-white ">
+        <div className="hidden lg:flex flex-col gap-3 items-end justify-end mb-10">
           <TopNav textColor="text-white" borderColor="border-white" />
         </div>
 
-        <div className="font-['manuka','manuka_Fallback',Impact,Helvetica,sans-serif] font-semibold italic-none text-white text-[80px] relative top-14">
+        <div className="font-['manuka','manuka_Fallback',Impact,Helvetica,sans-serif] font-semibold italic-none text-white text-[40px] lg:text-[80px] relative top-6 xl:top-14">
           {category}
         </div>
       </div>
 
-      <div className="px-100 mb-30">
-        <div className="font-['fkRomanStandard','fkRomanStandard_Fallback',Georgia,serif] font-normal not-italic text-white text-[22px] leading-7.75">
+      <div className="px-10 xl:px-100 mb-30">
+        <div className="font-['fkRomanStandard','fkRomanStandard_Fallback',Georgia,serif] font-normal not-italic text-white xl:text-[22px] leading-7.75">
           {brief[category] || "Category not found"}
         </div>
       </div>
 
-      <div className="px-150">
+      <div className=" px-10 xl:px-150">
         {posts?.data.map((post: Post, index: number) => (
           <Section key={index} post={post} />
         ))}
@@ -75,7 +79,7 @@ export const Section = ({ post }: { post: Post }) => {
       className="hover:cursor-pointer"
       onClick={() => navigateTo(`/post/${post.slug}`)}
     >
-      <div className="absolute z-10 top-40 left-60">
+      <div className="hidden xl:absolute z-10 top-40 left-60">
         <Image
           src="/logo-dark-lg-transparent.png"
           alt="hero"
@@ -89,11 +93,11 @@ export const Section = ({ post }: { post: Post }) => {
         <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
       </div>
 
-      <div className="text-white px-30 relative top-[-50]">
-        <div className="text-[3rem] hover:underline hover:decoration-[#3cffd0] decoration-1 font-black mb-4 leading-12 tracking-tighter">
+      <div className="text-white lg:px-30 relative top-[-50]">
+        <div className="text-[2.4rem] lg:text-[3rem] hover:underline hover:decoration-[#3cffd0] decoration-1 font-black mb-4 leading-12 tracking-tighter">
           {post.title}
         </div>
-        <div className="text-[1.5rem] mb-2 font-serif leading-8 tracking-tighter">
+        <div className="text-[1rem] lg:text-[1.5rem] mb-2 font-serif leading-8 tracking-tighter">
           {post.summary}
         </div>
         <div className="text-sm flex gap-4 text-stone-400">

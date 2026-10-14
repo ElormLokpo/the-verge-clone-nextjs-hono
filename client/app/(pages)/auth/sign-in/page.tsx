@@ -8,11 +8,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useGoogleOauth, useLoginUser, useRegisterUser } from "@/app/hooks";
 import { useEffect } from "react";
-import {
-  GoogleLogin,
-  type CredentialResponse,
-} from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode"
+import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 
 export default function Auth() {
@@ -23,33 +20,30 @@ export default function Auth() {
   );
 }
 
-
 type OauthResponse = {
   name: string;
   email: string;
   email_verified: boolean;
-}
+};
 
 export const AuthForm = () => {
   const [currentForm, setCurrentForm] = useState<string>("signUp");
 
   const { mutate: googleOauthLogin } = useGoogleOauth();
 
-  const handleOAuth = async (
-    response: CredentialResponse
-  ) => {
+  const handleOAuth = async (response: CredentialResponse) => {
     const credential = response.credential;
-    const { name, email, email_verified } = jwtDecode(credential as string) as OauthResponse;
+    const { name, email, email_verified } = jwtDecode(
+      credential as string,
+    ) as OauthResponse;
 
     if (!credential) return;
-
-    console.log(name, email, email_verified);
 
     await googleOauthLogin({ name, email, email_verified });
   };
 
   return (
-    <div className="bg-white w-132 py-10 px-3">
+    <div className=" bg-white md:w-132 py-10 px-3">
       <div className="flex flex-col gap-3 items-center">
         <div className="flex justify-center items-center gap-3 mb-3 w-[20rem]">
           <Typography variant="heading-5" className="text-center">
@@ -342,7 +336,3 @@ const SignInForm = () => {
     </div>
   );
 };
-
-
-
-

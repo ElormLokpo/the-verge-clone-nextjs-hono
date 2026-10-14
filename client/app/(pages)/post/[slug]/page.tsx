@@ -1,7 +1,6 @@
 "use client";
 
 import { TopNav } from "@/app/components/topNav";
-import Image from "next/image";
 import { HiOutlineLink } from "react-icons/hi";
 import { IoIosShareAlt } from "react-icons/io";
 import { GoComment } from "react-icons/go";
@@ -9,7 +8,12 @@ import DOMPurify from "isomorphic-dompurify";
 import { FormEvent, useState } from "react";
 import { useParams } from "next/navigation";
 import { useDeletePost, useGetPost } from "@/app/hooks/postsHook";
-import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from "@/app/hooks/commentsHook";
+import {
+  useCreateComment,
+  useDeleteComment,
+  useGetComments,
+  useUpdateComment,
+} from "@/app/hooks/commentsHook";
 import { CommentResponse } from "@/app/types";
 import { formatDate } from "@/app/lib/utils";
 import { useAuthStore } from "@/app/store";
@@ -29,7 +33,7 @@ export default function PostPage() {
   const post = data?.data;
 
   if (isLoading) {
-    return <LoadingScreen />
+    return <LoadingScreen />;
   }
 
   if (isError) {
@@ -37,17 +41,19 @@ export default function PostPage() {
   }
 
   if (!post) {
-    return <div className="text-white text-4xl text-center flex justify-center items-center h-screen w-screen">Post not found.</div>;
+    return (
+      <div className="text-white text-4xl text-center flex justify-center items-center h-screen w-screen">
+        Post not found.
+      </div>
+    );
   }
-
-
 
   async function copyLink(url: string) {
     try {
       await navigator.clipboard.writeText(url);
       toast.success("Post Link copied");
     } catch (error) {
-      console.error("Failed to copy link:", error);
+      void error;
     }
   }
 
@@ -64,74 +70,85 @@ export default function PostPage() {
       }
     } catch (error) {
       if (error instanceof Error && error.name !== "AbortError") {
-        console.error("Failed to share link:", error);
+        void error;
       }
     }
   }
 
   const handleDeletePost = async (id: string) => {
     await deletePost(id);
-  }
+  };
 
   return (
     <div className="text-white">
-      <div className="bg-[#D6F31F] px-100 py-10 h-160 w-full mb-10 text-[#131313] ">
-        <div className="flex flex-col gap-3 items-end justify-end mb-10">
-          <TopNav textColor="text-black" borderColor="border-black" />
-        </div>
-
-        <div className="grid grid-cols-2 gap-2">
-          <div className="relative w-120 mb-2 ">
-            <Image
-              src={post.coverPhoto}
-              alt="hero"
-              fill
-              className="object-cover"
-            />
+      <div
+        style={{
+          backgroundImage: `url(${post.coverPhoto})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+        className="bg-[#D6F31F] "
+      >
+        <div className="bg-black/30 h-full px-10 xl:px-100 py-10 h-160 w-full mb-10 text-white ">
+          <div className="hidden md:flex flex-col gap-3 items-end justify-end mb-10">
+            <TopNav textColor="text-white" borderColor="border-white" />
           </div>
 
-          <div>
-            <div className="mb-4 font-['polySans',Helvetica,Arial,sans-serif] underline decoration-1 font-medium text-[65px] leading-16.25">
-              {post.title}
-            </div>
+          <div className="">
+            <div>
+              <div className="mb-4 font-['polySans',Helvetica,Arial,sans-serif] underline decoration-1 font-medium text-[45px] lg:text-[65px] leading-10 lg:leading-16.25">
+                {post.title}
+              </div>
 
-            <div className="mb-3 font-['polySans',Helvetica,Arial,sans-serif] font-light text-[26px] leading-7.25">
-              {post.summary}
-            </div>
+              <div className="mb-3 font-['polySans',Helvetica,Arial,sans-serif] font-light text-[20px] lg:text-[26px] leading-7.25">
+                {post.summary}
+              </div>
 
-            <div className="mb-4 font-['polySans',Helvetica,Arial,sans-serif] font-medium text-[18px] leading-5">
-              {post.author.name}
-            </div>
+              <div className="mb-4 font-['polySans',Helvetica,Arial,sans-serif] font-medium text-[18px] leading-5">
+                {post.author.name}
+              </div>
 
-            <div className="text-xl flex gap-2 group relative">
-              <button onClick={() => copyLink(window.location.href)} className="border rounded-full p-2 hover:bg-stone-800 hover:text-white ">
-                <HiOutlineLink />
+              <div className="text-xl flex gap-2 group relative">
+                <button
+                  onClick={() => copyLink(window.location.href)}
+                  className="border rounded-full p-2 hover:bg-stone-800 hover:text-white "
+                >
+                  <HiOutlineLink />
+                </button>
+                <button
+                  onClick={() =>
+                    shareLink(post.slug, `${post.title} by ${post.author.name}`)
+                  }
+                  className="border rounded-full p-2 hover:bg-stone-800 hover:text-white "
+                >
+                  <IoIosShareAlt />
+                </button>
 
-              </button>
-              <button onClick={() => shareLink(post.slug, `${post.title} by ${post.author.name}`)} className="border rounded-full p-2 hover:bg-stone-800 hover:text-white ">
-                <IoIosShareAlt />
+                <div>|</div>
 
-              </button>
+                {post.author.id === userId && (
+                  <button
+                    onClick={() => handleDeletePost(post.id)}
+                    className="border rounded-full p-2 hover:bg-stone-800 hover:text-white "
+                  >
+                    <MdOutlineDelete />
+                  </button>
+                )}
 
-              <div>|</div>
-
-              {post.author.id === userId && <button onClick={() => handleDeletePost(post.id)} className="border rounded-full p-2 hover:bg-stone-800 hover:text-white ">
-                <MdOutlineDelete />
-              </button>}
-
-              <div className="flex gap-2 text-sm items-center">
-                <GoComment /> <span>{post.commentCount}</span>
+                <div className="flex gap-2 text-sm items-center">
+                  <GoComment /> <span>{post.commentCount}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="px-100 py-10 mb-10">
+      <div className="px-10 lg:px-100 py-10 mb-10">
         <BlogContent content={post.body} />
       </div>
 
-      <div className="px-100 mb-10">
+      <div className="px-10 lg:px-100 mb-10">
         <div>
           <CommentsSection
             slug={post.slug}
@@ -191,16 +208,18 @@ function CommentsSection({
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [edittedComment, setEdittedComment] = useState("");
 
-  const [deletingCommentId, setDeletingCommentId] = useState<string | null>(null);
-
+  const [deletingCommentId, setDeletingCommentId] = useState<string | null>(
+    null,
+  );
 
   const userId = useAuthStore((state) => state.user?.id);
 
   const { mutate: createComment, isPending } = useCreateComment(slug);
   const { data: commentsData } = useGetComments(postId || "");
 
-  const { mutate: updateComment, isPending: isUpdating } = useUpdateComment()
-  const { mutateAsync: deleteComment, isPending: isDeleting } = useDeleteComment();
+  const { mutate: updateComment, isPending: isUpdating } = useUpdateComment();
+  const { mutateAsync: deleteComment, isPending: isDeleting } =
+    useDeleteComment();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -227,13 +246,13 @@ function CommentsSection({
     } finally {
       setDeletingCommentId(null);
     }
-  }
+  };
 
   const handleUpdateComment = async (id: string) => {
     const content = edittedComment.trim();
 
     await updateComment({ id, data: { body: content } });
-  }
+  };
 
   if (!commentsData?.data) {
     return <div>Loading Comments...</div>;
@@ -311,69 +330,87 @@ function CommentsSection({
 
                   {comment.author.id === userId && <span> | </span>}
 
-
-                  {comment.author.id === userId && <div className="flex gap-4 items-center">
-
-                    <button onClick={() => {
-                      setEditingCommentId(comment.id);
-                      setEdittedComment(comment.body)
-
-                    }} className="flex gap-1 items-center text-xs text-stone-200 hover:text-stone-300">
-                      <span><RiEditLine /> </span>
-                      <span>Edit</span>
-                    </button>
-
-                    <button key={comment.id} disabled={isDeleting} onClick={() => handleDeleteComment(comment.id)} className="flex gap-1 items-center text-xs text-red-500 hover:text-red-700">
-                      <span><MdOutlineDelete /> </span>
-                      <span>  {deletingCommentId === comment.id ? "Deleting..." : "Delete"}</span>
-                    </button>
-
-
-                  </div>}
-                </div>
-
-                {editingCommentId === comment.id ? <form onSubmit={() => handleUpdateComment(comment.id)} className="mb-10">
-
-
-                  <textarea
-                    id="comment"
-                    value={edittedComment}
-                    onChange={(event) => setEdittedComment(event.target.value)}
-                    placeholder="Share your thoughts..."
-                    rows={4}
-                    maxLength={2000}
-                    className="w-full resize-y border border-stone-300  px-4 py-3 text-sm leading-6 text-stone-100 outline-none transition placeholder:text-stone-400 focus:border-stone-400 focus:ring-2 focus:ring-stone-100"
-                  />
-
-                  <div className="mt-3 flex items-center justify-between gap-4">
-                    <span className="text-xs text-stone-400">
-                      {edittedComment.length}/2000 characters
-                    </span>
-
-                    <div className="flex gap-4">
+                  {comment.author.id === userId && (
+                    <div className="flex gap-4 items-center">
                       <button
-                        onClick={() => setEditingCommentId(null)}
-                        disabled={!edittedComment.trim() || isPending}
-                        className=" bg-stone-600 text-white px-5 py-2.5 text-sm font-medium  transition hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-40"
+                        onClick={() => {
+                          setEditingCommentId(comment.id);
+                          setEdittedComment(comment.body);
+                        }}
+                        className="flex gap-1 items-center text-xs text-stone-200 hover:text-stone-300"
                       >
-                        Cancel
+                        <span>
+                          <RiEditLine />{" "}
+                        </span>
+                        <span>Edit</span>
                       </button>
 
                       <button
-                        type="submit"
-                        disabled={!edittedComment.trim() || isPending}
-                        className=" bg-[#D6F31F] px-5 py-2.5 text-sm font-medium text-stone-900 transition hover:bg-[#D6F31F]/50 disabled:cursor-not-allowed disabled:opacity-40"
+                        key={comment.id}
+                        disabled={isDeleting}
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="flex gap-1 items-center text-xs text-red-500 hover:text-red-700"
                       >
-                        {isPending ? "Editting comment..." : "Edit comment"}
+                        <span>
+                          <MdOutlineDelete />{" "}
+                        </span>
+                        <span>
+                          {" "}
+                          {deletingCommentId === comment.id
+                            ? "Deleting..."
+                            : "Delete"}
+                        </span>
                       </button>
                     </div>
+                  )}
+                </div>
 
+                {editingCommentId === comment.id ? (
+                  <form
+                    onSubmit={() => handleUpdateComment(comment.id)}
+                    className="mb-10"
+                  >
+                    <textarea
+                      id="comment"
+                      value={edittedComment}
+                      onChange={(event) =>
+                        setEdittedComment(event.target.value)
+                      }
+                      placeholder="Share your thoughts..."
+                      rows={4}
+                      maxLength={2000}
+                      className="w-full resize-y border border-stone-300  px-4 py-3 text-sm leading-6 text-stone-100 outline-none transition placeholder:text-stone-400 focus:border-stone-400 focus:ring-2 focus:ring-stone-100"
+                    />
 
-                  </div>
-                </form>
-                  : <p className="whitespace-pre-wrap wrap-break-word text-sm leading-7 text-stone-300">
+                    <div className="mt-3 flex items-center justify-between gap-4">
+                      <span className="text-xs text-stone-400">
+                        {edittedComment.length}/2000 characters
+                      </span>
+
+                      <div className="flex gap-4">
+                        <button
+                          onClick={() => setEditingCommentId(null)}
+                          disabled={!edittedComment.trim() || isPending}
+                          className=" bg-stone-600 text-white px-5 py-2.5 text-sm font-medium  transition hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          Cancel
+                        </button>
+
+                        <button
+                          type="submit"
+                          disabled={!edittedComment.trim() || isPending}
+                          className=" bg-[#D6F31F] px-5 py-2.5 text-sm font-medium text-stone-900 transition hover:bg-[#D6F31F]/50 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          {isUpdating ? "Editting comment..." : "Edit comment"}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                ) : (
+                  <p className="whitespace-pre-wrap wrap-break-word text-sm leading-7 text-stone-300">
                     {comment.body}
-                  </p>}
+                  </p>
+                )}
               </div>
             </article>
           ))
