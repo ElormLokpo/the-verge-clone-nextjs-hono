@@ -17,6 +17,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import { RiEditLine } from "react-icons/ri";
 import { toast } from "sonner";
 import { LoadingScreen } from "@/app/components/loadingScreen";
+import { ErrorScreen } from "@/app/components/errorScreen";
 
 export default function PostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -32,11 +33,11 @@ export default function PostPage() {
   }
 
   if (isError) {
-    return <div>Failed to load post.</div>;
+    return <ErrorScreen />;
   }
 
   if (!post) {
-    return <div>Post not found.</div>;
+    return <div className="text-white text-4xl text-center flex justify-center items-center h-screen w-screen">Post not found.</div>;
   }
 
 

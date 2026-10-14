@@ -7,8 +7,22 @@ import { VscComment } from "react-icons/vsc";
 import { useGetPosts, useNavigate } from "./hooks";
 
 import { ClipLoader } from "react-spinners";
+import { ErrorScreen } from "./components/errorScreen";
 
 export default function Home() {
+
+  const { isLoading, isError } = useGetPosts();
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen w-screen">
+      <ClipLoader color="#3cffd0" />
+    </div>;
+  }
+
+  if (isError) {
+    return <ErrorScreen />;
+  }
+
   return (
     <div className="h-screen w-screen bg-[#131313] px-70 py-16 mb-30">
       <div className="flex flex-col gap-3 items-end justify-end mb-10">
@@ -47,6 +61,7 @@ export default function Home() {
         </div>
       </div>
     </div>
+
   );
 }
 
