@@ -10,8 +10,7 @@ export const API_ROUTES = {
   getPost: `posts`,
   getPostByCategory: `posts/category`,
   createPost: `posts/create`,
-  updatePost: `posts/:id`,
-  deletePost: `posts/:id`,
+  posts: "posts",
   comments: `comments`,
 };
 

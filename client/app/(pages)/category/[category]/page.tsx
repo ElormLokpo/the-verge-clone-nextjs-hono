@@ -7,6 +7,7 @@ import { Post } from "@/app/types";
 import Image from "next/image";
 import { VscComment } from "react-icons/vsc";
 import { formatDate } from "@/app/lib/utils";
+import { LoadingScreen } from "@/app/components/loadingScreen";
 
 export default function PostCategoryPage() {
   const { category } = useParams<{ category: string }>();
@@ -14,7 +15,7 @@ export default function PostCategoryPage() {
   const { data: posts, isLoading } = useGetPostByCategory(category);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   const brief: Record<string, string> = {

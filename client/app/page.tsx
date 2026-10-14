@@ -1,11 +1,12 @@
 "use client";
 import Image from "next/image";
 import { TopNav } from "./components/topNav";
-import { HeaderSectionSkeleton } from "../app/components/ui/skeleton";
 import { formatDate, getRandomItems } from "../app/lib/utils";
 import { Post } from "./types";
 import { VscComment } from "react-icons/vsc";
 import { useGetPosts, useNavigate } from "./hooks";
+
+import { ClipLoader } from "react-spinners";
 
 export default function Home() {
   return (
@@ -59,7 +60,9 @@ const HeaderSection = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />;
+    return <div className="flex justify-center items-center h-50 w-full">
+      <ClipLoader color="#3cffd0" />
+    </div>;
   }
 
   return (
@@ -117,7 +120,9 @@ const FourGridSectionContainer = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />;
+    return <div className="flex justify-center items-center h-50 w-full">
+      <ClipLoader color="#3cffd0" />
+    </div>;;
   }
 
   return (
@@ -185,7 +190,9 @@ export const FiveGridSectionContainer = () => {
   const { navigateTo } = useNavigate();
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />;
+    return <div className="flex justify-center items-center h-50 w-full">
+      <ClipLoader color="#3cffd0" />
+    </div>;;
   }
 
   return (
@@ -292,7 +299,9 @@ const LinkSectionContainer = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />;
+    return <div className="flex justify-center items-center h-50 w-full">
+      <ClipLoader color="#3cffd0" />
+    </div>;;
   }
 
   return (
@@ -348,7 +357,9 @@ const RightSectionContainer = () => {
   );
 
   if (isLoading || !postFromServer?.data) {
-    return <HeaderSectionSkeleton />;
+    return <div className="flex justify-center items-center h-50 w-full">
+      <ClipLoader color="#3cffd0" />
+    </div>;;
   }
 
   return (

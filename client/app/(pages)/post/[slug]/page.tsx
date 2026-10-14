@@ -8,23 +8,27 @@ import { GoComment } from "react-icons/go";
 import DOMPurify from "isomorphic-dompurify";
 import { FormEvent, useState } from "react";
 import { useParams } from "next/navigation";
-import { useGetPost } from "@/app/hooks/postsHook";
+import { useDeletePost, useGetPost } from "@/app/hooks/postsHook";
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from "@/app/hooks/commentsHook";
 import { CommentResponse } from "@/app/types";
 import { formatDate } from "@/app/lib/utils";
 import { useAuthStore } from "@/app/store";
 import { MdOutlineDelete } from "react-icons/md";
 import { RiEditLine } from "react-icons/ri";
+import { toast } from "sonner";
+import { LoadingScreen } from "@/app/components/loadingScreen";
 
 export default function PostPage() {
   const { slug } = useParams<{ slug: string }>();
+  const userId = useAuthStore((state) => state.user?.id);
 
   const { data, isLoading, isError } = useGetPost(slug);
+  const { mutate: deletePost } = useDeletePost();
 
   const post = data?.data;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />
   }
 
   if (isError) {
@@ -33,6 +37,39 @@ export default function PostPage() {
 
   if (!post) {
     return <div>Post not found.</div>;
+  }
+
+
+
+  async function copyLink(url: string) {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Post Link copied");
+    } catch (error) {
+      console.error("Failed to copy link:", error);
+    }
+  }
+
+  async function shareLink(url: string, title: string) {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title,
+          url,
+        });
+      } else {
+        await copyLink(url);
+        alert("Sharing isn't supported here. Link copied instead!");
+      }
+    } catch (error) {
+      if (error instanceof Error && error.name !== "AbortError") {
+        console.error("Failed to share link:", error);
+      }
+    }
+  }
+
+  const handleDeletePost = async (id: string) => {
+    await deletePost(id);
   }
 
   return (
@@ -65,13 +102,21 @@ export default function PostPage() {
               {post.author.name}
             </div>
 
-            <div className="text-xl flex gap-2">
-              <div className="border rounded-full p-2">
+            <div className="text-xl flex gap-2 group relative">
+              <button onClick={() => copyLink(window.location.href)} className="border rounded-full p-2 hover:bg-stone-800 hover:text-white ">
                 <HiOutlineLink />
-              </div>
-              <div className="border rounded-full p-2">
+
+              </button>
+              <button onClick={() => shareLink(post.slug, `${post.title} by ${post.author.name}`)} className="border rounded-full p-2 hover:bg-stone-800 hover:text-white ">
                 <IoIosShareAlt />
-              </div>
+
+              </button>
+
+              <div>|</div>
+
+              {post.author.id === userId && <button onClick={() => handleDeletePost(post.id)} className="border rounded-full p-2 hover:bg-stone-800 hover:text-white ">
+                <MdOutlineDelete />
+              </button>}
 
               <div className="flex gap-2 text-sm items-center">
                 <GoComment /> <span>{post.commentCount}</span>
