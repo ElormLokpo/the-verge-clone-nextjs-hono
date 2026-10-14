@@ -12,6 +12,7 @@ import {
   CODE_EXPIRY_MINUTES,
   RESET_TOKEN_EXPIRY_MINUTES,
   FRONTEND_RESET_URL,
+  OauthRequest,
 } from "./auth.types";
 import { signToken } from "./auth.jwt";
 import { Context } from "hono";
@@ -306,4 +307,34 @@ export async function resetPassword(
     .where(eq(users.id, matchedUser.id));
 
   return { success: true };
+}
+
+
+export async function googleOauth(oauthData: OauthRequest) {
+  const { name, email, email_verified } = oauthData;
+
+  const existingUser = await db.query.users.findFirst({
+    where: eq(users.email, email),
+  });
+
+  if (existingUser) {
+    const token = await signToken(buildPayload(existingUser));
+
+    return { success: true, user: sanitize(existingUser), token };
+  }
+
+  const [user] = await db
+    .insert(users)
+    .values({
+      email,
+      oauthProvider: "google",
+      isEmailVerified: email_verified,
+      role: "user",
+      name,
+    } satisfies NewUser)
+    .returning();
+
+  const token = await signToken(buildPayload(user));
+  return { success: true, user: sanitize(user), token };
+
 }

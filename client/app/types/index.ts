@@ -93,3 +93,9 @@ export type CommentResponse = {
 };
 
 export type UpdatePostRequest = Partial<CreatePostRequest>;
+
+export type OauthRequest = {
+  name: string;
+  email: string;
+  email_verified: boolean;
+};

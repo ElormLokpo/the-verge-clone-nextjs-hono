@@ -5,6 +5,7 @@ export const API_ROUTES = {
   verifyEmail: `auth/verify-email`,
   forgotPassword: `auth/forgot-password`,
   resetPassword: `auth/reset-password`,
+  googleOauth: `auth/google-oauth`,
   getPosts: `posts/all`,
   getPost: `posts`,
   getPostByCategory: `posts/category`,

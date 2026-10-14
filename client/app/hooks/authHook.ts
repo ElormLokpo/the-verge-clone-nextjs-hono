@@ -5,6 +5,7 @@ import {
   AuthResponseType,
   EmailType,
   LoginUserRequest,
+  OauthRequest,
   RegisterUserRequest,
   ResetPasswordRequest,
   VerifyEmailRequest,
@@ -68,7 +69,7 @@ export const useLoginUser = () => {
         .post(API_ROUTES.login, data)
         .then((data) => data) as Promise<AuthResponseType>,
     onSuccess: (data: AuthResponseType) => {
-      toast.success("Logged in successful");
+      toast.success("Logged in successfully");
 
       setAuth(data.user, data.token);
       router.push(CLIENT_ROUTES.home);
@@ -130,3 +131,22 @@ export const useSendEmailVerification = () => {
     },
   });
 };
+
+
+export const useGoogleOauth = () => {
+  const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
+
+  return useMutation({
+    mutationFn: async (data: OauthRequest): Promise<AuthResponseType> => api
+      .post(API_ROUTES.googleOauth, data),
+    onSuccess: (data) => {
+      toast.success("Logged in successfully");
+      setAuth(data.user, data.token as string);
+      router.push(CLIENT_ROUTES.home);
+    },
+    onError: () => {
+      toast.error("Something went wrong. Please try again later");
+    }
+  })
+}
