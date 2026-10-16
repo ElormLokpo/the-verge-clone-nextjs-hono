@@ -4,10 +4,11 @@ import { Typography } from "@/app/components/ui/typography";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { useResetPassword } from "@/app/hooks";
 import { useEffect } from "react";
+import { CLIENT_ROUTES } from "@/app/constants";
 
 export const ResetPasswordPage = () => {
   return (
@@ -52,9 +53,11 @@ type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 
 const ResetPasswordForm = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const token = searchParams.get("token") as string;
   const email = searchParams.get("email") as string;
+
 
   const { mutate, isPending, isSuccess } = useResetPassword();
 
@@ -80,6 +83,13 @@ const ResetPasswordForm = () => {
       reset();
     }
   }, [isSuccess, reset]);
+
+  useEffect(() => {
+    if (!token || !email) return router.push(CLIENT_ROUTES.signIn);
+
+
+  }, [token, email, isPending, router]);
+
 
   return (
     <div className=" w-full ">

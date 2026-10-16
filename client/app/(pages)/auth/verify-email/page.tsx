@@ -9,6 +9,7 @@ import z from "zod";
 import { useEffect } from "react";
 import Link from "next/link";
 import { CLIENT_ROUTES } from "@/app/constants";
+import { useRouter } from "next/navigation";
 
 export const VerifyEmailPage = () => {
   return (
@@ -47,6 +48,8 @@ type VerifyEmailValues = z.infer<typeof verifyEmailSchema>;
 const VerifyEmailForm = () => {
   const authenticatedUserEmail = useAuthStore((state) => state.user?.email);
   const { mutate, isPending, isSuccess } = useVerifyEmail();
+  const router = useRouter()
+
 
   const {
     register,
@@ -70,6 +73,11 @@ const VerifyEmailForm = () => {
       reset();
     }
   }, [isSuccess, reset]);
+
+  useEffect(() => {
+    if (!authenticatedUserEmail) router.push(CLIENT_ROUTES.signIn)
+
+  }, [router, authenticatedUserEmail])
 
   return (
     <div className=" w-full ">
