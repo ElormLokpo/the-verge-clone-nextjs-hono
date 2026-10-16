@@ -22,6 +22,8 @@ import { RiEditLine } from "react-icons/ri";
 import { toast } from "sonner";
 import { LoadingScreen } from "@/app/components/loadingScreen";
 import { ErrorScreen } from "@/app/components/errorScreen";
+import { useRouter } from "next/navigation";
+import { CLIENT_ROUTES } from "@/app/constants";
 
 export default function PostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -203,7 +205,9 @@ function CommentsSection({
   commentCount: number;
   slug: string;
 }) {
+  const router = useRouter();
   const [comment, setComment] = useState("");
+
 
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [edittedComment, setEdittedComment] = useState("");
@@ -223,6 +227,8 @@ function CommentsSection({
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (!userId) router.push(CLIENT_ROUTES.signUp);
 
     const content = comment.trim();
 

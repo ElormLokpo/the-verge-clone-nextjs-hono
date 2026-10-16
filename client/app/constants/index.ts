@@ -16,7 +16,7 @@ export const API_ROUTES = {
 
 export const CLIENT_ROUTES = {
   signIn: `/auth/sign-in`,
-  signUp: `/auth/sign-up`,
+  signUp: `/auth/sign-in`,
   verifyEmail: `/auth/verify-email`,
   forgotPassword: `/auth/forgot-password`,
   resetPassword: `/auth/reset-password`,

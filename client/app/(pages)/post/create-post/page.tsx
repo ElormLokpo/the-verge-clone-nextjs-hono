@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { BlogEditor } from "../../../components/blogEditor";
 import { TopNav } from "@/app/components/topNav";
 import { useCreatePost } from "@/app/hooks/postsHook";
+import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/app/store";
+import { CLIENT_ROUTES } from "@/app/constants";
 
 export default function CreatePostPage() {
   const [title, setTitle] = useState("");
@@ -13,6 +16,15 @@ export default function CreatePostPage() {
   const [coverPhoto, setCoverPhoto] = useState("");
   const [body, setBody] = useState("");
   const { mutate, isPending } = useCreatePost();
+
+  const token = useAuthStore((state) => state.token);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!token) router.push(CLIENT_ROUTES.home)
+  }, [token, router])
+
+
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
