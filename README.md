@@ -1,6 +1,6 @@
 # The Verge Inspired project
 
-A full-stack blog application inspired by "The Verge", a blog website.
+A full-stack blog application inspired by "The Verge", a website.
 
 ## Tech Stack
 - **Frontend:** Next.js (`client/`)
